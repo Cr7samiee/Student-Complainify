@@ -2,9 +2,9 @@ import pandas as pd
 import re
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TRAIN_DIR = os.path.join(BASE_DIR, "TrainDataset")
-OUTPUT_DIR = os.path.join(BASE_DIR, "ai")
+OUTPUT_DIR = os.path.join(BASE_DIR, "workspace", "train")
 
 # Load dataset #1
 df1 = pd.read_csv(os.path.join(TRAIN_DIR, "university_complaint_triage_dataset.csv"))
