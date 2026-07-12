@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Register — Complainify{% endblock %}
+{% block content %}
+<header class="w-full pt-8 pb-4 flex flex-col items-center justify-center relative">
+<a href="{{ url_for('index') }}" class="absolute left-6 top-8 flex items-center gap-1 text-sm text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-sm">arrow_back</span> Back to Home</a>
+<div class="w-16 h-16 rounded-xl bg-primary flex items-center justify-center mb-4"><span class="material-symbols-outlined text-white text-2xl">gavel</span></div>
+<h1 class="text-2xl font-bold text-primary tracking-tight font-sans">Complainify</h1>
+</header>
+<main class="flex-grow flex items-center justify-center px-4 pb-16">
+<div class="bg-surface-white w-full max-w-md rounded-xl border border-outline-variant overflow-hidden shadow-sm">
+<div class="p-8">
+<div class="mb-8 text-center">
+<h2 class="text-2xl font-semibold text-on-surface mb-2">Create Account</h2>
+<p class="text-base text-on-surface-variant">Register for a student account.</p>
+</div>
+<form method="POST" class="space-y-5">
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="fullname">Full Name</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">person</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-on-surface text-sm" id="fullname" name="fullname" placeholder="John Doe" type="text">
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="email">Email Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">mail</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-on-surface text-sm" id="email" name="email" placeholder="name@gmail.com" type="text">
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="phone">Phone Number</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">call</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-on-surface text-sm" id="phone" name="phone" placeholder="98XXXXXXXX" type="text">
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="password">Password</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">lock</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-on-surface text-sm" id="password" name="password" placeholder="Create a strong password" type="password">
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="confirm_password">Confirm Password</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">lock</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-on-surface text-sm" id="confirm_password" name="confirm_password" placeholder="Confirm your password" type="password">
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary text-sm font-semibold py-3.5 rounded-lg active:scale-95 transition-all shadow-sm hover:brightness-110" type="submit">Create Account</button>
+</form>
+</div>
+<div class="bg-surface-container py-4 px-8 text-center">
+<p class="text-sm text-on-surface-variant">Already have an account? <a class="text-secondary font-bold hover:underline" href="{{ url_for('student_login') }}">Sign In</a></p>
+</div>
+</div>
+</main>
+{% endblock %}
