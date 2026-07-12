@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Submit Complaint — Complainify{% endblock %}
+{% block content %}
+<div class="min-h-screen flex flex-col">
+<header class="w-full bg-surface-white border-b border-outline-variant shadow-sm">
+<nav class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<a href="{{ url_for('index') }}" class="flex items-center gap-2"><span class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-white text-sm">gavel</span></span><span class="text-xl font-bold text-primary tracking-tight">Complainify</span></a>
+</div>
+<div class="flex items-center gap-4">
+<a href="{{ url_for('student_login') }}" class="text-sm font-semibold text-primary hover:opacity-80 transition-opacity">Login</a>
+<a href="{{ url_for('student_register') }}" class="bg-primary text-on-primary px-6 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-all">Sign Up</a>
+</div>
+</nav>
+</header>
+<main class="flex-1 flex items-center justify-center px-4 py-12">
+<div class="bg-surface-white w-full max-w-2xl rounded-xl border border-outline-variant overflow-hidden shadow-sm">
+<div class="p-8">
+<div class="mb-8 text-center">
+<h2 class="text-2xl font-semibold text-primary mb-2">Submit a Complaint</h2>
+<p class="text-base text-on-surface-variant">Describe your issue and we'll route it to the right department.</p>
+</div>
+<form method="POST" class="space-y-5">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="fullname">Full Name</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm" id="fullname" name="fullname" placeholder="Your name" type="text">
+</div>
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="email">Email</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm" id="email" name="email" placeholder="your@email.com" type="text">
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="category">Category</label>
+<select class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm" id="category" name="category">
+<option value="">Select category</option>
+<option>Academics</option><option>Hostels</option><option>IT Support</option><option>Infrastructure</option><option>Financial Services</option><option>Administrative</option><option>Other</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="priority">Priority</label>
+<select class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm" id="priority" name="priority">
+<option value="Medium">Medium</option>
+<option value="Low">Low</option>
+<option value="High">High</option>
+</select>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="subject">Subject</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm" id="subject" name="subject" placeholder="Brief title of your complaint" type="text">
+</div>
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="description">Description</label>
+<textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm min-h-[120px]" id="description" name="description" placeholder="Provide detailed information about your complaint..."></textarea>
+</div>
+<button class="w-full bg-primary text-on-primary text-sm font-semibold py-3.5 rounded-lg active:scale-95 transition-all shadow-sm hover:brightness-110" type="submit">Submit Complaint</button>
+</form>
+</div>
+</div>
+</main>
+</div>
+{% endblock %}
