@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard — Complainify{% endblock %}
+{% block content %}
+<aside class="fixed left-0 h-full w-64 bg-primary text-on-primary shadow-md flex flex-col py-6 hidden md:flex z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<span class="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-container flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-white">school</span></span>
+<span class="text-xl font-bold text-white tracking-tight">Student Hub</span>
+</div>
+<div class="px-4 mb-6 flex items-center gap-3 border-b border-on-primary-fixed-variant pb-4 mx-2">
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-secondary to-purple-400 flex items-center justify-center text-white font-bold text-sm shadow-md">{{ student_name[:2]|upper }}</div>
+<div><p class="text-sm text-white font-medium truncate">{{ student_name }}</p><p class="text-[10px] text-blue-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span> Student</p></div>
+</div>
+<nav class="flex-1 px-2 space-y-0.5">
+<a href="#" class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-xl px-4 py-3 text-sm font-medium transition-all shadow-sm"><span class="material-symbols-outlined text-sm">dashboard</span>Overview</a>
+<a href="#" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">description</span>My Complaints</a>
+<a href="{{ url_for('submit_complaint') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">add_circle</span>New Complaint</a>
+<a href="{{ url_for('track_complaint') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">track_changes</span>Track Status</a>
+</nav>
+<div class="px-2 space-y-0.5 border-t border-on-primary-fixed-variant pt-3 mt-2 mx-2">
+<a href="#" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">settings</span>Settings</a>
+<a href="{{ url_for('logout') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">logout</span>Sign Out</a>
+</div>
+</aside>
+<main class="md:ml-64 min-h-screen flex flex-col">
+<header class="bg-surface-white px-6 py-4 flex justify-between items-center sticky top-0 z-40 shadow-sm border-b border-outline-variant">
+<div><h1 class="text-2xl font-bold text-primary flex items-center gap-2"><span class="material-symbols-outlined text-secondary">dashboard</span>My Overview</h1><p class="text-xs text-on-surface-variant ml-8">Hey {{ student_name }}, here's your complaint status.</p></div>
+<div class="flex items-center gap-3">
+<button class="p-2 rounded-full hover:bg-surface-container transition-colors relative"><span class="material-symbols-outlined text-on-surface-variant">notifications</span><span class="absolute top-2 right-2 w-2 h-2 bg-error-crimson rounded-full"></span></button>
+<a href="{{ url_for('submit_complaint') }}" class="bg-gradient-to-r from-primary to-secondary text-on-primary px-5 py-2 rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-sm flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">add</span>New Complaint</a>
+</div>
+</header>
+<div class="p-6 flex-1 bg-gradient-to-b from-slate-bg to-surface">
+<section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="bg-surface-white p-5 rounded-2xl border border-outline-variant shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+<div class="flex items-center justify-between mb-3"><span class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">Total</span><span class="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center"><span class="material-symbols-outlined text-primary text-sm">assignment</span></span></div>
+<p class="text-3xl font-bold text-primary">{{ total }}</p>
+<p class="text-[11px] text-on-tertiary-container mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-xs">trending_up</span>All complaints</p>
+</div>
+<div class="bg-surface-white p-5 rounded-2xl border border-outline-variant shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+<div class="flex items-center justify-between mb-3"><span class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">Under Review</span><span class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center"><span class="material-symbols-outlined text-warning-amber text-sm">visibility</span></span></div>
+<p class="text-3xl font-bold text-primary">{{ pending }}</p>
+<p class="text-[11px] text-warning-amber mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span>Awaiting response</p>
+</div>
+<div class="bg-surface-white p-5 rounded-2xl border border-outline-variant shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+<div class="flex items-center justify-between mb-3"><span class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">In Progress</span><span class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center"><span class="material-symbols-outlined text-secondary text-sm">pending_actions</span></span></div>
+<p class="text-3xl font-bold text-primary">{{ in_progress }}</p>
+<p class="text-[11px] text-secondary mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-xs">sync</span>Being resolved</p>
+</div>
+<div class="bg-surface-white p-5 rounded-2xl border border-outline-variant shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+<div class="flex items-center justify-between mb-3"><span class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">Resolved</span><span class="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center"><span class="material-symbols-outlined text-on-tertiary-container text-sm">check_circle</span></span></div>
+<p class="text-3xl font-bold text-primary">{{ resolved }}</p>
+<p class="text-[11px] text-on-tertiary-container mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-xs">verified</span>{{ (resolved/total*100)|int if total > 0 else 0 }}% resolved</p>
+</div>
+</section>
+<div class="grid lg:grid-cols-3 gap-6">
+<section class="lg:col-span-2">
+<div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h2 class="text-lg font-bold text-primary flex items-center gap-2"><span class="material-symbols-outlined text-secondary">list_alt</span>Recent Complaints</h2>
+<a href="#" class="text-xs text-secondary font-semibold hover:underline">View All</a>
+</div>
+{% if complaints %}
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead><tr class="text-[11px] text-on-surface-variant font-semibold uppercase tracking-wider"><th class="px-6 py-4 bg-surface-container-low">Ticket</th><th class="px-6 py-4 bg-surface-container-low">Category</th><th class="px-6 py-4 bg-surface-container-low">Status</th><th class="px-6 py-4 bg-surface-container-low">Priority</th><th class="px-6 py-4 bg-surface-container-low">Date</th></tr></thead>
+<tbody class="divide-y divide-outline-variant/50">
+{% for c in complaints %}
+<tr class="hover:bg-slate-bg transition-colors">
+<td class="px-6 py-4 text-sm font-bold text-primary">#{{ c.ticket_id }}</td>
+<td class="px-6 py-4 text-sm text-on-surface">{{ c.category }}</td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-[11px] font-bold {% if c.status == 'Resolved' %}bg-green-50 text-green-700{% elif c.status == 'In Progress' %}bg-blue-50 text-blue-700{% else %}bg-amber-50 text-amber-700{% endif %}">{{ c.status }}</span></td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-[11px] font-bold {% if c.priority == 'High' %}bg-red-50 text-red-600{% elif c.priority == 'Medium' %}bg-amber-50 text-amber-600{% else %}bg-gray-50 text-gray-500{% endif %}">{{ c.priority }}</span></td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">{{ c.date }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% else %}
+<div class="p-12 text-center"><span class="material-symbols-outlined text-4xl text-on-surface-variant/30 mb-3">inbox</span><p class="text-sm font-semibold text-gray-900">No complaints yet</p><p class="text-xs text-on-surface-variant mt-1">Submit your first complaint to get started.</p><a href="{{ url_for('submit_complaint') }}" class="inline-flex items-center gap-1 mt-5 px-5 py-2.5 bg-primary text-on-primary text-sm font-semibold rounded-xl hover:opacity-90 transition-all shadow-sm"><span class="material-symbols-outlined text-sm">add</span>Submit Complaint</a></div>
+{% endif %}
+</div>
+</section>
+<section class="space-y-5">
+<div class="bg-gradient-to-br from-primary via-primary to-secondary p-6 rounded-2xl shadow-lg relative overflow-hidden group">
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-4"><span class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center"><span class="material-symbols-outlined text-sm text-white">auto_awesome</span></span><span class="text-xs text-blue-200 font-semibold uppercase tracking-wider">AI Insight</span></div>
+<p class="text-sm text-white/90 mb-3 leading-relaxed">Your <span class="font-bold text-yellow-300">complaints</span> are typically resolved within <span class="font-bold text-yellow-300">48 hours</span> — faster than the campus average.</p>
+<div class="h-1.5 bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-yellow-300 w-3/4 rounded-full"></div></div>
+<p class="text-[11px] text-blue-200 mt-2 italic">Resolution probability: 92%</p>
+</div>
+</div>
+<div class="bg-surface-white p-5 rounded-2xl border border-outline-variant shadow-sm">
+<h4 class="text-sm font-bold text-primary mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-secondary">link</span>Quick Links</h4>
+<ul class="space-y-2">
+<li><a href="#" class="flex items-center justify-between text-sm text-on-surface hover:text-secondary transition-colors group px-3 py-2 rounded-lg hover:bg-slate-bg"><span>Student Handbook</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span></a></li>
+<li><a href="#" class="flex items-center justify-between text-sm text-on-surface hover:text-secondary transition-colors group px-3 py-2 rounded-lg hover:bg-slate-bg"><span>Grievance Policy</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span></a></li>
+<li><a href="#" class="flex items-center justify-between text-sm text-on-surface hover:text-secondary transition-colors group px-3 py-2 rounded-lg hover:bg-slate-bg"><span>Contact Support</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span></a></li>
+</ul>
+</div>
+</section>
+</div>
+</div>
+<footer class="w-full mt-auto bg-primary text-on-primary py-3 px-6 border-t border-on-primary-fixed-variant">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+<span class="text-sm font-bold text-on-primary">Complainify <span class="text-xs text-blue-300 font-normal">Student Portal</span></span>
+<p class="text-[11px] text-primary-fixed-dim">&copy; 2024 Complainify. Student experience reimagined.</p>
+</div>
+</footer>
+</main>
+<nav class="fixed bottom-0 left-0 w-full bg-primary flex justify-around items-center py-2.5 md:hidden z-50 border-t border-on-primary-fixed-variant">
+<a href="#" class="flex flex-col items-center gap-0.5 text-on-secondary-container"><span class="material-symbols-outlined text-sm">dashboard</span><span class="text-[9px]">Home</span></a>
+<a href="#" class="flex flex-col items-center gap-0.5 text-on-primary-container"><span class="material-symbols-outlined text-sm">description</span><span class="text-[9px]">Complaints</span></a>
+<a href="{{ url_for('submit_complaint') }}" class="flex flex-col items-center gap-0.5 text-on-primary-container"><span class="material-symbols-outlined text-sm">add_circle</span><span class="text-[9px]">New</span></a>
+<a href="{{ url_for('logout') }}" class="flex flex-col items-center gap-0.5 text-on-primary-container"><span class="material-symbols-outlined text-sm">logout</span><span class="text-[9px]">Sign Out</span></a>
+</nav>
+{% endblock %}
+{% block footer %}{% endblock %}

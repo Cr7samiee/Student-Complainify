@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — Complainify{% endblock %}
+{% block content %}
+<aside class="fixed left-0 h-full w-64 bg-[#0a1628] text-white shadow-xl flex flex-col py-6 hidden md:flex z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<span class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-white">admin_panel_settings</span></span>
+<span class="text-xl font-bold text-white tracking-tight">Admin Panel</span>
+</div>
+<div class="px-4 mb-6 flex items-center gap-3 border-b border-white/10 pb-4 mx-2">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex items-center justify-center text-white font-bold text-sm shadow-md">{{ admin_name[:2]|upper }}</div>
+<div><p class="text-sm text-white font-medium truncate">{{ admin_name }}</p><p class="text-[10px] text-red-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-400 inline-block"></span> Administrator</p></div>
+</div>
+<nav class="flex-1 px-2 space-y-0.5">
+<a href="#" class="flex items-center gap-3 bg-[#d32f2f]/20 text-white rounded-lg px-4 py-3 text-sm font-medium border-l-2 border-[#d32f2f]"><span class="material-symbols-outlined text-sm">dashboard</span>Dashboard</a>
+<a href="#" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">assignment</span>All Complaints</a>
+<a href="{{ url_for('track_complaint') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">search</span>Track Status</a>
+<a href="#" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">bar_chart</span>Analytics</a>
+<a href="#" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">history_edu</span>Audit Log</a>
+</nav>
+<div class="px-2 space-y-0.5 border-t border-white/10 pt-3 mt-2 mx-2">
+<a href="#" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">settings</span>Settings</a>
+<a href="#" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">help</span>Help Center</a>
+<a href="{{ url_for('logout') }}" class="flex items-center gap-3 text-red-300 hover:text-red-200 hover:bg-red-500/10 rounded-lg px-4 py-3 text-sm transition-all mt-1"><span class="material-symbols-outlined text-sm">logout</span>Sign Out</a>
+</div>
+</aside>
+<main class="ml-64 min-h-screen flex flex-col bg-[#f0f2f5]">
+<header class="bg-white px-6 py-3 flex justify-between items-center sticky top-0 z-40 shadow-sm border-b border-gray-200">
+<div><h1 class="text-lg font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-[#d32f2f]">analytics</span>Analytics Dashboard</h1><p class="text-xs text-gray-500 ml-8">System-wide complaint resolution overview</p></div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 hover:bg-gray-100 rounded-lg"><span class="material-symbols-outlined text-gray-500">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span></button>
+<button class="bg-[#0a1628] text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-[#1a2a3a] transition-colors flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">download</span>Export Report</button>
+</div>
+</header>
+<div class="p-6 space-y-6 max-w-7xl">
+<section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+<div class="flex items-center justify-between mb-2"><span class="text-xs text-gray-400 font-medium uppercase">Active Complaints</span><span class="w-9 h-9 rounded-lg bg-indigo-50 flex items-center justify-center"><span class="material-symbols-outlined text-indigo-600 text-sm">pending_actions</span></span></div>
+<p class="text-3xl font-bold text-[#0a1628]">{{ total }}</p>
+<p class="text-[11px] text-green-600 mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-xs">trending_up</span>+12% vs last week</p>
+</div>
+<div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+<div class="flex items-center justify-between mb-2"><span class="text-xs text-gray-400 font-medium uppercase">Mean Resolution</span><span class="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center"><span class="material-symbols-outlined text-amber-600 text-sm">bolt</span></span></div>
+<p class="text-3xl font-bold text-[#0a1628]">4.2 <span class="text-sm text-gray-400 font-normal">hrs</span></p>
+<p class="text-[11px] text-amber-600 mt-1">AI-optimized routing</p>
+</div>
+<div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+<div class="flex items-center justify-between mb-2"><span class="text-xs text-gray-400 font-medium uppercase">Satisfaction</span><span class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center"><span class="material-symbols-outlined text-green-600 text-sm">sentiment_satisfied</span></span></div>
+<p class="text-3xl font-bold text-[#0a1628]">88%</p>
+<p class="text-[11px] text-green-600 mt-1"><span class="material-symbols-outlined text-xs">trending_up</span> Improving</p>
+</div>
+<div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+<div class="flex items-center justify-between mb-2"><span class="text-xs text-gray-400 font-medium uppercase">Critical</span><span class="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center"><span class="material-symbols-outlined text-red-600 text-sm">report_problem</span></span></div>
+<p class="text-3xl font-bold text-red-600">09</p>
+<p class="text-[11px] text-red-600 mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-xs">priority_high</span>Action required</p>
+</div>
+</section>
+<section class="grid lg:grid-cols-3 gap-5">
+<div class="lg:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+<div class="px-5 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+<h3 class="text-sm font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-[#d32f2f]">trending_up</span>Sentiment Trend</h3>
+<select class="text-xs text-gray-500 bg-transparent border-0 focus:ring-0"><option>Last 30 Days</option><option>Last 7 Days</option></select>
+</div>
+<div class="p-5 h-56 flex items-end gap-2 relative">
+<div class="absolute inset-0 flex items-center justify-center opacity-5"><span class="material-symbols-outlined text-[180px] text-[#0a1628]">bar_chart</span></div>
+<div class="flex-1 bg-indigo-200 rounded-t-lg hover:bg-indigo-400 transition-all cursor-pointer" style="height:60%"></div>
+<div class="flex-1 bg-indigo-300 rounded-t-lg hover:bg-indigo-400 transition-all cursor-pointer" style="height:75%"></div>
+<div class="flex-1 bg-indigo-200 rounded-t-lg hover:bg-indigo-400 transition-all cursor-pointer" style="height:55%"></div>
+<div class="flex-1 bg-[#d32f2f] rounded-t-lg hover:bg-red-500 transition-all cursor-pointer" style="height:90%"></div>
+<div class="flex-1 bg-indigo-300 rounded-t-lg hover:bg-indigo-400 transition-all cursor-pointer" style="height:65%"></div>
+<div class="flex-1 bg-indigo-400 rounded-t-lg hover:bg-indigo-500 transition-all cursor-pointer" style="height:85%"></div>
+</div>
+<div class="px-5 py-3 border-t border-gray-100 flex gap-4 text-[11px] font-medium">
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#d32f2f]"></span> Positive</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-indigo-300"></span> Neutral</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-gray-300"></span> Negative</span>
+</div>
+</div>
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+<div class="px-5 py-3 border-b border-gray-100 bg-gray-50/50"><h3 class="text-sm font-bold text-[#0a1628]">Category Breakdown</h3></div>
+<div class="p-5 space-y-4">
+<div><div class="flex justify-between text-xs mb-1.5"><span class="text-gray-700">Academic</span><span class="font-bold text-[#0a1628]">42%</span></div><div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div class="bg-indigo-600 h-full rounded-full transition-all hover:w-[48%]" style="width:42%"></div></div></div>
+<div><div class="flex justify-between text-xs mb-1.5"><span class="text-gray-700">Facilities</span><span class="font-bold text-[#0a1628]">28%</span></div><div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div class="bg-blue-500 h-full rounded-full transition-all" style="width:28%"></div></div></div>
+<div><div class="flex justify-between text-xs mb-1.5"><span class="text-gray-700">IT & Admin</span><span class="font-bold text-[#0a1628]">18%</span></div><div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div class="bg-gray-400 h-full rounded-full" style="width:18%"></div></div></div>
+<div><div class="flex justify-between text-xs mb-1.5"><span class="text-gray-700">Financial</span><span class="font-bold text-[#0a1628]">12%</span></div><div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div class="bg-amber-500 h-full rounded-full" style="width:12%"></div></div></div>
+</div>
+<div class="px-5 py-3 bg-gray-50 border-t border-gray-100"><button class="w-full text-xs text-indigo-600 font-semibold text-center hover:underline">View Full Analytics →</button></div>
+</div>
+</section>
+<section class="grid xl:grid-cols-3 gap-5 items-start">
+<div class="xl:col-span-1 space-y-4">
+<h2 class="text-sm font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">report</span>Critical Alerts</h2>
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-100">
+<div class="p-4 hover:bg-red-50 transition-colors cursor-pointer border-l-2 border-red-500">
+<div class="flex justify-between items-start mb-1.5"><span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded">HIGH</span><span class="text-[10px] text-gray-400">2h ago</span></div>
+<p class="text-sm font-bold text-[#0a1628]">Grade Discrepancy: CHEM-302</p>
+<p class="text-xs text-gray-500 mt-0.5 truncate">Automated grading error in midterm exam...</p>
+<div class="flex items-center gap-1.5 mt-2"><span class="w-5 h-5 rounded-full bg-gradient-to-r from-[#d32f2f] to-indigo-600 flex items-center justify-center"><span class="material-symbols-outlined text-[12px] text-white">smart_toy</span></span><span class="text-[10px] text-gray-500">AI flagged systemic issue</span></div>
+</div>
+<div class="p-4 hover:bg-red-50 transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-1.5"><span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded">HIGH</span><span class="text-[10px] text-gray-400">4h ago</span></div>
+<p class="text-sm font-bold text-[#0a1628]">Hostel Safety: Block B</p>
+<p class="text-xs text-gray-500 mt-0.5 truncate">Reported gas leak in basement area...</p>
+</div>
+<div class="p-4 hover:bg-red-50 transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-1.5"><span class="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded">MEDIUM</span><span class="text-[10px] text-gray-400">6h ago</span></div>
+<p class="text-sm font-bold text-[#0a1628]">Library WiFi Outage</p>
+<p class="text-xs text-gray-500 mt-0.5 truncate">Students reporting connectivity issues...</p>
+</div>
+</div>
+<button class="w-full py-2.5 bg-white rounded-xl border border-gray-100 shadow-sm text-xs text-[#0a1628] font-bold hover:bg-gray-50 transition-colors">View All (09) →</button>
+</div>
+<div class="xl:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+<div class="px-5 py-3 border-b border-gray-100 flex justify-between items-center">
+<h3 class="text-sm font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">recent_actors</span>Recent Activity</h3>
+<div class="flex gap-1.5">
+<button class="p-1.5 hover:bg-gray-100 rounded-md border border-gray-200"><span class="material-symbols-outlined text-sm text-gray-500">filter_list</span></button>
+<button class="p-1.5 hover:bg-gray-100 rounded-md border border-gray-200"><span class="material-symbols-outlined text-sm text-gray-500">download</span></button>
+</div>
+</div>
+{% if complaints %}
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead><tr class="text-[11px] text-gray-500 font-semibold uppercase tracking-wider bg-gray-50/50"><th class="px-5 py-3">Ticket</th><th class="px-5 py-3">Student</th><th class="px-5 py-3">Category</th><th class="px-5 py-3">Status</th><th class="px-5 py-3">Priority</th></tr></thead>
+<tbody class="divide-y divide-gray-50">
+{% for c in complaints %}
+<tr class="hover:bg-gray-50 transition-colors">
+<td class="px-5 py-3.5 text-sm font-bold text-[#0a1628]">#{{ c.ticket_id }}</td>
+<td class="px-5 py-3.5 text-sm text-gray-600">{{ c.student }}</td>
+<td class="px-5 py-3.5 text-sm text-gray-600">{{ c.category }}</td>
+<td class="px-5 py-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold {% if c.status == 'Resolved' %}bg-green-100 text-green-700{% elif c.status == 'In Progress' %}bg-blue-100 text-blue-700{% else %}bg-amber-100 text-amber-700{% endif %}">{{ c.status }}</span></td>
+<td class="px-5 py-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold {% if c.priority == 'High' %}bg-red-100 text-red-700{% elif c.priority == 'Medium' %}bg-amber-100 text-amber-700{% else %}bg-gray-100 text-gray-500{% endif %}">{{ c.priority }}</span></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% else %}
+<div class="p-10 text-center"><span class="material-symbols-outlined text-3xl text-gray-300 mb-2">inbox</span><p class="text-sm font-semibold text-gray-600">No complaints yet</p></div>
+{% endif %}
+</div>
+</section>
+</div>
+<footer class="bg-[#0a1628] w-full mt-auto">
+<div class="max-w-7xl mx-auto px-6 py-3 flex flex-col md:flex-row justify-between items-center border-t border-white/5 gap-2">
+<div class="flex items-center gap-2"><span class="text-sm font-bold text-white">Complainify</span><span class="text-[10px] text-gray-500">v4.2.0-Admin</span></div>
+<p class="text-[10px] text-gray-500">&copy; 2024 Complainify. Institutional Navy Standard.</p>
+</div>
+</footer>
+</main>
+{% endblock %}
+{% block footer %}{% endblock %}

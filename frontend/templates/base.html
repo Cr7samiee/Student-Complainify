@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Complainify — Complaint Management{% endblock %}</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script>
+tailwind.config = { darkMode: "class", theme: { extend: { colors: { primary: "#022448", "on-primary": "#ffffff", "primary-container": "#1e3a5f", "on-primary-container": "#8aa4cf", "primary-fixed-dim": "#adc8f5", secondary: "#0058be", "on-secondary": "#ffffff", "secondary-container": "#2170e4", "on-secondary-container": "#fefcff", tertiary: "#002a1a", "on-tertiary-container": "#10b981", surface: "#f8f9ff", "surface-bright": "#f8f9ff", "surface-container": "#e5eeff", "surface-container-low": "#eff4ff", "surface-container-high": "#dce9ff", "surface-white": "#FFFFFF", "on-surface": "#0b1c30", "on-surface-variant": "#43474e", "outline-variant": "#c4c6cf", "outline": "#74777f", "slate-bg": "#F1F5F9", "error": "#ba1a1a", "error-crimson": "#EF4444", "warning-amber": "#F59E0B", "text-ink": "#1E293B", "on-primary-fixed-variant": "#2d486d" }, fontFamily: { sans: ["Inter"] } } } };
+</script>
+<style>body{font-family:'Inter',sans-serif}.material-symbols-outlined{font-variation-settings:'FILL'0,'wght'400,'GRAD'0,'opsz'24;display:inline-block;vertical-align:middle}</style>
+{% block head %}{% endblock %}
+</head>
+<body class="bg-slate-bg text-on-surface font-sans antialiased min-h-screen flex flex-col">
+{% block content %}{% endblock %}
+{% block footer %}
+<footer class="bg-primary text-on-primary w-full mt-auto">
+<div class="max-w-7xl mx-auto px-6 py-16">
+<div class="grid md:grid-cols-4 gap-10 mb-12">
+<div class="md:col-span-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center"><span class="material-symbols-outlined text-white">gavel</span></span>
+<span class="text-xl font-bold text-white">Complainify</span>
+</div>
+<p class="text-sm text-primary-fixed-dim leading-relaxed">AI-powered complaint resolution platform for higher education institutions. Bridging the gap between student feedback and administrative action.</p>
+</div>
+<div><span class="text-sm font-bold text-white uppercase tracking-wider block mb-5">Product</span><div class="flex flex-col gap-3"><a class="text-sm text-primary-fixed-dim hover:text-white transition-colors" href="{{ url_for('index') }}#features">Features</a><a class="text-sm text-primary-fixed-dim hover:text-white transition-colors" href="{{ url_for('index') }}#how-it-works">How It Works</a><a class="text-sm text-primary-fixed-dim hover:text-white transition-colors" href="#">Pricing</a><a class="text-sm text-primary-fixed-dim hover:text-white transition-colors" href="#">Integrations</a></div></div>
+<div><span class="text-sm font-bold text-white uppercase tracking-wider block mb-5">Company</span><div class="flex flex-col gap-3"><a class="text-sm text-primary-fixed-dim hover:text-white transition-colors" href="{{ url_for('index') }}#about">About Us</a><a class="text-sm text-primary-fixed-dim hover:text-white transition-colors" href="#">Case Studies</a><a class="text-sm text-primary-fixed-dim hover:text-white transition-colors" href="#">Blog</a><a class="text-sm text-primary-fixed-dim hover:text-white transition-colors" href="#">Contact</a></div></div>
+<div><span class="text-sm font-bold text-white uppercase tracking-wider block mb-5">Legal</span><div class="flex flex-col gap-3"><a class="text-sm text-primary-fixed-dim hover:text-white transition-colors" href="#">Privacy Policy</a><a class="text-sm text-primary-fixed-dim hover:text-white transition-colors" href="#">Terms of Service</a><a class="text-sm text-primary-fixed-dim hover:text-white transition-colors" href="#">University Guidelines</a><a class="text-sm text-primary-fixed-dim hover:text-white transition-colors" href="#">GDPR</a></div></div>
+</div>
+<div class="border-t border-on-primary-fixed-variant pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-primary-fixed-dim">
+<p>&copy; 2024 Complainify. All rights reserved. Institutional Navy Standard.</p>
+<div class="flex gap-6"><a class="hover:text-white transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">tag</span>Twitter</a><a class="hover:text-white transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">linkedin</span>LinkedIn</a><a class="hover:text-white transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">code</span>GitHub</a></div>
+</div>
+</div>
+</footer>
+{% endblock %}
+</body>
+</html>
