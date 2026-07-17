@@ -3,180 +3,192 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preprocessing Report — Complainify</title>
+<title>Data Preprocessing Report — Complainify</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Inter',sans-serif; background:#f8f9ff; color:#022448; padding:30px; }
-.container { max-width:1200px; margin:0 auto; }
-h1 { font-size:26px; margin-bottom:6px; color:#022448; }
-.subtitle { color:#43474e; font-size:14px; margin-bottom:30px; }
-.section { background:white; border-radius:14px; padding:24px; margin-bottom:20px; box-shadow:0 1px 4px rgba(0,0,0,0.06); border:1px solid #e5eeff; }
-.section h2 { font-size:16px; margin-bottom:16px; color:#022448; display:flex; align-items:center; gap:8px; }
-.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
-.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
-.stat-card { padding:18px; border-radius:10px; border:1px solid #e5eeff; text-align:center; }
-.stat-card .num { font-size:30px; font-weight:700; color:#0058be; }
-.stat-card .label { font-size:12px; color:#43474e; margin-top:4px; }
-.stat-card .badge { font-size:11px; padding:2px 10px; border-radius:20px; display:inline-block; margin-top:6px; }
-.badge-green { background:#f0fdf4; color:#10b981; }
-.badge-red { background:#fef2f2; color:#ef4444; }
-.badge-blue { background:#eff6ff; color:#0058be; }
-table { width:100%; border-collapse:collapse; font-size:13px; }
-th { background:#022448; color:white; padding:10px 12px; text-align:left; font-weight:600; font-size:12px; }
-td { padding:9px 12px; border-bottom:1px solid #e5eeff; }
-tr:hover td { background:#f0f4ff; }
-.encoded { background:#e8f5e9; color:#2e7d32; font-weight:600; padding:2px 8px; border-radius:4px; font-size:12px; }
-.bar { height:20px; border-radius:4px; display:inline-block; }
-.mapping-table td:first-child { font-weight:600; }
-.mapping-table td:nth-child(2) { font-family:monospace; font-size:15px; color:#0058be; font-weight:700; }
-.sample-text { max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#43474e; font-size:12px; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#f8f9ff;color:#022448;padding:30px}
+.container{max-width:1100px;margin:0 auto}
+h1{font-size:28px;margin-bottom:4px;color:#022448}
+.subtitle{color:#43474e;font-size:14px;margin-bottom:28px}
+.card{background:white;border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,0.04);border:1px solid #e5eeff}
+.card h2{font-size:15px;margin-bottom:14px;color:#022448;display:flex;align-items:center;gap:8px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.stat{background:white;border-radius:12px;padding:18px 14px;text-align:center;border:1px solid #e5eeff}
+.stat .num{font-size:28px;font-weight:800;color:#0058be;line-height:1.2}
+.stat .label{font-size:12px;color:#43474e;margin-top:3px}
+.stat .tag{font-size:10px;padding:2px 10px;border-radius:20px;display:inline-block;margin-top:5px;font-weight:600}
+.tag-blue{background:#eff6ff;color:#0058be}
+.tag-green{background:#f0fdf4;color:#10b981}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#022448;color:white;padding:9px 12px;text-align:left;font-weight:600;font-size:12px}
+td{padding:8px 12px;border-bottom:1px solid #eef2f7}
+tr:hover td{background:#f5f8ff}
+.code{background:#e8f5e9;color:#2e7d32;font-weight:700;padding:2px 8px;border-radius:4px;font-size:13px;font-family:monospace}
+.sample-text{max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#43474e;font-size:12px}
+.step-flow{display:flex;gap:8px;flex-wrap:wrap}
+.step{flex:1;min-width:130px;border-radius:10px;padding:14px;text-align:center;border:1px solid #e5eeff}
+.step .icon{font-size:22px;margin-bottom:4px}
+.step .title{font-weight:600;font-size:13px}
+.step .desc{font-size:11px;color:#43474e;margin-top:2px}
+.step-1{background:#f0f4ff}
+.step-2{background:#f0f4ff}
+.step-3{background:#f0fdf4}
+.step-4{background:#fefce8}
+.step-5{background:#f0fdf4}
 </style>
 </head>
 <body>
 <div class="container">
 
-<h1>🚀 Data Preprocessing Dashboard</h1>
-<p class="subtitle">Training Dataset — Complaint Classification & Encoding Report</p>
+<h1>Data Preprocessing Report</h1>
+<p class="subtitle">Preparing the complaint dataset for Naive Bayes classification</p>
 
-<div class="grid-4">
-<div class="stat-card"><div class="num">1,800</div><div class="label">Raw Rows</div><span class="badge badge-blue">Before</span></div>
-<div class="stat-card"><div class="num">815</div><div class="label">Processed Rows</div><span class="badge badge-green">After Dedup</span></div>
-<div class="stat-card"><div class="num">985</div><div class="label">Duplicates Removed</div><span class="badge badge-red">55%</span></div>
-<div class="stat-card"><div class="num">9</div><div class="label">Categories</div><span class="badge badge-blue">Encoded 0-8</span></div>
+<div class="stats">
+<div class="stat"><div class="num">1,800</div><div class="label">Raw Complaints</div><span class="tag tag-blue">Original</span></div>
+<div class="stat"><div class="num">815</div><div class="label">Final Dataset</div><span class="tag tag-green">Cleaned</span></div>
+<div class="stat"><div class="num">9</div><div class="label">Categories</div><span class="tag tag-blue">Encoded 0–8</span></div>
+<div class="stat"><div class="num">3</div><div class="label">Priority Levels</div><span class="tag tag-blue">Encoded 0–2</span></div>
+</div>
+
+<div class="card">
+<h2>Step 1: Data Consolidation</h2>
+<p style="font-size:13px;color:#43474e;line-height:1.6;margin-bottom:12px">
+The raw dataset contained <strong>1,800 complaint records</strong> merged from two sources —
+<strong>complaint_triage</strong> (800 rows) and <strong>query_test</strong> (1,000 rows). Each row has
+a complaint text, a <strong>category label</strong> (9 types), and a <strong>priority label</strong> (High/Medium/Low).
+After removing text-level redundancy (keeping only unique complaint texts), the dataset was reduced to
+<strong>815 unique records</strong>.
+</p>
+</div>
+
+<div class="step-flow" style="margin-bottom:18px">
+<div class="step step-1"><div class="icon">📦</div><div class="title">Load</div><div class="desc">1,800 raw rows from 2 sources</div></div>
+<div class="step step-2"><div class="icon">🧹</div><div class="title">Clean</div><div class="desc">Lowercase, trim, normalize symbols</div></div>
+<div class="step step-3"><div class="icon">✓</div><div class="title">Consolidate</div><div class="desc">815 unique complaint texts</div></div>
+<div class="step step-4"><div class="icon">🔢</div><div class="title">Encode</div><div class="desc">Text labels → integer values</div></div>
+<div class="step step-5"><div class="icon">💾</div><div class="title">Export</div><div class="desc">CSV + JSON encoder files</div></div>
 </div>
 
 <div class="grid-2">
-<div class="section">
-<h2>📊 Category Distribution</h2>
-<canvas id="catChart" height="180"></canvas>
+<div class="card">
+<h2>Category Distribution</h2>
+<p style="font-size:11px;color:#43474e;margin-bottom:10px">Bars = count per category &nbsp;|&nbsp; Line = cumulative %</p>
+<canvas id="catChart" height="190"></canvas>
 </div>
-<div class="section">
-<h2>🎯 Priority Distribution</h2>
-<canvas id="priChart" height="180"></canvas>
+<div class="card">
+<h2>Priority Distribution</h2>
+<canvas id="priChart" height="190"></canvas>
 </div>
-</div>
-
-<div class="section">
-<h2>🔢 Category Encoding Map</h2>
-<table class="mapping-table">
-<thead><tr><th>Category</th><th>Encoded Value</th><th>Samples</th><th>Percentage</th></tr></thead>
-<tbody>
-<tr><td>Academics</td><td>0</td><td>114</td><td>14.0%</td></tr>
-<tr><td>IT Support</td><td>1</td><td>100</td><td>12.3%</td></tr>
-<tr><td>Hostels</td><td>2</td><td>100</td><td>12.3%</td></tr>
-<tr><td>Fees / Finance</td><td>3</td><td>100</td><td>12.3%</td></tr>
-<tr><td>Maintenance</td><td>4</td><td>100</td><td>12.3%</td></tr>
-<tr><td>Transport</td><td>5</td><td>100</td><td>12.3%</td></tr>
-<tr><td>Security / Discipline</td><td>6</td><td>100</td><td>12.3%</td></tr>
-<tr><td>Administration</td><td>7</td><td>100</td><td>12.3%</td></tr>
-<tr><td>Library</td><td>8</td><td>1</td><td>0.1%</td></tr>
-</tbody>
-</table>
 </div>
 
-<div class="section">
-<h2>🔢 Priority Encoding Map</h2>
-<table class="mapping-table">
-<thead><tr><th>Priority</th><th>Encoded Value</th><th>Samples</th><th>Percentage</th></tr></thead>
-<tbody>
-<tr><td>Medium</td><td>0</td><td>283</td><td>34.7%</td></tr>
-<tr><td>Low</td><td>1</td><td>309</td><td>37.9%</td></tr>
-<tr><td>High</td><td>2</td><td>223</td><td>27.4%</td></tr>
-</tbody>
-</table>
-</div>
-
-<div class="section">
-<h2>📝 Sample Processed Data (First 10 Rows)</h2>
+<div class="grid-3">
+<div class="card">
+<h2>Category Encoding</h2>
 <table>
-<thead><tr><th>#</th><th>Cleaned Text</th><th>Category</th><th>Encoded</th><th>Priority</th><th>Encoded</th><th>Source</th></tr></thead>
+<thead><tr><th>Category</th><th>Code</th><th>Count</th></tr></thead>
 <tbody>
-<tr><td>1</td><td class="sample-text">vpn intermittently disconnects during remote work connections drop every 20 30 minutes while on client calls please review vpn logs and stability for my profile</td><td>IT Support</td><td><span class="encoded">0</span></td><td>Medium</td><td><span class="encoded">0</span></td><td>complaint_triage</td></tr>
-<tr><td>2</td><td class="sample-text">request to map departmental research share i need read write access to the biology research drive the path in the wiki returns access denied could you confirm my group membership and map the drive no elevated privileges required</td><td>IT Support</td><td><span class="encoded">0</span></td><td>Low</td><td><span class="encoded">1</span></td><td>complaint_triage</td></tr>
-<tr><td>3</td><td class="sample-text">canvas submission blocked by sso loop right before deadline sign in passes then loops to login again tried different browsers and cleared cache please break the loop or provide a temporary bypass this is time critical for my grade</td><td>IT Support</td><td><span class="encoded">0</span></td><td>High</td><td><span class="encoded">2</span></td><td>complaint_triage</td></tr>
-<tr><td>4</td><td class="sample-text">matlab license request for course project i need matlab installed with the university license could you assist with activation on a managed laptop</td><td>IT Support</td><td><span class="encoded">0</span></td><td>Low</td><td><span class="encoded">1</span></td><td>complaint_triage</td></tr>
-<tr><td>5</td><td class="sample-text">vpn client fails to authenticate with 2fa the university vpn client keeps timing out during the two factor authentication step after entering my credentials on the push notification or code entry step the connection drops entirely without an error message</td><td>IT Support</td><td><span class="encoded">0</span></td><td>High</td><td><span class="encoded">2</span></td><td>complaint_triage</td></tr>
-<tr><td>6</td><td class="sample-text">onedrive for education sync conflicts across lab and office pcs edits on the lab machine create conflicted copy when opened in my office i reinstalled the client and cleared cache issue persists version history shows parallel edits despite single user workflow please review client version throttling and campus network egress</td><td>IT Support</td><td><span class="encoded">0</span></td><td>Medium</td><td><span class="encoded">0</span></td><td>complaint_triage</td></tr>
-<tr><td>7</td><td class="sample-text">multi factor authentication enrollment loop after resetting my phone i cannot enroll a new device for duo the system says i am already enrolled but no device is registered so i cannot access any portal that requires mfa</td><td>IT Support</td><td><span class="encoded">0</span></td><td>High</td><td><span class="encoded">2</span></td><td>complaint_triage</td></tr>
-<tr><td>8</td><td class="sample-text">zoom pro account locked after license reassignment my zoom pro features stopped working after the department reassigned licenses i can only join basic meetings but cannot host large classes or use breakout rooms please restore my pro license</td><td>IT Support</td><td><span class="encoded">0</span></td><td>Medium</td><td><span class="encoded">0</span></td><td>complaint_triage</td></tr>
-<tr><td>9</td><td class="sample-text">wordpress site restore from backup request the departmental website got corrupted after a plugin update i have a backup from last week on the server but i do not have shell access to restore it myself could the admin team trigger a restore from the latest backup</td><td>IT Support</td><td><span class="encoded">0</span></td><td>Medium</td><td><span class="encoded">0</span></td><td>complaint_triage</td></tr>
-<tr><td>10</td><td class="sample-text">email delivery delay for interdepartmental mails emails sent from my university account to other departmental emails are being delayed by over 4 hours this is causing a lot of communication issues with colleagues and faculty members</td><td>IT Support</td><td><span class="encoded">0</span></td><td>Low</td><td><span class="encoded">1</span></td><td>complaint_triage</td></tr>
+<tr><td>Academics</td><td class="code">0</td><td>114</td></tr>
+<tr><td>IT Support</td><td class="code">1</td><td>100</td></tr>
+<tr><td>Hostels</td><td class="code">2</td><td>100</td></tr>
+<tr><td>Fees / Finance</td><td class="code">3</td><td>100</td></tr>
+<tr><td>Maintenance</td><td class="code">4</td><td>100</td></tr>
+<tr><td>Transport</td><td class="code">5</td><td>100</td></tr>
+<tr><td>Security / Discipline</td><td class="code">6</td><td>100</td></tr>
+<tr><td>Administration</td><td class="code">7</td><td>100</td></tr>
+<tr><td>Library</td><td class="code">8</td><td>1</td></tr>
 </tbody>
 </table>
 </div>
+<div class="card">
+<h2>Priority Encoding</h2>
+<table>
+<thead><tr><th>Priority</th><th>Code</th><th>Count</th></tr></thead>
+<tbody>
+<tr><td>Medium</td><td class="code">0</td><td>283</td></tr>
+<tr><td>Low</td><td class="code">1</td><td>309</td></tr>
+<tr><td>High</td><td class="code">2</td><td>223</td></tr>
+</tbody>
+</table>
+</div>
+<div class="card">
+<h2>Text Length</h2>
+<table>
+<thead><tr><th>Metric</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>Average</td><td><strong>203 chars</strong></td></tr>
+<tr><td>Shortest</td><td>25 chars</td></tr>
+<tr><td>Longest</td><td>469 chars</td></tr>
+<tr><td>Median</td><td>194 chars</td></tr>
+</tbody>
+</table>
+</div>
+</div>
 
-<div class="section">
-<h2>⚙️ Preprocessing Pipeline</h2>
-<div style="display:flex; gap:10px; flex-wrap:wrap;">
-<div style="flex:1; min-width:140px; background:#eff6ff; border-radius:10px; padding:16px; text-align:center;">
-<div style="font-size:24px; margin-bottom:6px;">📥</div>
-<div style="font-weight:600; font-size:13px;">Load</div>
-<div style="font-size:11px; color:#43474e;">1800 raw rows</div>
-</div>
-<div style="flex:1; min-width:140px; background:#eff6ff; border-radius:10px; padding:16px; text-align:center;">
-<div style="font-size:24px; margin-bottom:6px;">🧹</div>
-<div style="font-weight:600; font-size:13px;">Clean</div>
-<div style="font-size:11px; color:#43474e;">Lowercase, trim, normalize</div>
-</div>
-<div style="flex:1; min-width:140px; background:#fef2f2; border-radius:10px; padding:16px; text-align:center;">
-<div style="font-size:24px; margin-bottom:6px;">🗑️</div>
-<div style="font-weight:600; font-size:13px;">Dedup</div>
-<div style="font-size:11px; color:#43474e;">985 duplicates removed</div>
-</div>
-<div style="flex:1; min-width:140px; background:#f0fdf4; border-radius:10px; padding:16px; text-align:center;">
-<div style="font-size:24px; margin-bottom:6px;">🔢</div>
-<div style="font-weight:600; font-size:13px;">Encode</div>
-<div style="font-size:11px; color:#43474e;">Category → 0-8, Priority → 0-2</div>
-</div>
-<div style="flex:1; min-width:140px; background:#f0fdf4; border-radius:10px; padding:16px; text-align:center;">
-<div style="font-size:24px; margin-bottom:6px;">💾</div>
-<div style="font-weight:600; font-size:13px;">Export</div>
-<div style="font-size:11px; color:#43474e;">815 rows + JSON encoders</div>
-</div>
-</div>
+<div class="card">
+<h2>Sample Records (Before Encoding → After Encoding)</h2>
+<table>
+<thead><tr><th>#</th><th>Cleaned Complaint Text</th><th>Category</th><th style="text-align:center">→</th><th>Encoded</th><th>Priority</th><th style="text-align:center">→</th><th>Encoded</th></tr></thead>
+<tbody>
+<tr><td>1</td><td class="sample-text">vpn intermittently disconnects during remote work connections drop every 20 30 minutes while on client calls please review vpn logs and stability for my profile</td><td>IT Support</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">1</td><td>Medium</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">0</td></tr>
+<tr><td>2</td><td class="sample-text">request to map departmental research share i need read write access to the biology research drive the path in the wiki returns access denied</td><td>IT Support</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">1</td><td>Low</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">1</td></tr>
+<tr><td>3</td><td class="sample-text">canvas submission blocked by sso loop right before deadline sign in passes then loops to login again tried different browsers and cleared cache</td><td>IT Support</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">1</td><td>High</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">2</td></tr>
+<tr><td>4</td><td class="sample-text">matlab license request for course project i need matlab installed with the university license could you assist with activation on a managed laptop</td><td>IT Support</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">1</td><td>Low</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">1</td></tr>
+<tr><td>5</td><td class="sample-text">continuous water supply cut for over 24 hours in block f we have no water for drinking cleaning or the washrooms the hygiene levels are becoming unbearable</td><td>Hostels</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">2</td><td>High</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">2</td></tr>
+<tr><td>6</td><td class="sample-text">the examination schedule for final semester has not been released yet the tentative dates were supposed to be out last week i cannot plan my travel or study schedule without knowing the exam dates</td><td>Academics</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">0</td><td>High</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">2</td></tr>
+</tbody>
+</table>
 </div>
 
 </div>
 
 <script>
-const catCtx = document.getElementById('catChart').getContext('2d');
-new Chart(catCtx, {
-  type: 'bar',
-  data: {
-    labels: ['IT Support','Hostels','Academics','Fees/Finance','Maintenance','Transport','Security/Discipline','Administration','Library'],
-    datasets: [{
-      label: 'Count',
-      data: [100,100,114,100,100,100,100,100,1],
-      backgroundColor: ['#3b82f6','#6366f1','#8b5cf6','#ec4899','#f43f5e','#f59e0b','#10b981','#06b6d4','#022448'],
-      borderRadius: 6
-    }]
-  },
-  options: {
-    responsive: true,
-    plugins: { legend: { display: false } },
-    scales: { y: { beginAtZero: true } }
-  }
-});
-
-const priCtx = document.getElementById('priChart').getContext('2d');
-new Chart(priCtx, {
-  type: 'doughnut',
-  data: {
-    labels: ['Medium (0)', 'Low (1)', 'High (2)'],
-    datasets: [{
-      data: [309, 283, 223],
-      backgroundColor: ['#10b981','#f59e0b','#ef4444']
-    }]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom' }
+const catData = {
+  labels: ['Academics','IT Support','Hostels','Fees','Maintenance','Transport','Security','Admin','Library'],
+  datasets: [
+    {
+      type:'bar',
+      label:'Count',
+      data:[114,100,100,100,100,100,100,100,1],
+      backgroundColor:['#3b82f6','#6366f1','#8b5cf6','#ec4899','#f43f5e','#f59e0b','#10b981','#06b6d4','#94a3b8'],
+      borderRadius:4,
+      order:2
+    },
+    {
+      type:'line',
+      label:'Cumulative %',
+      data:[14,26.3,38.7,51,63.3,75.6,87.9,100,100.1],
+      borderColor:'#022448',
+      backgroundColor:'transparent',
+      borderWidth:2,
+      pointBackgroundColor:'#022448',
+      pointRadius:3,
+      tension:0.2,
+      yAxisID:'y1',
+      order:1
     }
+  ]
+};
+const catOpts = {
+  responsive:true,
+  plugins:{legend:{display:false}},
+  scales:{
+    y:{beginAtZero:true,grid:{color:'#eef2f7'},title:{display:true,text:'Count',font:{size:11}}},
+    y1:{position:'right',beginAtZero:true,max:110,grid:{display:false},title:{display:true,text:'Cumulative %',font:{size:11}}}
   }
+};
+new Chart(document.getElementById('catChart'),{type:'bar',data:catData,options:catOpts});
+
+new Chart(document.getElementById('priChart'),{
+  type:'doughnut',
+  data:{
+    labels:['Low (code=1) — 309','Medium (code=0) — 283','High (code=2) — 223'],
+    datasets:[{data:[309,283,223],backgroundColor:['#10b981','#f59e0b','#ef4444']}]
+  },
+  options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:12}}}}}
 });
 </script>
 </body>
