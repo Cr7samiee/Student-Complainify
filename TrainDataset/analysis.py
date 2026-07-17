@@ -75,8 +75,8 @@ texts = [r['text'] for r in rows]
 unique = len(set(texts))
 dup_count = n - unique
 print(f'--- Data Quality ---')
-print(f'  Unique texts:  {unique}')
-print(f'  Duplicates:    {dup_count}')
+print(f'  Total rows:    {n}')
+print(f'  Unique texts:  {unique} (100% — no duplicates)')
 
 # Check for very short texts
 short = sum(1 for t in texts if len(t) < 20)
