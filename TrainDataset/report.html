@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dataset Analysis Report</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:#f8f9ff; color:#022448; padding:40px; }
+.container { max-width:1200px; margin:0 auto; }
+h1 { font-size:28px; margin-bottom:30px; color:#022448; border-bottom:3px solid #0058be; padding-bottom:10px; }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:40px; }
+.stat-card { background:white; border-radius:12px; padding:20px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+.stat-card .num { font-size:32px; font-weight:700; color:#0058be; }
+.stat-card .label { font-size:14px; color:#666; margin-top:4px; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:40px; }
+.chart-card { background:white; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+.chart-card h3 { font-size:16px; margin-bottom:16px; color:#022448; }
+.full { grid-column:1/-1; }
+table { width:100%; border-collapse:collapse; font-size:14px; }
+th { background:#022448; color:white; padding:10px 12px; text-align:left; }
+td { padding:8px 12px; border-bottom:1px solid #e8eaf6; }
+tr:hover td { background:#f0f4ff; }
+.num-col { text-align:right; font-weight:600; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Dataset Analysis Report</h1>
+
+<div class="stats">
+<div class="stat-card"><div class="num">890</div><div class="label">Total Samples</div></div>
+<div class="stat-card"><div class="num">9</div><div class="label">Categories</div></div>
+<div class="stat-card"><div class="num">3</div><div class="label">Priority Levels</div></div>
+<div class="stat-card"><div class="num">2</div><div class="label">Sources</div></div>
+<div class="stat-card"><div class="num">815</div><div class="label">Unique Texts</div></div>
+<div class="stat-card"><div class="num">75</div><div class="label">Duplicates</div></div>
+</div>
+
+<div class="grid">
+<div class="chart-card">
+<h3>Category Distribution</h3>
+<canvas id="catChart" height="200"></canvas>
+</div>
+<div class="chart-card">
+<h3>Priority Distribution</h3>
+<canvas id="priChart" height="200"></canvas>
+</div>
+<div class="chart-card">
+<h3>Source Distribution</h3>
+<canvas id="srcChart" height="200"></canvas>
+</div>
+<div class="chart-card">
+<h3>Text Length Distribution</h3>
+<canvas id="lenChart" height="200"></canvas>
+</div>
+</div>
+
+<div class="chart-card full">
+<h3>Category x Priority Cross-tab</h3>
+<div style="overflow-x:auto;">
+<table>
+<tr><th>Category</th><th>High</th><th>Medium</th><th>Low</th><th>Total</th></tr>
+<tr><td>Academics</td><td class="num-col">30</td><td class="num-col">40</td><td class="num-col">45</td><td class="num-col">115</td></tr>
+<tr><td>Administration</td><td class="num-col">34</td><td class="num-col">39</td><td class="num-col">42</td><td class="num-col">115</td></tr>
+<tr><td>Fees / Finance</td><td class="num-col">30</td><td class="num-col">40</td><td class="num-col">45</td><td class="num-col">115</td></tr>
+<tr><td>Hostels</td><td class="num-col">30</td><td class="num-col">40</td><td class="num-col">45</td><td class="num-col">115</td></tr>
+<tr><td>IT Support</td><td class="num-col">30</td><td class="num-col">40</td><td class="num-col">45</td><td class="num-col">115</td></tr>
+<tr><td>Library</td><td class="num-col">5</td><td class="num-col">5</td><td class="num-col">5</td><td class="num-col">15</td></tr>
+<tr><td>Maintenance</td><td class="num-col">25</td><td class="num-col">35</td><td class="num-col">40</td><td class="num-col">100</td></tr>
+<tr><td>Security / Discipline</td><td class="num-col">36</td><td class="num-col">37</td><td class="num-col">27</td><td class="num-col">100</td></tr>
+<tr><td>Transport</td><td class="num-col">28</td><td class="num-col">32</td><td class="num-col">40</td><td class="num-col">100</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<script>
+new Chart(document.getElementById('catChart'), {
+    type: 'bar',
+    data: {
+        labels: ["IT Support", "Hostels", "Academics", "Fees / Finance", "Administration", "Maintenance", "Transport", "Security / Discipline", "Library"],
+        datasets: [{ label:'Count', data:[115, 115, 115, 115, 115, 100, 100, 100, 15], backgroundColor:["#022448", "#0058be", "#1a73e8", "#4a90d9", "#7ab3f0", "#a8d1f7", "#c4c6cf", "#e8eaf6", "#f8f9ff"], borderRadius:6 }]
+    },
+    options: { responsive:true, plugins:{ legend:{ display:false } } }
+});
+new Chart(document.getElementById('priChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ["High", "Medium", "Low"],
+        datasets: [{ data:[248, 308, 334], backgroundColor:['#EF4444','#F59E0B','#10B981'] }]
+    },
+    options: { responsive:true }
+});
+new Chart(document.getElementById('srcChart'), {
+    type: 'pie',
+    data: {
+        labels: ["complaint_triage", "query_test"],
+        datasets: [{ data:[800, 90], backgroundColor:['#022448','#0058be','#4a90d9'] }]
+    },
+    options: { responsive:true }
+});
+new Chart(document.getElementById('lenChart'), {
+    type: 'bar',
+    data: {
+        labels: ["0-50", "51-100", "101-150", "151-200", "201-300", "301-500", "500+"],
+        datasets: [{ label:'Count', data:[72, 19, 101, 326, 325, 47, 0], backgroundColor:'#0058be', borderRadius:6 }]
+    },
+    options: { responsive:true, plugins:{ legend:{ display:false } } }
+});
+</script>
+</body>
+</html>

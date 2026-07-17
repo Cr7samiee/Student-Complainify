@@ -37,6 +37,22 @@ categories = [r['category'] for r in rows]
 priorities = [r['priority'] for r in rows]
 sources = [r['source'] for r in rows]
 
+# Deduplicate: keep unique (text, category, priority) combinations
+seen = set()
+unique_indices = []
+for i, t in enumerate(texts):
+    key = (t, categories[i], priorities[i])
+    if key not in seen:
+        seen.add(key)
+        unique_indices.append(i)
+
+removed = len(texts) - len(unique_indices)
+texts = [texts[i] for i in unique_indices]
+categories = [categories[i] for i in unique_indices]
+priorities = [priorities[i] for i in unique_indices]
+sources = [sources[i] for i in unique_indices]
+print(f'Removed {removed} exact duplicates, kept {len(texts)} unique rows')
+
 cat_encoder = build_encoder(categories)
 pri_encoder = build_encoder(priorities)
 
