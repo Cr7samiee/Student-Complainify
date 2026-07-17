@@ -1,0 +1,11 @@
+{
+  "IT Support": 0,
+  "Hostels": 1,
+  "Academics": 2,
+  "Fees / Finance": 3,
+  "Maintenance": 4,
+  "Transport": 5,
+  "Security / Discipline": 6,
+  "Administration": 7,
+  "Library": 8
+}
