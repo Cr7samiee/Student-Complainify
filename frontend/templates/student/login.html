@@ -17,6 +17,13 @@
 <a href="{{ url_for('student_login') }}" class="flex-1 py-2 text-center text-sm font-semibold bg-white rounded-md shadow-sm text-primary">Student</a>
 <a href="{{ url_for('admin_login') }}" class="flex-1 py-2 text-center text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors">Admin</a>
 </div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="form-message {{ category }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
 <form method="POST" class="space-y-5">
 <div class="space-y-1.5">
 <label class="block text-sm font-medium text-on-surface" for="email">Email Address</label>

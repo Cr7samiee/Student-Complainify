@@ -13,6 +13,13 @@
 <h2 class="text-2xl font-semibold text-on-surface mb-2">Create Account</h2>
 <p class="text-base text-on-surface-variant">Register for a student account.</p>
 </div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="form-message {{ category }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
 <form method="POST" class="space-y-5">
 <div class="space-y-1.5">
 <label class="block text-sm font-medium text-on-surface" for="fullname">Full Name</label>
@@ -39,8 +46,15 @@
 <label class="block text-sm font-medium text-on-surface" for="password">Password</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">lock</span>
-<input class="w-full pl-10 pr-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-on-surface text-sm" id="password" name="password" placeholder="Create a strong password" type="password">
+<input class="w-full pl-10 pr-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-on-surface text-sm" id="password" name="password" placeholder="Create a strong password" type="password" onkeyup="checkStrength(this.value)">
 </div>
+<div class="flex gap-1.5 mt-2" id="strength-bar">
+<div class="strength-segment h-1.5 flex-1 rounded-full bg-gray-200"></div>
+<div class="strength-segment h-1.5 flex-1 rounded-full bg-gray-200"></div>
+<div class="strength-segment h-1.5 flex-1 rounded-full bg-gray-200"></div>
+<div class="strength-segment h-1.5 flex-1 rounded-full bg-gray-200"></div>
+</div>
+<p class="text-xs text-on-surface-variant mt-1" id="strength-text">Type a password to see strength</p>
 </div>
 <div class="space-y-1.5">
 <label class="block text-sm font-medium text-on-surface" for="confirm_password">Confirm Password</label>
@@ -57,4 +71,23 @@
 </div>
 </div>
 </main>
+<script>
+function checkStrength(pw) {
+  var segments = document.querySelectorAll('.strength-segment');
+  var text = document.getElementById('strength-text');
+  var colors = ['bg-gray-200','bg-red-400','bg-orange-400','bg-yellow-400','bg-green-500'];
+  var labels = ['','Weak','Fair','Good','Strong'];
+  var score = 0;
+  if (pw.length >= 6) score++;
+  if (pw.length >= 10) score++;
+  if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
+  if (/\d/.test(pw)) score++;
+  if (/[^a-zA-Z0-9]/.test(pw)) score++;
+  for (var i = 0; i < 4; i++) {
+    segments[i].className = 'strength-segment h-1.5 flex-1 rounded-full ' + (i < score ? colors[score] : 'bg-gray-200');
+  }
+  text.textContent = score > 0 ? 'Password strength: ' + labels[score] : 'Type a password to see strength';
+  text.style.color = score > 3 ? '#10b981' : score > 1 ? '#f59e0b' : '#ef4444';
+}
+</script>
 {% endblock %}

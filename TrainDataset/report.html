@@ -3,111 +3,226 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dataset Analysis Report</title>
+<title>Data Preprocessing Report — Complainify</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Inter',sans-serif; background:#f8f9ff; color:#022448; padding:40px; }
-.container { max-width:1200px; margin:0 auto; }
-h1 { font-size:28px; margin-bottom:30px; color:#022448; border-bottom:3px solid #0058be; padding-bottom:10px; }
-.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:40px; }
-.stat-card { background:white; border-radius:12px; padding:20px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
-.stat-card .num { font-size:32px; font-weight:700; color:#0058be; }
-.stat-card .label { font-size:14px; color:#666; margin-top:4px; }
-.grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:40px; }
-.chart-card { background:white; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
-.chart-card h3 { font-size:16px; margin-bottom:16px; color:#022448; }
-.full { grid-column:1/-1; }
-table { width:100%; border-collapse:collapse; font-size:14px; }
-th { background:#022448; color:white; padding:10px 12px; text-align:left; }
-td { padding:8px 12px; border-bottom:1px solid #e8eaf6; }
-tr:hover td { background:#f0f4ff; }
-.num-col { text-align:right; font-weight:600; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#f8f9ff;color:#022448;padding:30px}
+.container{max-width:1100px;margin:0 auto}
+h1{font-size:28px;margin-bottom:4px;color:#022448}
+.subtitle{color:#43474e;font-size:14px;margin-bottom:28px}
+.card{background:white;border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,0.04);border:1px solid #e5eeff}
+.card h2{font-size:15px;margin-bottom:14px;color:#022448;display:flex;align-items:center;gap:8px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.stat{background:white;border-radius:12px;padding:18px 14px;text-align:center;border:1px solid #e5eeff}
+.stat .num{font-size:28px;font-weight:800;color:#0058be;line-height:1.2}
+.stat .label{font-size:12px;color:#43474e;margin-top:3px}
+.stat .tag{font-size:10px;padding:2px 10px;border-radius:20px;display:inline-block;margin-top:5px;font-weight:600}
+.tag-blue{background:#eff6ff;color:#0058be}
+.tag-green{background:#f0fdf4;color:#10b981}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#022448;color:white;padding:9px 12px;text-align:left;font-weight:600;font-size:12px}
+td{padding:8px 12px;border-bottom:1px solid #eef2f7}
+tr:hover td{background:#f5f8ff}
+.code{background:#e8f5e9;color:#2e7d32;font-weight:700;padding:2px 8px;border-radius:4px;font-size:13px;font-family:monospace}
+.sample-text{max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#43474e;font-size:12px}
+.step-flow{display:flex;gap:8px;flex-wrap:wrap}
+.step{flex:1;min-width:130px;border-radius:10px;padding:14px;text-align:center;border:1px solid #e5eeff}
+.step .icon{font-size:22px;margin-bottom:4px}
+.step .title{font-weight:600;font-size:13px}
+.step .desc{font-size:11px;color:#43474e;margin-top:2px}
+.step-1{background:#f0f4ff}
+.step-2{background:#f0f4ff}
+.step-3{background:#f0fdf4}
+.step-4{background:#fefce8}
+.step-5{background:#f0fdf4}
 </style>
 </head>
 <body>
 <div class="container">
-<h1>Dataset Analysis Report</h1>
 
-<div class="stats">
-<div class="stat-card"><div class="num">815</div><div class="label">Total Samples</div></div>
-<div class="stat-card"><div class="num">9</div><div class="label">Categories</div></div>
-<div class="stat-card"><div class="num">3</div><div class="label">Priority Levels</div></div>
-<div class="stat-card"><div class="num">2</div><div class="label">Sources</div></div>
-<div class="stat-card"><div class="num">815</div><div class="label">Unique Texts</div></div>
-<div class="stat-card"><div class="num">0</div><div class="label">Duplicates</div></div>
-</div>
+<h1>📊 Data Preprocessing Report</h1>
+<p class="subtitle">Preparing the complaint dataset for Naive Bayes classification — Before vs After</p>
 
-<div class="grid">
-<div class="chart-card">
-<h3>Category Distribution</h3>
-<canvas id="catChart" height="200"></canvas>
+<!-- Before vs After Comparison -->
+<div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:10px;margin-bottom:22px;align-items:center">
+<div style="background:white;border-radius:14px;padding:20px;border:2px solid #e5eeff;text-align:center">
+<div style="font-size:11px;color:#43474e;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Before Preprocessing</div>
+<div style="font-size:48px;font-weight:800;color:#ef4444;line-height:1">1,800</div>
+<div style="font-size:13px;color:#43474e;margin-top:4px">total raw complaints</div>
+<div style="font-size:11px;color:#94a3b8;margin-top:4px">2 sources merged (800 + 1,000)</div>
 </div>
-<div class="chart-card">
-<h3>Priority Distribution</h3>
-<canvas id="priChart" height="200"></canvas>
-</div>
-<div class="chart-card">
-<h3>Source Distribution</h3>
-<canvas id="srcChart" height="200"></canvas>
-</div>
-<div class="chart-card">
-<h3>Text Length Distribution</h3>
-<canvas id="lenChart" height="200"></canvas>
+<div style="text-align:center;font-size:28px;color:#0058be;font-weight:700">→</div>
+<div style="background:white;border-radius:14px;padding:20px;border:2px solid #10b981;text-align:center;position:relative">
+<div style="position:absolute;top:-10px;right:14px;background:#10b981;color:white;font-size:10px;font-weight:700;padding:2px 10px;border-radius:20px">FINAL</div>
+<div style="font-size:11px;color:#43474e;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">After Preprocessing</div>
+<div style="font-size:48px;font-weight:800;color:#10b981;line-height:1">815</div>
+<div style="font-size:13px;color:#43474e;margin-top:4px"><strong>unique</strong> complaint texts</div>
+<div style="font-size:11px;color:#94a3b8;margin-top:4px">all duplicates removed</div>
 </div>
 </div>
 
-<div class="chart-card full">
-<h3>Category x Priority Cross-tab</h3>
-<div style="overflow-x:auto;">
+<!-- Reduction details -->
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:22px">
+<div style="background:#fef2f2;border-radius:12px;padding:14px;text-align:center;border:1px solid #fecaca">
+<div style="font-size:11px;color:#ef4444;font-weight:600">RAW</div>
+<div style="font-size:24px;font-weight:800;color:#ef4444">1,800</div>
+<div style="font-size:10px;color:#ef4444">rows loaded</div>
+</div>
+<div style="background:#fff7ed;border-radius:12px;padding:14px;text-align:center;border:1px solid #fed7aa">
+<div style="font-size:11px;color:#f97316;font-weight:600">REMOVED</div>
+<div style="font-size:24px;font-weight:800;color:#f97316">985</div>
+<div style="font-size:10px;color:#f97316">duplicate texts</div>
+</div>
+<div style="background:#f0fdf4;border-radius:12px;padding:14px;text-align:center;border:1px solid #bbf7d0">
+<div style="font-size:11px;color:#10b981;font-weight:600">UNIQUE</div>
+<div style="font-size:24px;font-weight:800;color:#10b981">815</div>
+<div style="font-size:10px;color:#10b981">texts remain</div>
+</div>
+<div style="background:#eff6ff;border-radius:12px;padding:14px;text-align:center;border:1px solid #bfdbfe">
+<div style="font-size:11px;color:#0058be;font-weight:600">ENCODED</div>
+<div style="font-size:24px;font-weight:800;color:#0058be">9+3</div>
+<div style="font-size:10px;color:#0058be">category + priority labels</div>
+</div>
+</div>
+
+<div class="card">
+<h2>Why 1,800 → 815?</h2>
+<p style="font-size:13px;color:#43474e;line-height:1.6">
+The raw dataset merged two sources — <strong>complaint_triage</strong> (800 rows) and <strong>query_test</strong> (1,000 rows).
+Many complaint texts appeared multiple times (e.g., <em>"LMS is not allowing assignment upload"</em> appeared 15 times).
+Keeping duplicates would <strong>bias the ML model</strong> toward repeated texts, so we kept only <strong>1 copy per unique complaint</strong>.
+Each of the <strong>815 unique texts</strong> has a category label (9 types) and priority label (High/Medium/Low) assigned.
+</p>
+</div>
+
+<div class="step-flow" style="margin-bottom:18px">
+<div class="step step-1"><div class="icon">📦</div><div class="title">Load</div><div class="desc">1,800 raw rows from 2 sources</div></div>
+<div class="step step-2"><div class="icon">🧹</div><div class="title">Clean</div><div class="desc">Lowercase, trim, normalize symbols</div></div>
+<div class="step step-3"><div class="icon">✓</div><div class="title">Consolidate</div><div class="desc">815 unique complaint texts</div></div>
+<div class="step step-4"><div class="icon">🔢</div><div class="title">Encode</div><div class="desc">Text labels → integer values</div></div>
+<div class="step step-5"><div class="icon">💾</div><div class="title">Export</div><div class="desc">CSV + JSON encoder files</div></div>
+</div>
+
+<div class="grid-2">
+<div class="card">
+<h2>Category Distribution</h2>
+<p style="font-size:11px;color:#43474e;margin-bottom:10px">Bars = count per category &nbsp;|&nbsp; Line = cumulative %</p>
+<canvas id="catChart" height="190"></canvas>
+</div>
+<div class="card">
+<h2>Priority Distribution</h2>
+<canvas id="priChart" height="190"></canvas>
+</div>
+</div>
+
+<div class="grid-3">
+<div class="card">
+<h2>Category Encoding</h2>
 <table>
-<tr><th>Category</th><th>High</th><th>Medium</th><th>Low</th><th>Total</th></tr>
-<tr><td>Academics</td><td class="num-col">29</td><td class="num-col">40</td><td class="num-col">45</td><td class="num-col">114</td></tr>
-<tr><td>Administration</td><td class="num-col">29</td><td class="num-col">34</td><td class="num-col">37</td><td class="num-col">100</td></tr>
-<tr><td>Fees / Finance</td><td class="num-col">25</td><td class="num-col">35</td><td class="num-col">40</td><td class="num-col">100</td></tr>
-<tr><td>Hostels</td><td class="num-col">25</td><td class="num-col">35</td><td class="num-col">40</td><td class="num-col">100</td></tr>
-<tr><td>IT Support</td><td class="num-col">25</td><td class="num-col">35</td><td class="num-col">40</td><td class="num-col">100</td></tr>
-<tr><td>Library</td><td class="num-col">1</td><td class="num-col">0</td><td class="num-col">0</td><td class="num-col">1</td></tr>
-<tr><td>Maintenance</td><td class="num-col">25</td><td class="num-col">35</td><td class="num-col">40</td><td class="num-col">100</td></tr>
-<tr><td>Security / Discipline</td><td class="num-col">36</td><td class="num-col">37</td><td class="num-col">27</td><td class="num-col">100</td></tr>
-<tr><td>Transport</td><td class="num-col">28</td><td class="num-col">32</td><td class="num-col">40</td><td class="num-col">100</td></tr>
+<thead><tr><th>Category</th><th>Code</th><th>Count</th></tr></thead>
+<tbody>
+<tr><td>Academics</td><td class="code">0</td><td>114</td></tr>
+<tr><td>IT Support</td><td class="code">1</td><td>100</td></tr>
+<tr><td>Hostels</td><td class="code">2</td><td>100</td></tr>
+<tr><td>Fees / Finance</td><td class="code">3</td><td>100</td></tr>
+<tr><td>Maintenance</td><td class="code">4</td><td>100</td></tr>
+<tr><td>Transport</td><td class="code">5</td><td>100</td></tr>
+<tr><td>Security / Discipline</td><td class="code">6</td><td>100</td></tr>
+<tr><td>Administration</td><td class="code">7</td><td>100</td></tr>
+<tr><td>Library</td><td class="code">8</td><td>1</td></tr>
+</tbody>
+</table>
+</div>
+<div class="card">
+<h2>Priority Encoding</h2>
+<table>
+<thead><tr><th>Priority</th><th>Code</th><th>Count</th></tr></thead>
+<tbody>
+<tr><td>Medium</td><td class="code">0</td><td>283</td></tr>
+<tr><td>Low</td><td class="code">1</td><td>309</td></tr>
+<tr><td>High</td><td class="code">2</td><td>223</td></tr>
+</tbody>
+</table>
+</div>
+<div class="card">
+<h2>Text Length</h2>
+<table>
+<thead><tr><th>Metric</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>Average</td><td><strong>203 chars</strong></td></tr>
+<tr><td>Shortest</td><td>25 chars</td></tr>
+<tr><td>Longest</td><td>469 chars</td></tr>
+<tr><td>Median</td><td>194 chars</td></tr>
+</tbody>
 </table>
 </div>
 </div>
+
+<div class="card">
+<h2>Sample Records (Before Encoding → After Encoding)</h2>
+<table>
+<thead><tr><th>#</th><th>Cleaned Complaint Text</th><th>Category</th><th style="text-align:center">→</th><th>Encoded</th><th>Priority</th><th style="text-align:center">→</th><th>Encoded</th></tr></thead>
+<tbody>
+<tr><td>1</td><td class="sample-text">vpn intermittently disconnects during remote work connections drop every 20 30 minutes while on client calls please review vpn logs and stability for my profile</td><td>IT Support</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">1</td><td>Medium</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">0</td></tr>
+<tr><td>2</td><td class="sample-text">request to map departmental research share i need read write access to the biology research drive the path in the wiki returns access denied</td><td>IT Support</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">1</td><td>Low</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">1</td></tr>
+<tr><td>3</td><td class="sample-text">canvas submission blocked by sso loop right before deadline sign in passes then loops to login again tried different browsers and cleared cache</td><td>IT Support</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">1</td><td>High</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">2</td></tr>
+<tr><td>4</td><td class="sample-text">matlab license request for course project i need matlab installed with the university license could you assist with activation on a managed laptop</td><td>IT Support</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">1</td><td>Low</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">1</td></tr>
+<tr><td>5</td><td class="sample-text">continuous water supply cut for over 24 hours in block f we have no water for drinking cleaning or the washrooms the hygiene levels are becoming unbearable</td><td>Hostels</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">2</td><td>High</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">2</td></tr>
+<tr><td>6</td><td class="sample-text">the examination schedule for final semester has not been released yet the tentative dates were supposed to be out last week i cannot plan my travel or study schedule without knowing the exam dates</td><td>Academics</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">0</td><td>High</td><td style="text-align:center;color:#0058be;font-weight:700">→</td><td class="code">2</td></tr>
+</tbody>
+</table>
+</div>
+
 </div>
 
 <script>
-new Chart(document.getElementById('catChart'), {
-    type: 'bar',
-    data: {
-        labels: ["Academics", "IT Support", "Hostels", "Fees / Finance", "Maintenance", "Transport", "Security / Discipline", "Administration", "Library"],
-        datasets: [{ label:'Count', data:[114, 100, 100, 100, 100, 100, 100, 100, 1], backgroundColor:["#022448", "#0058be", "#1a73e8", "#4a90d9", "#7ab3f0", "#a8d1f7", "#c4c6cf", "#e8eaf6", "#f8f9ff"], borderRadius:6 }]
+const catData = {
+  labels: ['Academics','IT Support','Hostels','Fees','Maintenance','Transport','Security','Admin','Library'],
+  datasets: [
+    {
+      type:'bar',
+      label:'Count',
+      data:[114,100,100,100,100,100,100,100,1],
+      backgroundColor:['#3b82f6','#6366f1','#8b5cf6','#ec4899','#f43f5e','#f59e0b','#10b981','#06b6d4','#94a3b8'],
+      borderRadius:4,
+      order:2
     },
-    options: { responsive:true, plugins:{ legend:{ display:false } } }
-});
-new Chart(document.getElementById('priChart'), {
-    type: 'doughnut',
-    data: {
-        labels: ["High", "Medium", "Low"],
-        datasets: [{ data:[223, 283, 309], backgroundColor:['#EF4444','#F59E0B','#10B981'] }]
-    },
-    options: { responsive:true }
-});
-new Chart(document.getElementById('srcChart'), {
-    type: 'pie',
-    data: {
-        labels: ["complaint_triage", "query_test"],
-        datasets: [{ data:[800, 15], backgroundColor:['#022448','#0058be','#4a90d9'] }]
-    },
-    options: { responsive:true }
-});
-new Chart(document.getElementById('lenChart'), {
-    type: 'bar',
-    data: {
-        labels: ["0-50", "51-100", "101-150", "151-200", "201-300", "301-500", "500+"],
-        datasets: [{ label:'Count', data:[12, 4, 101, 326, 325, 47, 0], backgroundColor:'#0058be', borderRadius:6 }]
-    },
-    options: { responsive:true, plugins:{ legend:{ display:false } } }
+    {
+      type:'line',
+      label:'Cumulative %',
+      data:[14,26.3,38.7,51,63.3,75.6,87.9,100,100.1],
+      borderColor:'#022448',
+      backgroundColor:'transparent',
+      borderWidth:2,
+      pointBackgroundColor:'#022448',
+      pointRadius:3,
+      tension:0.2,
+      yAxisID:'y1',
+      order:1
+    }
+  ]
+};
+const catOpts = {
+  responsive:true,
+  plugins:{legend:{display:false}},
+  scales:{
+    y:{beginAtZero:true,grid:{color:'#eef2f7'},title:{display:true,text:'Count',font:{size:11}}},
+    y1:{position:'right',beginAtZero:true,max:110,grid:{display:false},title:{display:true,text:'Cumulative %',font:{size:11}}}
+  }
+};
+new Chart(document.getElementById('catChart'),{type:'bar',data:catData,options:catOpts});
+
+new Chart(document.getElementById('priChart'),{
+  type:'doughnut',
+  data:{
+    labels:['Low (code=1) — 309','Medium (code=0) — 283','High (code=2) — 223'],
+    datasets:[{data:[309,283,223],backgroundColor:['#10b981','#f59e0b','#ef4444']}]
+  },
+  options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:12}}}}}
 });
 </script>
 </body>

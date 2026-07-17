@@ -71,31 +71,52 @@ def student_login():
     if 'user_id' in session and session.get('role') == 'student':
         return redirect(url_for('student_dashboard'))
     if request.method == 'POST':
-        email = request.form.get('email')
+        email = request.form.get('email', '').strip()
         password = hash_pw(request.form.get('password',''))
         conn = get_db(); cur = conn.cursor()
-        cur.execute("SELECT id,fullname,email,role FROM users WHERE email=%s AND password=%s AND role='student'", (email, password))
+        cur.execute("SELECT id,fullname,email,password,role FROM users WHERE email=%s AND role='student'", (email,))
         user = cur.fetchone()
-        cur.close(); conn.close()
         if user:
-            session.permanent = True
-            session['user_id'] = user['id']
-            session['fullname'] = user['fullname']
-            session['email'] = user['email']
-            session['role'] = 'student'
-            return redirect(url_for('student_dashboard'))
-        flash('Invalid email or password.', 'error')
+            if user['password'] == password:
+                session.permanent = True
+                session['user_id'] = user['id']
+                session['fullname'] = user['fullname']
+                session['email'] = user['email']
+                session['role'] = 'student'
+                cur.close(); conn.close()
+                return redirect(url_for('student_dashboard'))
+            flash('Incorrect password. Please try again.', 'error')
+        else:
+            flash('Account not found with this email.', 'error')
+        cur.close(); conn.close()
     return render_template('student/login.html')
 
 @app.route('/student/register', methods=['GET', 'POST'])
 def student_register():
     if request.method == 'POST':
+        fullname = request.form.get('fullname', '').strip()
+        email = request.form.get('email', '').strip()
+        phone = request.form.get('phone', '').strip()
+        pw = request.form.get('password', '')
+        confirm = request.form.get('confirm_password', '')
+
+        if not fullname or not email or not phone or not pw:
+            flash('All fields are required.', 'error')
+            return render_template('student/register.html')
+        if '@' not in email:
+            flash('Please enter a valid email address.', 'error')
+            return render_template('student/register.html')
+        if len(pw) < 6:
+            flash('Password must be at least 6 characters.', 'error')
+            return render_template('student/register.html')
+        if pw != confirm:
+            flash('Passwords do not match.', 'error')
+            return render_template('student/register.html')
+
         conn = get_db(); cur = conn.cursor()
         try:
-            pw = request.form.get('password','')
             cur.execute("INSERT INTO users (fullname,email,phone,plain_password,password,role) VALUES (%s,%s,%s,%s,%s,'student')",
-                (request.form.get('fullname'), request.form.get('email'), request.form.get('phone'),
-                 pw, hash_pw(pw)))
+                (fullname, email, phone, pw, hash_pw(pw)))
             conn.commit()
             flash('Registration successful! Please login.', 'success')
         except pymysql.err.IntegrityError:
@@ -125,31 +146,52 @@ def admin_login():
     if 'user_id' in session and session.get('role') == 'admin':
         return redirect(url_for('admin_dashboard'))
     if request.method == 'POST':
-        email = request.form.get('email')
+        email = request.form.get('email', '').strip()
         password = hash_pw(request.form.get('password',''))
         conn = get_db(); cur = conn.cursor()
-        cur.execute("SELECT id,fullname,email,role FROM users WHERE email=%s AND password=%s AND role='admin'", (email, password))
+        cur.execute("SELECT id,fullname,email,password,role FROM users WHERE email=%s AND role='admin'", (email,))
         user = cur.fetchone()
-        cur.close(); conn.close()
         if user:
-            session.permanent = True
-            session['user_id'] = user['id']
-            session['fullname'] = user['fullname']
-            session['email'] = user['email']
-            session['role'] = 'admin'
-            return redirect(url_for('admin_dashboard'))
-        flash('Invalid credentials.', 'error')
+            if user['password'] == password:
+                session.permanent = True
+                session['user_id'] = user['id']
+                session['fullname'] = user['fullname']
+                session['email'] = user['email']
+                session['role'] = 'admin'
+                cur.close(); conn.close()
+                return redirect(url_for('admin_dashboard'))
+            flash('Incorrect password. Please try again.', 'error')
+        else:
+            flash('Admin account not found with this email.', 'error')
+        cur.close(); conn.close()
     return render_template('admin/login.html')
 
 @app.route('/admin/register', methods=['GET', 'POST'])
 def admin_register():
     if request.method == 'POST':
+        fullname = request.form.get('fullname', '').strip()
+        email = request.form.get('email', '').strip()
+        phone = request.form.get('phone', '').strip()
+        pw = request.form.get('password', '')
+        confirm = request.form.get('confirm_password', '')
+
+        if not fullname or not email or not phone or not pw:
+            flash('All fields are required.', 'error')
+            return render_template('admin/register.html')
+        if '@' not in email:
+            flash('Please enter a valid email address.', 'error')
+            return render_template('admin/register.html')
+        if len(pw) < 6:
+            flash('Password must be at least 6 characters.', 'error')
+            return render_template('admin/register.html')
+        if pw != confirm:
+            flash('Passwords do not match.', 'error')
+            return render_template('admin/register.html')
+
         conn = get_db(); cur = conn.cursor()
         try:
-            pw = request.form.get('password','')
             cur.execute("INSERT INTO users (fullname,email,phone,plain_password,password,role) VALUES (%s,%s,%s,%s,%s,'admin')",
-                (request.form.get('fullname'), request.form.get('email'), request.form.get('phone'),
-                 pw, hash_pw(pw)))
+                (fullname, email, phone, pw, hash_pw(pw)))
             conn.commit()
             flash('Admin registration successful! Please login.', 'success')
         except pymysql.err.IntegrityError:
