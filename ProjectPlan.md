@@ -361,6 +361,51 @@ The application is **not developed inside the XAMPP `htdocs` directory**, as it 
 
 ---
 
+---
+
+# 🧠 Naive Bayes Implementation (From Scratch)
+
+### File: `ai/naive_bayes.py`
+
+Full Multinomial Naive Bayes classifier implemented **entirely from scratch** (no scikit-learn).
+
+### How It Works
+
+| Step | What It Does |
+|------|-------------|
+| **Tokenization** | Lowercase text, remove punctuation/stopwords, keep words > 2 chars |
+| **Vocabulary** | ~3,500 unique words, filtered to ~1,170 (keep words in ≥3 documents) |
+| **Priors** | P(category) = doc_count / total_docs (log probability) |
+| **Likelihoods** | P(word\|category) = (count + α) / (total_words + α × vocab_size) with Laplace smoothing |
+| **Prediction** | argmax[ log P(c) + Σ log P(w\|c) ] using log to avoid underflow |
+| **Confidence** | Convert log scores back to probabilities via softmax |
+
+### Results (815 samples, 9 categories)
+
+| Metric | Value | vs Random (11%) |
+|--------|-------|-----------------|
+| **Cross-validation (5-fold)** | **60.43%** | 5.5× better |
+| **Test accuracy** | **59.51%** | 5.4× better |
+| **Training accuracy** | **94.17%** | 8.5× better |
+
+### Sample Predictions
+
+| Complaint Text | Predicted | Confidence |
+|---------------|-----------|------------|
+| "My hostel room has a broken fan and water leaking" | **Hostels** | 96.3% |
+| "The bus timing has changed and I missed my classes" | **Transport** | 94.7% |
+| "I have not received my scholarship amount" | **Fees / Finance** | 71.3% |
+| "Someone stole my laptop from the library" | **Security / Discipline** | 75.4% |
+| "Exam results are delayed, need grade card" | **Fees / Finance** | 30.2% |
+
+### Key Parameters
+- **alpha (Laplace smoothing):** 1.0
+- **min_df:** 3 (ignore words appearing in <3 documents)
+- **Train/Test split:** 80/20 stratified (preserves class proportions)
+- **Validation:** 5-fold cross-validation
+
+---
+
 # 📋 Session Prompt Log
 
 All prompts/instructions given during AI-assisted development sessions (chronological order):
