@@ -1,8 +1,10 @@
-import csv, re, json, os, math
+import csv, re, json, os, math, sys
 from collections import Counter, defaultdict
 
+CONFIDENCE_THRESHOLD = 0.60
+
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_PATH = os.path.join(BASE, 'TrainDataset', 'processed_dataset_1274.csv')
+DATA_PATH = os.path.join(BASE, 'TrainDataset', 'processed_dataset_815.csv')
 ENC_PATH = os.path.join(BASE, 'TrainDataset', 'encoders', 'category_decoder.json')
 
 with open(ENC_PATH) as f:
@@ -65,7 +67,8 @@ class MultinomialNB:
         return best, probs
 
 print('=' * 55)
-print('  Complaint Category Predictor')
+print(f'  Complaint Category Predictor')
+print(f'  (threshold: {CONFIDENCE_THRESHOLD*100:.0f}% → Other)')
 print('=' * 55)
 
 with open(DATA_PATH, encoding='utf-8') as f:
@@ -78,16 +81,22 @@ nb = MultinomialNB()
 nb.fit(texts, labels)
 print('Model ready!')
 
-import sys
+def predict_safe(inp, nb):
+    pred, probs = nb.predict_with_proba(inp)
+    conf = probs[pred]
+    if conf < CONFIDENCE_THRESHOLD:
+        return 'Other', conf, probs
+    return CAT_DECODER[pred], conf, probs
 
 if len(sys.argv) > 1:
     inp = ' '.join(sys.argv[1:])
-    pred, probs = nb.predict_with_proba(inp)
+    label, conf, probs = predict_safe(inp, nb)
     print(f'\nComplaint: {inp[:80]}...' if len(inp) > 80 else f'\nComplaint: {inp}')
-    print(f'Predicted: {CAT_DECODER[pred]} ({probs[pred]*100:.1f}% confidence)')
-    print('Top-3:')
-    for c, p in sorted(probs.items(), key=lambda x: -x[1])[:3]:
-        print(f'  → {CAT_DECODER[c]}: {p*100:.1f}%')
+    print(f'Predicted: {label} ({conf*100:.1f}% confidence)')
+    if label != 'Other':
+        print('Top-3:')
+        for c, p in sorted(probs.items(), key=lambda x: -x[1])[:3]:
+            print(f'  → {CAT_DECODER[c]}: {p*100:.1f}%')
 else:
     while True:
         inp = input('\nEnter complaint (or "quit"): ').strip()
@@ -96,8 +105,9 @@ else:
         if not inp:
             continue
 
-        pred, probs = nb.predict_with_proba(inp)
-        print(f'\n  Predicted: {CAT_DECODER[pred]} ({probs[pred]*100:.1f}% confidence)')
-        print('  Top-3:')
-        for c, p in sorted(probs.items(), key=lambda x: -x[1])[:3]:
-            print(f'    → {CAT_DECODER[c]}: {p*100:.1f}%')
+        label, conf, probs = predict_safe(inp, nb)
+        print(f'\n  Predicted: {label} ({conf*100:.1f}% confidence)')
+        if label != 'Other':
+            print('  Top-3:')
+            for c, p in sorted(probs.items(), key=lambda x: -x[1])[:3]:
+                print(f'    → {CAT_DECODER[c]}: {p*100:.1f}%')
