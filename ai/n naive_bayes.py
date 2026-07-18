@@ -2,7 +2,7 @@ import csv, re, json, os, math
 from collections import Counter, defaultdict
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_PATH = os.path.join(BASE, 'TrainDataset', 'processed_dataset_815.csv')
+DATA_PATH = os.path.join(BASE, 'TrainDataset', 'processed_dataset_4500.csv')
 ENC_PATH = os.path.join(BASE, 'TrainDataset', 'encoders', 'category_decoder.json')
 
 with open(ENC_PATH) as f:
