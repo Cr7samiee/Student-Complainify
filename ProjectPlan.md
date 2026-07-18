@@ -380,13 +380,25 @@ Full Multinomial Naive Bayes classifier implemented **entirely from scratch** (n
 | **Prediction** | argmax[ log P(c) + Σ log P(w\|c) ] using log to avoid underflow |
 | **Confidence** | Convert log scores back to probabilities via softmax |
 
-### Results (815 samples, 9 categories)
+### Results (1,080 samples, 9 categories)
 
-| Metric | Value | vs Random (11%) |
-|--------|-------|-----------------|
-| **Cross-validation (5-fold)** | **60.43%** | 5.5× better |
-| **Test accuracy** | **59.51%** | 5.4× better |
-| **Training accuracy** | **94.17%** | 8.5× better |
+| Metric | Before (815) | After (+265 synthetic) | Improvement |
+|--------|-------------|----------------------|-------------|
+| **Cross-validation (5-fold)** | **60.43%** | **71.48%** | **+11%** |
+| **Test accuracy** | **59.51%** | **68.52%** | **+9%** |
+| **Training accuracy** | **94.17%** | **94.79%** | — |
+
+### Synthetic Data Generation (`ai/generate_fake_data.py` → `ai/gen_fake.py`)
+
+265 fake complaints generated for under-represented categories using template-based placeholders:
+
+| Category | Before | After | Templates Used |
+|----------|--------|-------|---------------|
+| Library | 1 | 100 | book issues, fines, timings, machines |
+| Academics | 114 | 150 | teacher late, faculty, grades, exams |
+| Administration | 100 | 150 | certificates, office staff, documents |
+| IT Support | 100 | 150 | wifi, network, printer, portal, VPN |
+| Security / Discipline | 100 | 130 | theft, suspicious activity, fights |
 
 ### Sample Predictions
 
