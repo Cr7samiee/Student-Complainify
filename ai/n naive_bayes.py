@@ -10,11 +10,22 @@ with open(ENC_PATH) as f:
 
 STOPWORDS = set('a an the is are was were be been being have has had do does did will would shall should may might must can could of in on at by for with about against between into through during before after above below to from up down out off over under again further then once here there when where why how all each every both few more most other some such no nor not only own same so than too very just because as until while'.split())
 
+def stem(w):
+    if len(w) < 5: return w
+    if w.endswith('ied'): return w[:-3] + 'y'
+    if w.endswith('ies'): return w[:-3] + 'y'
+    if w.endswith('ying'): return w[:-4] + 'y'
+    if w.endswith('ing'): return w[:-3]
+    if w.endswith('ed'): return w[:-2]
+    if w.endswith('es'): return w[:-2]
+    if w.endswith('s') and not w.endswith('ss'): return w[:-1]
+    return w
+
 def clean_and_tokenize(text):
     text = text.lower()
     text = re.sub(r'[^a-z0-9\s]', '', text)
     tokens = text.split()
-    return [t for t in tokens if t not in STOPWORDS and len(t) > 2]
+    return [stem(t) for t in tokens if t not in STOPWORDS and len(t) > 2]
 
 def load_data(path):
     with open(path, encoding='utf-8') as f:
