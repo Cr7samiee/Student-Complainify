@@ -3,7 +3,7 @@ from email.message import EmailMessage
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from datetime import timedelta, datetime
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ai'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'TrainDataset'))
 from classifier import auto_categorize
 
 app = Flask(
