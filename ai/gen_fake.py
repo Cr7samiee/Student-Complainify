@@ -2,7 +2,7 @@ import csv, os, random, json
 
 random.seed(42)
 BASE = 'E:/Project-VI/workspace/ComplaintMgmtSystem/TrainDataset'
-DATA_PATH = os.path.join(BASE, 'processed_dataset.csv')
+DATA_PATH = os.path.join(BASE, 'processed_dataset_815.csv')
 OUT_PATH = os.path.join(BASE, 'processed_dataset_1080.csv')
 
 with open(DATA_PATH, encoding='utf-8') as f:
@@ -59,11 +59,14 @@ new += gen(0, 50, {0:[
          'd':['morning','yesterday','last week','3 days','a week','two weeks','this morning','last night'],
          'l':['library','lab 3','block a','computer lab','main building','cse department','seminar hall','auditorium','admin block']}})
 
-new += gen(2, 36, {2:[
+new += gen(2, 50, {2:[
     'The {person} is coming late to {t} class every day',
     '{person} did not show up for the scheduled {t} lecture',
     'The {person} is not explaining {t} properly students struggling',
     '{t} results are delayed by {d} we need them for placement',
+    'My {t} result is delayed by {d} please publish it soon',
+    'Exam result not published even after {d} of waiting',
+    'University delayed the {t} result for {d} very frustrating',
     'My {t} marks were entered wrongly in portal please check',
     'The {person} is not responding to emails about {t} project',
     'Study material for {t} is not uploaded on the LMS',
@@ -74,6 +77,8 @@ new += gen(2, 36, {2:[
     'The {person} is not giving proper feedback on {t} submissions',
     'The {person} asked irrelevant questions in viva not in syllabus',
     'Attendance for {t} was marked wrong I was present that day',
+    'The {t} was conducted months ago but result still pending',
+    '{t} held last semester still no result published yet',
 ]}, {2:{'person':['professor sharma','dr patel','the faculty','the lecturer','the teacher','the instructor','prof gupta','the course coordinator','the hod'],
          't':['assignment','project','lab report','lecture','course','exam','test','quiz','thesis','seminar','tutorial','workshop','internship','research paper','practical'],
          'd':['one week','ten days','two weeks','a month','last semester','fifteen days']}})

@@ -864,64 +864,56 @@ The printer is lagging since yesterday in the lab 3 please fix it,IT Support,Hig
 The projector in room lab 3 is not connecting to my laptop,IT Support,High,synthetic,0,2
 My internet is not working tried restarting but still unstable,IT Support,Medium,synthetic,0,0
 Login portal for the internet is crashing blank page,IT Support,High,synthetic,0,2
-Attendance for seminar was marked wrong I was present that day,Academics,Medium,synthetic,2,0
-practical results are delayed by last semester we need them for placement,Academics,High,synthetic,2,2
-The the lecturer is not giving proper feedback on workshop submissions,Academics,Medium,synthetic,2,0
-Study material for tutorial is not uploaded on the LMS,Academics,High,synthetic,2,2
-The the course coordinator is not responding to emails about practical project,Academics,High,synthetic,2,2
+Grade for lecture is missing from transcript need it for last semester,Academics,High,synthetic,2,2
+University delayed the workshop result for two weeks very frustrating,Academics,Medium,synthetic,2,0
+quiz exam schedule has two papers on same day resolve,Academics,High,synthetic,2,2
+The dr patel is not giving proper feedback on lecture submissions,Academics,Low,synthetic,2,1
+The the instructor is not explaining assignment properly students struggling,Academics,High,synthetic,2,2
+The lecture was conducted months ago but result still pending,Academics,High,synthetic,2,2
+My assignment marks were entered wrongly in portal please check,Academics,Low,synthetic,2,1
+the lecturer did not show up for the scheduled project lecture,Academics,Low,synthetic,2,1
+The dr patel canceled the thesis lecture without rescheduling,Academics,Low,synthetic,2,1
+The the course coordinator is not responding to emails about lecture project,Academics,High,synthetic,2,2
+My workshop result is delayed by last semester please publish it soon,Academics,High,synthetic,2,2
+The the lecturer asked irrelevant questions in viva not in syllabus,Academics,Medium,synthetic,2,0
+Grade for lecture is missing from transcript need it for one week,Academics,Low,synthetic,2,1
+Grade for exam is missing from transcript need it for a month,Academics,Medium,synthetic,2,0
+The professor sharma is not giving proper feedback on tutorial submissions,Academics,High,synthetic,2,2
+assignment results are delayed by a month we need them for placement,Academics,High,synthetic,2,2
 The dr patel canceled the lecture lecture without rescheduling,Academics,Low,synthetic,2,1
-the instructor did not show up for the scheduled assignment lecture,Academics,High,synthetic,2,2
-lecture exam schedule has two papers on same day resolve,Academics,High,synthetic,2,2
-assignment results are delayed by one week we need them for placement,Academics,High,synthetic,2,2
-Grade for assignment is missing from transcript need it for ten days,Academics,Low,synthetic,2,1
-The the instructor is coming late to project class every day,Academics,High,synthetic,2,2
-course results are delayed by fifteen days we need them for placement,Academics,Medium,synthetic,2,0
-thesis results are delayed by ten days we need them for placement,Academics,High,synthetic,2,2
-The the course coordinator marked me absent even though I attended lecture,Academics,Medium,synthetic,2,0
-The prof gupta asked irrelevant questions in viva not in syllabus,Academics,Low,synthetic,2,1
-dr patel did not show up for the scheduled tutorial lecture,Academics,Medium,synthetic,2,0
-The prof gupta is not responding to emails about test project,Academics,Medium,synthetic,2,0
-Attendance for workshop was marked wrong I was present that day,Academics,Low,synthetic,2,1
-Grade for tutorial is missing from transcript need it for fifteen days,Academics,Low,synthetic,2,1
-The prof gupta is coming late to workshop class every day,Academics,Medium,synthetic,2,0
-The dr patel asked irrelevant questions in viva not in syllabus,Academics,Low,synthetic,2,1
-lecture results are delayed by last semester we need them for placement,Academics,Medium,synthetic,2,0
-The prof gupta is not explaining lab report properly students struggling,Academics,Medium,synthetic,2,0
-The the lecturer canceled the research paper lecture without rescheduling,Academics,Low,synthetic,2,1
-The the hod canceled the project lecture without rescheduling,Academics,Low,synthetic,2,1
-Grade for thesis is missing from transcript need it for one week,Academics,Low,synthetic,2,1
-The the lecturer asked irrelevant questions in viva not in syllabus,Academics,Low,synthetic,2,1
-Study material for quiz is not uploaded on the LMS,Academics,Medium,synthetic,2,0
-research paper results are delayed by a month we need them for placement,Academics,Low,synthetic,2,1
-The prof gupta is not explaining assignment properly students struggling,Academics,Medium,synthetic,2,0
-My practical marks were entered wrongly in portal please check,Academics,Medium,synthetic,2,0
-My test marks were entered wrongly in portal please check,Academics,High,synthetic,2,2
-The the hod is not giving proper feedback on tutorial submissions,Academics,High,synthetic,2,2
-The the faculty canceled the lecture lecture without rescheduling,Academics,Medium,synthetic,2,0
-assignment results are delayed by last semester we need them for placement,Academics,High,synthetic,2,2
-assignment exam schedule has two papers on same day resolve,Academics,High,synthetic,2,2
-Students misbehaving in the library disturbing others,Security / Discipline,Low,synthetic,6,1
-Someone stole my tablet from the computer lab during lunch,Security / Discipline,High,synthetic,6,2
-My wallet went missing from the library locker room,Security / Discipline,High,synthetic,6,2
-Suspicious person seen roaming around parking lot after college hours,Security / Discipline,Low,synthetic,6,1
-Unsafe situation in the parking lot near canteen,Security / Discipline,High,synthetic,6,2
-The security guard at back gate is not checking id cards,Security / Discipline,Low,synthetic,6,1
-Unsafe situation in the parking lot near hostel courtyard,Security / Discipline,High,synthetic,6,2
-Unsafe situation in the parking lot near library,Security / Discipline,High,synthetic,6,2
-Suspicious person seen roaming around back gate after college hours,Security / Discipline,High,synthetic,6,2
-Unsafe situation in the parking lot near garden area,Security / Discipline,High,synthetic,6,2
-Students misbehaving in the library disturbing others,Security / Discipline,Medium,synthetic,6,0
-The security guard at staircase is not checking id cards,Security / Discipline,High,synthetic,6,2
-Students misbehaving in the library disturbing others,Security / Discipline,Low,synthetic,6,1
-CCTV camera near the back gate has been broken for two weeks,Security / Discipline,High,synthetic,6,2
-Students caught fighting in the sports ground need action,Security / Discipline,Medium,synthetic,6,0
-Students misbehaving in the library disturbing others,Security / Discipline,Low,synthetic,6,1
-Someone stole my headphones from the garden area during lunch,Security / Discipline,High,synthetic,6,2
-Suspicious person seen roaming around canteen after college hours,Security / Discipline,High,synthetic,6,2
-The security guard at auditorium is not checking id cards,Security / Discipline,Medium,synthetic,6,0
-A books was found damaged in the canteen by unknown persons,Security / Discipline,Low,synthetic,6,1
-Students misbehaving in the library disturbing others,Security / Discipline,Medium,synthetic,6,0
-A headphones was found damaged in the auditorium by unknown persons,Security / Discipline,High,synthetic,6,2
+University delayed the thesis result for a month very frustrating,Academics,Low,synthetic,2,1
+Grade for lab report is missing from transcript need it for two weeks,Academics,Medium,synthetic,2,0
+My research paper marks were entered wrongly in portal please check,Academics,Low,synthetic,2,1
+The the hod is not giving proper feedback on project submissions,Academics,Low,synthetic,2,1
+The research paper was conducted months ago but result still pending,Academics,Low,synthetic,2,1
+The the lecturer is not explaining lab report properly students struggling,Academics,Medium,synthetic,2,0
+The the course coordinator asked irrelevant questions in viva not in syllabus,Academics,Low,synthetic,2,1
+The professor sharma marked me absent even though I attended lab report,Academics,Medium,synthetic,2,0
+The prof gupta is coming late to course class every day,Academics,Medium,synthetic,2,0
+Study material for test is not uploaded on the LMS,Academics,High,synthetic,2,2
+The tutorial was conducted months ago but result still pending,Academics,High,synthetic,2,2
+The the faculty asked irrelevant questions in viva not in syllabus,Academics,Low,synthetic,2,1
+Study material for lecture is not uploaded on the LMS,Academics,Low,synthetic,2,1
+workshop held last semester still no result published yet,Academics,High,synthetic,2,2
+the instructor did not show up for the scheduled assignment lecture,Academics,Low,synthetic,2,1
+quiz held last semester still no result published yet,Academics,High,synthetic,2,2
+Attendance for lab report was marked wrong I was present that day,Academics,Low,synthetic,2,1
+Attendance for project was marked wrong I was present that day,Academics,Low,synthetic,2,1
+The dr patel is not explaining tutorial properly students struggling,Academics,Low,synthetic,2,1
+The dr patel marked me absent even though I attended practical,Academics,High,synthetic,2,2
+My seminar marks were entered wrongly in portal please check,Academics,High,synthetic,2,2
+dr patel did not show up for the scheduled test lecture,Academics,High,synthetic,2,2
+seminar held last semester still no result published yet,Academics,High,synthetic,2,2
+The the teacher canceled the lecture lecture without rescheduling,Academics,High,synthetic,2,2
+The the lecturer canceled the course lecture without rescheduling,Academics,Medium,synthetic,2,0
+My tutorial result is delayed by fifteen days please publish it soon,Academics,Medium,synthetic,2,0
+The the instructor is not giving proper feedback on practical submissions,Academics,Low,synthetic,2,1
+The the course coordinator is coming late to seminar class every day,Academics,High,synthetic,2,2
+project results are delayed by last semester we need them for placement,Academics,Low,synthetic,2,1
+Attendance for course was marked wrong I was present that day,Academics,Low,synthetic,2,1
+practical exam schedule has two papers on same day resolve,Academics,Low,synthetic,2,1
+My exam marks were entered wrongly in portal please check,Academics,Medium,synthetic,2,0
+Exam result not published even after a month of waiting,Academics,High,synthetic,2,2
 CCTV camera near the garden area has been broken for since last month,Security / Discipline,Low,synthetic,6,1
 Students caught fighting in the auditorium need action,Security / Discipline,Medium,synthetic,6,0
 Students caught fighting in the canteen need action,Security / Discipline,Low,synthetic,6,1
@@ -930,38 +922,30 @@ My wallet went missing from the sports ground locker room,Security / Discipline,
 Unsafe situation in the parking lot near hostel courtyard,Security / Discipline,High,synthetic,6,2
 Students misbehaving in the library disturbing others,Security / Discipline,Low,synthetic,6,1
 Students caught fighting in the staircase need action,Security / Discipline,Medium,synthetic,6,0
-My degree certificate has spelling mistake in my name,Administration,Medium,synthetic,7,0
-Office hours for character certificate are very limited cannot meet staff,Administration,Low,synthetic,7,1
-The the coordinator in admin office is rude with students,Administration,Medium,synthetic,7,0
-My bonafide certificate application pending for since june no response yet,Administration,Low,synthetic,7,1
-The admin staff at accounts section is very unhelpful and rude,Administration,Low,synthetic,7,1
-My scholarship form document was misplaced please trace it,Administration,High,synthetic,7,2
-My noc document was misplaced please trace it,Administration,High,synthetic,7,2
-My transfer certificate application pending for three weeks no response yet,Administration,High,synthetic,7,2
-My application sent to wrong department please forward,Administration,Low,synthetic,7,1
-My degree certificate has spelling mistake in my name,Administration,Low,synthetic,7,1
-Online internship approval portal showing wrong status information,Administration,High,synthetic,7,2
-My degree certificate has spelling mistake in my name,Administration,Low,synthetic,7,1
-The clerk lost my original documents for degree verification,Administration,Low,synthetic,7,1
-Office hours for internship approval are very limited cannot meet staff,Administration,Low,synthetic,7,1
-My application sent to wrong department please forward,Administration,Medium,synthetic,7,0
-The id card form on website not working cannot submit,Administration,Low,synthetic,7,1
-The admin staff at first floor is very unhelpful and rude,Administration,Medium,synthetic,7,0
-Someone asked for bribe to process my fee waiver application,Administration,Medium,synthetic,7,0
-Transfer certificate application stuck for two months,Administration,Low,synthetic,7,1
-Online degree portal showing wrong status information,Administration,Low,synthetic,7,1
-My application sent to wrong department please forward,Administration,Medium,synthetic,7,0
-My degree application pending for since june no response yet,Administration,Medium,synthetic,7,0
-Someone asked for bribe to process my id card application,Administration,High,synthetic,7,2
-Someone asked for bribe to process my transcript application,Administration,Medium,synthetic,7,0
-I need a admission form certificate urgently for my job application,Administration,High,synthetic,7,2
-The the coordinator in admin office is rude with students,Administration,Low,synthetic,7,1
-Online scholarship form portal showing wrong status information,Administration,Low,synthetic,7,1
-The character certificate form on website not working cannot submit,Administration,Medium,synthetic,7,0
+My headphones went missing from the sports ground locker room,Security / Discipline,Low,synthetic,6,1
+Suspicious person seen roaming around staircase after college hours,Security / Discipline,Medium,synthetic,6,0
+CCTV camera near the library has been broken for a week,Security / Discipline,Medium,synthetic,6,0
+A keys was found damaged in the sports ground by unknown persons,Security / Discipline,Low,synthetic,6,1
+The auditorium gate is left open at night security risk,Security / Discipline,High,synthetic,6,2
+A stranger entered the hostel at auditorium at night,Security / Discipline,Low,synthetic,6,1
+Suspicious person seen roaming around canteen after college hours,Security / Discipline,High,synthetic,6,2
+A watch was found damaged in the library by unknown persons,Security / Discipline,Medium,synthetic,6,0
+Unsafe situation in the parking lot near auditorium,Security / Discipline,Low,synthetic,6,1
+A stranger entered the hostel at parking lot at night,Security / Discipline,Low,synthetic,6,1
+CCTV camera near the main entrance has been broken for a week,Security / Discipline,Medium,synthetic,6,0
+The security guard at staircase is not checking id cards,Security / Discipline,Low,synthetic,6,1
+Students caught fighting in the canteen need action,Security / Discipline,Medium,synthetic,6,0
+My charger went missing from the garden area locker room,Security / Discipline,High,synthetic,6,2
+A bag was found damaged in the parking lot by unknown persons,Security / Discipline,Low,synthetic,6,1
+A stranger entered the hostel at library at night,Security / Discipline,Low,synthetic,6,1
+Students misbehaving in the library disturbing others,Security / Discipline,Medium,synthetic,6,0
+Students caught fighting in the cycle stand need action,Security / Discipline,Low,synthetic,6,1
+CCTV camera near the parking lot has been broken for a week,Security / Discipline,Medium,synthetic,6,0
+Someone stole my headphones from the hostel courtyard during lunch,Security / Discipline,Low,synthetic,6,1
+The main entrance gate is left open at night security risk,Security / Discipline,Medium,synthetic,6,0
+The security guard at hostel courtyard is not checking id cards,Security / Discipline,Low,synthetic,6,1
+The admin staff at admission office is very unhelpful and rude,Administration,Medium,synthetic,7,0
 My migration certificate request was rejected without any explanation,Administration,Low,synthetic,7,1
-The bonafide certificate form on website not working cannot submit,Administration,High,synthetic,7,2
-The noc form on website not working cannot submit,Administration,Medium,synthetic,7,0
-Office hours for character certificate are very limited cannot meet staff,Administration,Low,synthetic,7,1
 Someone asked for bribe to process my migration certificate application,Administration,Medium,synthetic,7,0
 The admin staff at front desk is very unhelpful and rude,Administration,High,synthetic,7,2
 Online fee waiver portal showing wrong status information,Administration,Medium,synthetic,7,0
@@ -980,37 +964,36 @@ My application sent to wrong department please forward,Administration,Medium,syn
 Transfer certificate application stuck for since june,Administration,High,synthetic,7,2
 Online transfer certificate portal showing wrong status information,Administration,High,synthetic,7,2
 My application sent to wrong department please forward,Administration,Medium,synthetic,7,0
-Book catalogue search shows wrong shelf location,Library,Medium,synthetic,8,0
-Library membership renewal not processed even after three weeks,Library,Medium,synthetic,8,0
-Reference books cannot be taken home no copies inside,Library,High,synthetic,8,2
-The research paper books on shelf are all old editions need new,Library,Medium,synthetic,8,0
-The journal I need is missing from periodical section,Library,High,synthetic,8,2
-Noise level in library reading hall very high no control,Library,High,synthetic,8,2
-Reference books cannot be taken home no copies inside,Library,Medium,synthetic,8,0
-Photocopy machine in library broken since this semester,Library,Low,synthetic,8,1
-Reference books cannot be taken home no copies inside,Library,Medium,synthetic,8,0
-Library book issue system down cannot issue or return,Library,Medium,synthetic,8,0
-Library staff at counter is very rude and slow,Library,Medium,synthetic,8,0
-Not enough textbook copies for number of students,Library,Medium,synthetic,8,0
-Library book issue system down cannot issue or return,Library,High,synthetic,8,2
-Book return drop box full cannot return my book,Library,High,synthetic,8,2
-Noise level in library reading hall very high no control,Library,High,synthetic,8,2
-The encyclopedia section in library always closed during lunch,Library,High,synthetic,8,2
-Library staff at counter is very rude and slow,Library,Low,synthetic,8,1
-I lost a book from library how do I pay penalty,Library,High,synthetic,8,2
-Reference books cannot be taken home no copies inside,Library,Low,synthetic,8,1
-Library book issue system down cannot issue or return,Library,Low,synthetic,8,1
-The journal I need for my project not available in library,Library,Low,synthetic,8,1
-Book return drop box full cannot return my book,Library,High,synthetic,8,2
-The guide book section in library always closed during lunch,Library,Medium,synthetic,8,0
-Library book issue system down cannot issue or return,Library,High,synthetic,8,2
-The journal I need is missing from periodical section,Library,Medium,synthetic,8,0
-The journal I need is missing from periodical section,Library,Low,synthetic,8,1
-The book books on shelf are all old editions need new,Library,Low,synthetic,8,1
-Library membership renewal not processed even after two weeks,Library,Low,synthetic,8,1
-Book catalogue search shows wrong shelf location,Library,Medium,synthetic,8,0
-Library fine charged incorrectly I returned book on time,Library,High,synthetic,8,2
-I lost a book from library how do I pay penalty,Library,Low,synthetic,8,1
+My degree certificate has spelling mistake in my name,Administration,Medium,synthetic,7,0
+The admin staff at front desk is very unhelpful and rude,Administration,Medium,synthetic,7,0
+The clerk lost my original documents for grade card verification,Administration,Medium,synthetic,7,0
+My degree certificate has spelling mistake in my name,Administration,Low,synthetic,7,1
+The noc form on website not working cannot submit,Administration,High,synthetic,7,2
+The clerk lost my original documents for id card verification,Administration,High,synthetic,7,2
+My application sent to wrong department please forward,Administration,Low,synthetic,7,1
+Transfer certificate application stuck for last semester,Administration,Medium,synthetic,7,0
+My degree certificate has spelling mistake in my name,Administration,Low,synthetic,7,1
+Office hours for migration certificate are very limited cannot meet staff,Administration,Low,synthetic,7,1
+The clerk lost my original documents for admission form verification,Administration,High,synthetic,7,2
+Transfer certificate application stuck for since june,Administration,Medium,synthetic,7,0
+The scholarship form approval process takes too long more than 45 days,Administration,High,synthetic,7,2
+The admission form approval process takes too long more than two months,Administration,High,synthetic,7,2
+The the office assistant in admin office is rude with students,Administration,High,synthetic,7,2
+The admin staff at registrar office is very unhelpful and rude,Administration,Low,synthetic,7,1
+Online admission form portal showing wrong status information,Administration,Low,synthetic,7,1
+The admin staff at accounts section is very unhelpful and rude,Administration,Low,synthetic,7,1
+Someone asked for bribe to process my transcript application,Administration,Low,synthetic,7,1
+My bonafide certificate application pending for 45 days no response yet,Administration,Medium,synthetic,7,0
+Transfer certificate application stuck for three weeks,Administration,Medium,synthetic,7,0
+The clerk lost my original documents for id card verification,Administration,High,synthetic,7,2
+The grade card form on website not working cannot submit,Administration,High,synthetic,7,2
+The clerk lost my original documents for scholarship form verification,Administration,Medium,synthetic,7,0
+The degree form on website not working cannot submit,Administration,High,synthetic,7,2
+My bonafide certificate document was misplaced please trace it,Administration,Low,synthetic,7,1
+Someone asked for bribe to process my noc application,Administration,Low,synthetic,7,1
+I need a admission form certificate urgently for my job application,Administration,High,synthetic,7,2
+My degree certificate has spelling mistake in my name,Administration,Medium,synthetic,7,0
+My fee waiver application pending for 45 days no response yet,Administration,Low,synthetic,7,1
 Not enough textbook copies for number of students,Library,Low,synthetic,8,1
 Not enough textbook copies for number of students,Library,High,synthetic,8,2
 Book catalogue search shows wrong shelf location,Library,High,synthetic,8,2
@@ -1079,3 +1062,34 @@ Library fine charged incorrectly I returned book on time,Library,Medium,syntheti
 Photocopy machine in library broken since a month,Library,High,synthetic,8,2
 Digital library computers all occupied during peak hours,Library,Low,synthetic,8,1
 Book catalogue search shows wrong shelf location,Library,High,synthetic,8,2
+Library staff at counter is very rude and slow,Library,Low,synthetic,8,1
+Library membership renewal not processed even after this semester,Library,Medium,synthetic,8,0
+Library timing should be extended during exam week,Library,Medium,synthetic,8,0
+Digital library computers all occupied during peak hours,Library,High,synthetic,8,2
+Not enough textbook copies for number of students,Library,High,synthetic,8,2
+The manual books on shelf are all old editions need new,Library,Low,synthetic,8,1
+Book catalogue search shows wrong shelf location,Library,High,synthetic,8,2
+Library id card machine not working cannot scan card,Library,High,synthetic,8,2
+Photocopy machine in library broken since this semester,Library,Medium,synthetic,8,0
+Not enough textbook copies for number of students,Library,Medium,synthetic,8,0
+Library id card machine not working cannot scan card,Library,Medium,synthetic,8,0
+I lost a book from library how do I pay penalty,Library,Low,synthetic,8,1
+Library id card machine not working cannot scan card,Library,Medium,synthetic,8,0
+I lost a book from library how do I pay penalty,Library,Medium,synthetic,8,0
+The journal I need is missing from periodical section,Library,Medium,synthetic,8,0
+The atlas I need for my project not available in library,Library,Medium,synthetic,8,0
+Noise level in library reading hall very high no control,Library,Medium,synthetic,8,0
+Library book issue system down cannot issue or return,Library,Medium,synthetic,8,0
+Library id card machine not working cannot scan card,Library,Medium,synthetic,8,0
+Library id card machine not working cannot scan card,Library,High,synthetic,8,2
+Library id card machine not working cannot scan card,Library,High,synthetic,8,2
+The report I need for my project not available in library,Library,Low,synthetic,8,1
+The thesis section in library always closed during lunch,Library,High,synthetic,8,2
+Library membership renewal not processed even after a month,Library,High,synthetic,8,2
+I lost a book from library how do I pay penalty,Library,High,synthetic,8,2
+Book return drop box full cannot return my book,Library,High,synthetic,8,2
+Book return drop box full cannot return my book,Library,Medium,synthetic,8,0
+The textbook I need for my project not available in library,Library,Medium,synthetic,8,0
+I lost a book from library how do I pay penalty,Library,Medium,synthetic,8,0
+I lost a book from library how do I pay penalty,Library,Medium,synthetic,8,0
+Digital library computers all occupied during peak hours,Library,Medium,synthetic,8,0
