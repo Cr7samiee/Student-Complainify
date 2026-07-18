@@ -7,7 +7,7 @@ DST = os.path.join(BASE, 'processed_dataset_4500.csv')
 
 CAT_NAME = {0:'IT Support',1:'Hostels',2:'Academics',3:'Fees / Finance',
             4:'Maintenance',5:'Transport',6:'Security / Discipline',
-            7:'Administration',8:'Library'}
+            7:'Administration',8:'Library',9:'Canteen'}
 PRIOS = ['Low','Medium','High']
 PRIO_E = {'Low':1,'Medium':0,'High':2}
 
@@ -21,9 +21,9 @@ V = {
     'monitor','display','battery','charger','adapter','bluetooth','ethernet','wlan','ip','mac',
     'usb','port','hardware','firmware','motherboard','processor','ram','ssd','cloud','storage',
     'working','connect','rebooting','restart','fail','offline','down','slow','speed'],
-1: ['roommate','warden','mess','canteen','pillow','blanket','mattress','almirah','cupboard',
+1: ['roommate','warden','pillow','blanket','mattress','almirah','cupboard',
     'curtain','geyser','washroom','toilet','drainage','tap','flush','sink','balcony','corridor',
-    'staircase','laundry','bunk','locker','hostel','kitchen','ro','cooler','mosquito','bathroom',
+    'staircase','laundry','bunk','locker','hostel','mosquito','bathroom',
     'towel','bucket','mug','soap','shampoo','detergent','hanger','slipper','bed','cotton',
     'fan','chair','table','window','door','ventilator','exhaust','water','heater','inverter',
     'heating','slow','service','noisy','dirty','stinking','expensive','strict'],
@@ -74,6 +74,11 @@ V = {
     'section','aisle','almanac','bibliography','fiction','nonfiction','volume','edition',
     'author','publisher','index','abstract','citation','thesis','database','ebook','audiobook',
     'expired','zone','absent','overdue','available','stack','periodical','subscription'],
+9: ['canteen','mess','kitchen','food','meal','lunch','breakfast','dinner','snack','menu',
+    'quality','taste','hygiene','stale','fresh','rotten','spoil','cook','curry','rice',
+    'chapati','vegetable','chicken','egg','daal','sabzi','pickle','salad','sauce','oil',
+    'plate','cup','glass','spoon','fork','queue','counter','bill','rate','price',
+    'expensive','cheap','worth','overcharge','water','drink','juice','tea','coffee','milk'],
 }
 
 # 50 TEMPLATES per category — ONLY unique vocab words, NO filler/common words
@@ -151,8 +156,7 @@ T = {
 ],
 1: [  # Hostels
     'roommate {h1} {h2} {h3}',
-    'warden {h1} {h2} mess {h3}',
-    'canteen {h1} {h2} pillow {h3}',
+    'warden {h1} {h2} {h3}',
     'blanket mattress {h1} {h2} {h3}',
     'almirah cupboard {h1} {h2} {h3}',
     'curtain {h1} {h2} geyser {h3}',
@@ -162,8 +166,7 @@ T = {
     'balcony {h1} {h2} corridor {h3}',
     'staircase {h1} {h2} laundry {h3}',
     'bunk locker {h1} {h2} {h3}',
-    'hostel kitchen {h1} {h2} {h3}',
-    'ro cooler {h1} {h2} {h3}',
+    'hostel {h1} {h2} {h3}',
     'mosquito {h1} {h2} bathroom {h3}',
     'towel bucket {h1} {h2} {h3}',
     'mug soap {h1} {h2} shampoo {h3}',
@@ -172,8 +175,6 @@ T = {
     'cotton {h1} {h2} pillow {h3}',
     'roommate {h1} noisy {h2} {h3}',
     'warden {h1} strict {h2} {h3}',
-    'mess {h1} dirty {h2} {h3}',
-    'canteen {h1} expensive {h2} {h3}',
     'blanket {h1} torn {h2} {h3}',
     'mattress {h1} hard {h2} {h3}',
     'cupboard {h1} broken {h2} {h3}',
@@ -185,8 +186,6 @@ T = {
     'sink {h1} pipe {h2} {h3}',
     'laundry {h1} service {h2} {h3}',
     'locker {h1} jammed {h2} {h3}',
-    'kitchen {h1} unclean {h2} {h3}',
-    'cooler {h1} not {h2} {h3}',
     'mosquito {h1} infestation {h2} {h3}',
     'bathroom {h1} dirty {h2} {h3}',
     'bucket {h1} cracked {h2} {h3}',
@@ -211,13 +210,9 @@ T = {
     'inverter {h1} backup {h2} {h3}',
     'roommate {h1} shifting {h2} {h3}',
     'warden {h1} permission {h2} {h3}',
-    'mess {h1} food {h2} {h3}',
-    'canteen {h1} rate {h2} {h3}',
     'laundry {h1} machine {h2} {h3}',
     'locker {h1} key {h2} {h3}',
     'hostel {h1} gate {h2} {h3}',
-    'kitchen {h1} gas {h2} {h3}',
-    'cooler {h1} water {h2} {h3}',
     'mosquito {h1} net {h2} {h3}',
 ],
 2: [  # Academics
@@ -724,9 +719,61 @@ T = {
     'photocopy {l1} charges {l2} {l3}',
     'print {l1} black {l2} {l3}',
 ],
+9: [  # Canteen
+    'canteen {c1} {c2} {c3}',
+    'mess {c1} {c2} food {c3}',
+    'kitchen {c1} {c2} meal {c3}',
+    'lunch {c1} {c2} breakfast {c3}',
+    'dinner {c1} {c2} snack {c3}',
+    'menu {c1} {c2} quality {c3}',
+    'taste {c1} {c2} hygiene {c3}',
+    'stale {c1} {c2} fresh {c3}',
+    'rotten {c1} {c2} spoil {c3}',
+    'cook {c1} {c2} curry {c3}',
+    'rice {c1} {c2} chapati {c3}',
+    'vegetable {c1} {c2} chicken {c3}',
+    'egg {c1} {c2} daal {c3}',
+    'sabzi {c1} {c2} pickle {c3}',
+    'salad {c1} {c2} sauce {c3}',
+    'oil {c1} {c2} plate {c3}',
+    'cup {c1} {c2} glass {c3}',
+    'spoon {c1} {c2} fork {c3}',
+    'queue {c1} {c2} counter {c3}',
+    'bill {c1} {c2} rate {c3}',
+    'price {c1} {c2} expensive {c3}',
+    'cheap {c1} {c2} worth {c3}',
+    'overcharge {c1} {c2} water {c3}',
+    'drink {c1} {c2} juice {c3}',
+    'tea {c1} {c2} coffee {c3}',
+    'milk {c1} {c2} food {c3}',
+    'canteen {c1} stale {c2} {c3}',
+    'mess {c1} quality {c2} {c3}',
+    'food {c1} rotten {c2} {c3}',
+    'meal {c1} spoiled {c2} {c3}',
+    'lunch {c1} delayed {c2} {c3}',
+    'breakfast {c1} menu {c2} {c3}',
+    'dinner {c1} served {c2} {c3}',
+    'snack {c1} items {c2} {c3}',
+    'taste {c1} bad {c2} {c3}',
+    'hygiene {c1} poor {c2} {c3}',
+    'rice {c1} undercook {c2} {c3}',
+    'chapati {c1} hard {c2} {c3}',
+    'vegetable {c1} oily {c2} {c3}',
+    'queue {c1} long {c2} {c3}',
+    'counter {c1} staff {c2} {c3}',
+    'bill {c1} overcharge {c2} {c3}',
+    'rate {c1} increased {c2} {c3}',
+    'water {c1} unclean {c2} {c3}',
+    'tea {c1} cold {c2} {c3}',
+    'coffee {c1} bitter {c2} {c3}',
+    'milk {c1} sour {c2} {c3}',
+    'food {c1} shortage {c2} {c3}',
+    'kitchen {c1} hygiene {c2} {c3}',
+    'canteen {c1} costly {c2} {c3}',
+],
 }
 
-PREFIX = {0:'w',1:'h',2:'a',3:'f',4:'m',5:'t',6:'s',7:'d',8:'l'}
+PREFIX = {0:'w',1:'h',2:'a',3:'f',4:'m',5:'t',6:'s',7:'d',8:'l',9:'c'}
 POOLS = {}
 for cat, words in V.items():
     p = PREFIX[cat]
@@ -750,8 +797,8 @@ with open(ORIG, encoding='utf-8') as f:
     fields = reader.fieldnames
 
 new = []
-for cat in range(9):
-    n = (8000 - 815) // 9
+for cat in range(10):
+    n = (9000 - 815) // 10
     for _ in range(n):
         txt = fill(random.choice(T[cat]), POOLS[cat])
         p = random.choice(PRIOS)
