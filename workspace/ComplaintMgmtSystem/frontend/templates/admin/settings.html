@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Admin Settings — Complainify{% endblock %}
+{% block content %}
+<aside class="fixed left-0 h-full w-64 bg-[#0a1628] text-white shadow-xl flex flex-col py-6 hidden md:flex z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<span class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-white">admin_panel_settings</span></span>
+<span class="text-xl font-bold text-white tracking-tight">Admin Panel</span>
+</div>
+<div class="px-4 mb-6 flex items-center gap-3 border-b border-white/10 pb-4 mx-2">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex items-center justify-center text-white font-bold text-sm shadow-md">{{ admin_name[:2]|upper }}</div>
+<div><p class="text-sm text-white font-medium truncate">{{ admin_name }}</p><p class="text-[10px] text-red-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-400 inline-block"></span> Administrator</p></div>
+</div>
+<nav class="flex-1 px-2 space-y-0.5">
+<a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">dashboard</span>Dashboard</a>
+<a href="{{ url_for('admin_complaints') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">assignment</span>All Complaints</a>
+<a href="{{ url_for('track_complaint') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">search</span>Track Status</a>
+</nav>
+<div class="px-2 space-y-0.5 border-t border-white/10 pt-3 mt-2 mx-2">
+<a href="{{ url_for('index') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">arrow_back</span>Back to Home</a>
+<a href="{{ url_for('admin_settings') }}" class="flex items-center gap-3 bg-[#d32f2f]/20 text-white rounded-lg px-4 py-3 text-sm font-medium border-l-2 border-[#d32f2f]"><span class="material-symbols-outlined text-sm">settings</span>Settings</a>
+<a href="{{ url_for('logout') }}" class="flex items-center gap-3 text-red-300 hover:text-red-200 hover:bg-red-500/10 rounded-lg px-4 py-3 text-sm transition-all mt-1"><span class="material-symbols-outlined text-sm">logout</span>Sign Out</a>
+</div>
+</aside>
+<main class="ml-64 min-h-screen flex flex-col bg-[#f0f2f5]">
+<header class="bg-white px-6 py-3 flex justify-between items-center sticky top-0 z-40 shadow-sm border-b border-gray-200">
+<div><h1 class="text-lg font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-[#d32f2f]">settings</span>Settings</h1><p class="text-xs text-gray-500 ml-8">Manage your admin profile</p></div>
+</header>
+<div class="p-6 max-w-2xl mx-auto space-y-6">
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+<h2 class="text-sm font-bold text-[#0a1628] mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">person</span>Profile</h2>
+<form method="POST" class="space-y-4">
+<input type="hidden" name="action" value="profile">
+<div class="space-y-1.5"><label class="block text-xs font-medium text-gray-500">Full Name</label><input name="fullname" value="{{ user.fullname }}" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] focus:border-[#d32f2f] outline-none"></div>
+<div class="space-y-1.5"><label class="block text-xs font-medium text-gray-500">Email</label><input value="{{ user.email }}" disabled class="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm bg-gray-50 text-gray-400 cursor-not-allowed"></div>
+<div class="space-y-1.5"><label class="block text-xs font-medium text-gray-500">Phone</label><input name="phone" value="{{ user.phone or '' }}" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] focus:border-[#d32f2f] outline-none"></div>
+<button type="submit" class="bg-[#0a1628] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-[#1a2a3a] transition-colors">Save Changes</button>
+</form>
+</div>
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+<h2 class="text-sm font-bold text-[#0a1628] mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">lock</span>Change Password</h2>
+<form method="POST" class="space-y-4">
+<input type="hidden" name="action" value="password">
+<div class="space-y-1.5"><label class="block text-xs font-medium text-gray-500">Current Password</label><input type="password" name="current_password" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] focus:border-[#d32f2f] outline-none"></div>
+<div class="space-y-1.5"><label class="block text-xs font-medium text-gray-500">New Password</label><input type="password" name="new_password" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] focus:border-[#d32f2f] outline-none"></div>
+<div class="space-y-1.5"><label class="block text-xs font-medium text-gray-500">Confirm New Password</label><input type="password" name="confirm_password" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] focus:border-[#d32f2f] outline-none"></div>
+<button type="submit" class="bg-[#d32f2f] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-[#b71c1c] transition-colors">Change Password</button>
+</form>
+</div>
+</div>
+<footer class="bg-[#0a1628] w-full mt-auto">
+<div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center border-t border-white/5"><span class="text-sm font-bold text-white">Complainify</span><p class="text-[10px] text-gray-500">&copy; 2024 Complainify</p></div>
+</footer>
+</main>
+{% endblock %}
+{% block footer %}{% endblock %}

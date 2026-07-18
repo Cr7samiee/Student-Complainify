@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Complaint #{{ c.ticket_id }} — Complainify{% endblock %}
+{% block content %}
+<aside class="fixed left-0 h-full w-64 bg-primary text-on-primary shadow-md flex flex-col py-6 hidden md:flex z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<span class="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-container flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-white">school</span></span>
+<span class="text-xl font-bold text-white tracking-tight">Student Hub</span>
+</div>
+<div class="px-4 mb-6 flex items-center gap-3 border-b border-on-primary-fixed-variant pb-4 mx-2">
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-secondary to-purple-400 flex items-center justify-center text-white font-bold text-sm shadow-md">{{ student_name[:2]|upper }}</div>
+<div><p class="text-sm text-white font-medium truncate">{{ student_name }}</p><p class="text-[10px] text-blue-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span> Student</p></div>
+</div>
+<nav class="flex-1 px-2 space-y-0.5">
+<a href="{{ url_for('student_dashboard') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">dashboard</span>Overview</a>
+<a href="{{ url_for('student_dashboard') }}#complaints" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">description</span>My Complaints</a>
+<a href="{{ url_for('submit_complaint') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">add_circle</span>New Complaint</a>
+<a href="{{ url_for('track_complaint') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">track_changes</span>Track Status</a>
+</nav>
+<div class="px-2 space-y-0.5 border-t border-on-primary-fixed-variant pt-3 mt-2 mx-2">
+<a href="{{ url_for('index') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">arrow_back</span>Back to Home</a>
+<a href="{{ url_for('student_settings') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">settings</span>Settings</a>
+<a href="{{ url_for('logout') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">logout</span>Sign Out</a>
+</div>
+</aside>
+<main class="md:ml-64 min-h-screen flex flex-col">
+<header class="bg-surface-white px-6 py-4 flex justify-between items-center sticky top-0 z-40 shadow-sm border-b border-outline-variant">
+<div><h1 class="text-2xl font-bold text-primary flex items-center gap-2"><span class="material-symbols-outlined text-secondary">description</span>Complaint #{{ c.ticket_id }}</h1></div>
+<a href="{{ url_for('student_dashboard') }}" class="text-sm text-secondary font-semibold flex items-center gap-1 hover:underline"><span class="material-symbols-outlined text-sm">arrow_back</span>Back to Dashboard</a>
+</header>
+<div class="p-6 flex-1 bg-gradient-to-b from-slate-bg to-surface">
+<div class="max-w-4xl mx-auto space-y-6">
+<div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-6">
+<div class="flex justify-between items-start mb-6">
+<div><h2 class="text-lg font-bold text-primary">{{ c.subject }}</h2><p class="text-xs text-on-surface-variant mt-1">Submitted {{ c.created }}</p></div>
+<span class="px-4 py-1.5 rounded-full text-sm font-semibold {% if c.status == 'Resolved' %}bg-on-tertiary-container/10 text-on-tertiary-container{% elif c.status == 'In Progress' %}bg-secondary/10 text-secondary{% else %}bg-warning-amber/10 text-warning-amber{% endif %}">{{ c.status }}</span>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+<div class="bg-surface rounded-xl p-4"><p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Category</p><p class="text-sm font-bold text-primary mt-1">{{ c.category }}</p></div>
+<div class="bg-surface rounded-xl p-4"><p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Priority</p><span class="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-semibold {% if c.priority == 'High' %}bg-error-crimson/10 text-error-crimson{% elif c.priority == 'Medium' %}bg-warning-amber/10 text-warning-amber{% else %}bg-on-surface-variant/10 text-on-surface-variant{% endif %}">{{ c.priority }}</span></div>
+<div class="bg-surface rounded-xl p-4"><p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Assigned To</p><p class="text-sm font-bold text-primary mt-1">{{ c.assigned_to or 'Not assigned yet' }}</p></div>
+<div class="bg-surface rounded-xl p-4"><p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Validated</p><p class="text-sm font-bold {% if c.validated %}text-on-tertiary-container{% else %}text-warning-amber{% endif %} mt-1">{% if c.validated %}Yes{% else %}Pending{% endif %}</p></div>
+</div>
+<div class="mb-6"><h4 class="text-sm font-bold text-primary mb-2">Description</h4><p class="text-sm text-on-surface bg-surface rounded-xl p-4 whitespace-pre-wrap">{{ c.description }}</p></div>
+{% if c.admin_notes %}<div><h4 class="text-sm font-bold text-primary mb-2">Admin Response</h4><p class="text-sm text-on-surface bg-blue-50 rounded-xl p-4">{{ c.admin_notes }}</p></div>{% endif %}
+</div>
+<div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-6">
+<h3 class="text-sm font-bold text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-secondary">timeline</span>Progress Timeline</h3>
+<div class="space-y-4">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-on-tertiary-container/10 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-sm text-on-tertiary-container">check_circle</span></div>
+<div><p class="text-sm font-semibold text-primary">Submitted</p><p class="text-xs text-on-surface-variant">Your complaint was submitted on {{ c.created }}</p></div>
+</div>
+{% if c.assigned_at %}
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-sm text-secondary">assignment_ind</span></div>
+<div><p class="text-sm font-semibold text-primary">Assigned to {{ c.assigned_to }}</p><p class="text-xs text-on-surface-variant">Assigned on {{ c.assigned_date }}</p></div>
+</div>
+{% endif %}
+{% if c.resolved_at %}
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-on-tertiary-container/10 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-sm text-on-tertiary-container">task_alt</span></div>
+<div><p class="text-sm font-semibold text-primary">Resolved</p><p class="text-xs text-on-surface-variant">Resolved on {{ c.resolved_date }}</p></div>
+</div>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+<footer class="w-full mt-auto bg-primary text-on-primary py-3 px-6 border-t border-on-primary-fixed-variant">
+<div class="max-w-7xl mx-auto flex justify-between items-center"><span class="text-sm font-bold">Complainify <span class="text-xs text-blue-300 font-normal">Student Portal</span></span><p class="text-[11px] text-primary-fixed-dim">&copy; 2024 Complainify</p></div>
+</footer>
+</main>
+{% endblock %}
+{% block footer %}{% endblock %}

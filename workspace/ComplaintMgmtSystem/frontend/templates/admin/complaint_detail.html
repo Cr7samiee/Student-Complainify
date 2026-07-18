@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Complaint #{{ c.ticket_id }} — Admin{% endblock %}
+{% block content %}
+<aside class="fixed left-0 h-full w-64 bg-[#0a1628] text-white shadow-xl flex flex-col py-6 hidden md:flex z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<span class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-white">admin_panel_settings</span></span>
+<span class="text-xl font-bold text-white tracking-tight">Admin Panel</span>
+</div>
+<div class="px-4 mb-6 flex items-center gap-3 border-b border-white/10 pb-4 mx-2">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex items-center justify-center text-white font-bold text-sm shadow-md">{{ admin_name[:2]|upper }}</div>
+<div><p class="text-sm text-white font-medium truncate">{{ admin_name }}</p><p class="text-[10px] text-red-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-400 inline-block"></span> Administrator</p></div>
+</div>
+<nav class="flex-1 px-2 space-y-0.5">
+<a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">dashboard</span>Dashboard</a>
+<a href="{{ url_for('admin_complaints') }}" class="flex items-center gap-3 bg-[#d32f2f]/20 text-white rounded-lg px-4 py-3 text-sm font-medium border-l-2 border-[#d32f2f]"><span class="material-symbols-outlined text-sm">assignment</span>All Complaints</a>
+<a href="{{ url_for('track_complaint') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">search</span>Track Status</a>
+<a href="#" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">bar_chart</span>Analytics</a>
+</nav>
+<div class="px-2 space-y-0.5 border-t border-white/10 pt-3 mt-2 mx-2">
+<a href="{{ url_for('index') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">arrow_back</span>Back to Home</a>
+<a href="{{ url_for('admin_settings') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">settings</span>Settings</a>
+<a href="{{ url_for('logout') }}" class="flex items-center gap-3 text-red-300 hover:text-red-200 hover:bg-red-500/10 rounded-lg px-4 py-3 text-sm transition-all mt-1"><span class="material-symbols-outlined text-sm">logout</span>Sign Out</a>
+</div>
+</aside>
+<main class="ml-64 min-h-screen flex flex-col bg-[#f0f2f5]">
+<header class="bg-white px-6 py-3 flex justify-between items-center sticky top-0 z-40 shadow-sm border-b border-gray-200">
+<div><h1 class="text-lg font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-[#d32f2f]">assignment</span>Complaint #{{ c.ticket_id }}</h1></div>
+<div class="flex items-center gap-3">
+<a href="{{ url_for('admin_complaints') }}" class="text-sm text-gray-500 hover:text-[#d32f2f] flex items-center gap-1"><span class="material-symbols-outlined text-sm">arrow_back</span>Back</a>
+<span class="px-3 py-1 rounded-full text-xs font-bold {% if c.status == 'Resolved' %}bg-green-100 text-green-700{% elif c.status == 'In Progress' %}bg-blue-100 text-blue-700{% else %}bg-amber-100 text-amber-700{% endif %}">{{ c.status }}</span>
+</div>
+</header>
+<div class="p-6 max-w-5xl mx-auto space-y-6">
+<div class="grid lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 space-y-6">
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+<h2 class="text-sm font-bold text-[#0a1628] mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">info</span>Complaint Details</h2>
+<div class="grid grid-cols-2 gap-4 text-sm">
+<div><span class="text-gray-400 text-xs block">Student Name</span><span class="font-semibold text-[#0a1628]">{{ c.fullname }}</span></div>
+<div><span class="text-gray-400 text-xs block">Email</span><span class="font-semibold text-[#0a1628]">{{ c.email }}</span></div>
+<div><span class="text-gray-400 text-xs block">Category</span><span class="font-semibold text-[#0a1628]">{{ c.category }}</span></div>
+<div><span class="text-gray-400 text-xs block">Priority</span><span class="font-semibold {% if c.priority == 'High' %}text-red-600{% elif c.priority == 'Medium' %}text-amber-600{% else %}text-gray-500{% endif %}">{{ c.priority }}</span></div>
+<div><span class="text-gray-400 text-xs block">Submitted</span><span class="font-semibold text-[#0a1628]">{{ c.created }}</span></div>
+<div><span class="text-gray-400 text-xs block">Validated</span><span class="font-semibold {% if c.validated %}text-green-600{% else %}text-amber-600{% endif %}">{% if c.validated %}Yes{% else %}No{% endif %}</span></div>
+</div>
+<hr class="my-4 border-gray-100">
+<div><span class="text-gray-400 text-xs block mb-1">Subject</span><p class="font-semibold text-[#0a1628]">{{ c.subject }}</p></div>
+<div class="mt-3"><span class="text-gray-400 text-xs block mb-1">Description</span><p class="text-sm text-gray-700 whitespace-pre-wrap">{{ c.description }}</p></div>
+</div>
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+<h2 class="text-sm font-bold text-[#0a1628] mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">history</span>Status Timeline</h2>
+<div class="space-y-4">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-sm text-green-600">check_circle</span></div>
+<div><p class="text-sm font-semibold text-[#0a1628]">Submitted</p><p class="text-xs text-gray-400">{{ c.created }}</p></div>
+</div>
+{% if c.assigned_at %}
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-sm text-blue-600">assignment_ind</span></div>
+<div><p class="text-sm font-semibold text-[#0a1628]">Assigned to {{ c.assigned_to }}</p><p class="text-xs text-gray-400">{{ c.assigned_date }}</p></div>
+</div>
+{% endif %}
+{% if c.resolved_at %}
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-sm text-green-600">task_alt</span></div>
+<div><p class="text-sm font-semibold text-[#0a1628]">Resolved</p><p class="text-xs text-gray-400">{{ c.resolved_date }}</p></div>
+</div>
+{% endif %}
+{% if c.admin_notes %}
+<div class="mt-3 p-3 bg-gray-50 rounded-lg"><span class="text-xs text-gray-400 block mb-1">Admin Notes</span><p class="text-sm text-gray-700">{{ c.admin_notes }}</p></div>
+{% endif %}
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+<h3 class="text-sm font-bold text-[#0a1628] mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">person_add</span>Assign To</h3>
+<form method="POST" action="{{ url_for('admin_assign', ticket_id=c.ticket_id) }}" class="space-y-3">
+<select name="assigned_to" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] focus:border-[#d32f2f] outline-none">
+<option value="">Select department</option>
+<option value="Academic Affairs" {% if c.assigned_to == 'Academic Affairs' %}selected{% endif %}>Academic Affairs</option>
+<option value="Hostel Administration" {% if c.assigned_to == 'Hostel Administration' %}selected{% endif %}>Hostel Administration</option>
+<option value="IT Support" {% if c.assigned_to == 'IT Support' %}selected{% endif %}>IT Support</option>
+<option value="Maintenance Team" {% if c.assigned_to == 'Maintenance Team' %}selected{% endif %}>Maintenance Team</option>
+<option value="Security Office" {% if c.assigned_to == 'Security Office' %}selected{% endif %}>Security Office</option>
+<option value="Finance Office" {% if c.assigned_to == 'Finance Office' %}selected{% endif %}>Finance Office</option>
+<option value="Administration" {% if c.assigned_to == 'Administration' %}selected{% endif %}>Administration</option>
+<option value="Library" {% if c.assigned_to == 'Library' %}selected{% endif %}>Library</option>
+<option value="Transport Office" {% if c.assigned_to == 'Transport Office' %}selected{% endif %}>Transport Office</option>
+<option value="Canteen Management" {% if c.assigned_to == 'Canteen Management' %}selected{% endif %}>Canteen Management</option>
+</select>
+<button type="submit" class="w-full bg-[#0a1628] text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-[#1a2a3a] transition-colors">Assign</button>
+</form>
+</div>
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+<h3 class="text-sm font-bold text-[#0a1628] mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">update</span>Update Status</h3>
+<form method="POST" action="{{ url_for('admin_update_status', ticket_id=c.ticket_id) }}" class="space-y-3">
+<select name="status" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] focus:border-[#d32f2f] outline-none">
+<option value="Pending" {% if c.status == 'Pending' %}selected{% endif %}>Pending</option>
+<option value="In Progress" {% if c.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+<option value="Resolved" {% if c.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+</select>
+<textarea name="admin_notes" rows="2" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none" placeholder="Resolution notes...">{{ c.admin_notes or '' }}</textarea>
+<button type="submit" class="w-full bg-[#d32f2f] text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-[#b71c1c] transition-colors">Update Status</button>
+</form>
+</div>
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-3">
+<h3 class="text-sm font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">verified</span>Actions</h3>
+{% if not c.validated %}
+<form method="POST" action="{{ url_for('admin_validate', ticket_id=c.ticket_id) }}">
+<button type="submit" class="w-full bg-green-600 text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-1.5"><span class="material-symbols-outlined text-sm">check</span>Validate as Legitimate</button>
+</form>
+{% else %}
+<p class="text-xs text-green-600 flex items-center gap-1"><span class="material-symbols-outlined text-sm">verified</span> Validated</p>
+{% endif %}
+<form method="POST" action="{{ url_for('admin_resend_email', ticket_id=c.ticket_id) }}">
+<button type="submit" class="w-full bg-blue-600 text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-1.5"><span class="material-symbols-outlined text-sm">mail</span>Resend Email Notification</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+<footer class="bg-[#0a1628] w-full mt-auto">
+<div class="max-w-7xl mx-auto px-6 py-3 flex flex-col md:flex-row justify-between items-center border-t border-white/5 gap-2">
+<div class="flex items-center gap-2"><span class="text-sm font-bold text-white">Complainify</span><span class="text-[10px] text-gray-500">v4.2.0-Admin</span></div>
+<p class="text-[10px] text-gray-500">&copy; 2024 Complainify</p>
+</div>
+</footer>
+</main>
+{% endblock %}
+{% block footer %}{% endblock %}

@@ -134,16 +134,16 @@ The project uses **two labeled datasets** combined into a unified training set:
 | `TrainDataset/university_complaint_triage_dataset.csv` | Primary complaint triage data | 800 | category + priority |
 | `TrainDataset/university_query_test.csv` | Student query data | 1000 | category + priority |
 
-### Combined Dataset (`workspace/train/training_dataset.csv`)
+### Combined Dataset (`ai/training_dataset.csv`)
 
 - **Total rows**: 1800 cleaned, labeled complaints
 - **9 categories**: Academics, IT Support, Administration, Hostels, Fees / Finance, Library, Maintenance, Transport, Security / Discipline
 - **3 priority levels**: High (547), Medium (589), Low (664)
-- **Pipeline**: `workspace/train/preprocess_dataset.py` handles loading, cleaning, category normalization, text cleaning, and deduplication
+- **Pipeline**: `ai/preprocess_dataset.py` handles loading, cleaning, category normalization, text cleaning, and deduplication
 
 ### Preprocessing Steps
 
-The preprocessing script (`workspace/train/preprocess_dataset.py`) performs:
+The preprocessing script (`ai/preprocess_dataset.py`) performs:
 1. Column standardization (complaint_text, category, priority)
 2. Category name normalization across datasets (e.g., "Academic Office" → "Academics", "Finance Office" → "Fees / Finance")
 3. Text cleaning (remove URLs, special characters, lowercase)
@@ -219,21 +219,47 @@ Display on Admin Dashboard
 # 📁 Project Structure
 
 ```text
-ComplaintMgmtSystem/
+AI-Student-Complaint-System/
+│
+├── app.py
+├── config.py
+├── requirements.txt
+│
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── uploads/
+│
+├── templates/
+│   ├── student/
+│   ├── admin/
+│   └── shared/
+│
+├── database/
+│   └── complaint_system.sql
 │
 ├── TrainDataset/
-│   ├── training_dataset.csv
 │   ├── university_complaint_triage_dataset.csv
 │   ├── university_query_test.csv
 │   └── university_queries_test.csv
 │
-├── workspace/
-│   ├── ProjectPlan.md
-│   └── train/
-│       ├── preprocess_dataset.py
-│       └── training_dataset.csv
+├── ai/
+│   ├── preprocess_dataset.py
+│   ├── tokenizer.py
+│   ├── naive_bayes.py
+│   ├── vader_sentiment.py
+│   └── training_dataset.csv
 │
-└── ProjectPlan.md (moved inside workspace/)
+├── routes/
+│
+├── models/
+│
+├── utils/
+│   ├── email_service.py
+│   ├── database.py
+│   └── helper.py
+│
+└── README.md
 ```
 
 ---
@@ -332,3 +358,112 @@ The application is **not developed inside the XAMPP `htdocs` directory**, as it 
 - Frontend: HTML5, CSS3, JavaScript
 - Database Server: MySQL (XAMPP)
 - Version Control: Git & GitHub
+
+---
+
+---
+
+# 🧠 Naive Bayes Implementation (From Scratch)
+
+### File: `ai/naive_bayes.py`
+
+Full Multinomial Naive Bayes classifier implemented **entirely from scratch** (no scikit-learn).
+
+### How It Works
+
+| Step | What It Does |
+|------|-------------|
+| **Tokenization** | Lowercase text, remove punctuation/stopwords, keep words > 2 chars |
+| **Vocabulary** | ~3,500 unique words, filtered to ~1,170 (keep words in ≥3 documents) |
+| **Priors** | P(category) = doc_count / total_docs (log probability) |
+| **Likelihoods** | P(word\|category) = (count + α) / (total_words + α × vocab_size) with Laplace smoothing |
+| **Prediction** | argmax[ log P(c) + Σ log P(w\|c) ] using log to avoid underflow |
+| **Confidence** | Convert log scores back to probabilities via softmax |
+
+### Results (1,080 samples, 9 categories)
+
+| Metric | Before (815) | After (+265 synthetic) | Improvement |
+|--------|-------------|----------------------|-------------|
+| **Cross-validation (5-fold)** | **60.43%** | **71.48%** | **+11%** |
+| **Test accuracy** | **59.51%** | **68.52%** | **+9%** |
+| **Training accuracy** | **94.17%** | **94.79%** | — |
+
+### Synthetic Data Generation (`ai/generate_fake_data.py` → `ai/gen_fake.py`)
+
+265 fake complaints generated for under-represented categories using template-based placeholders:
+
+| Category | Before | After | Templates Used |
+|----------|--------|-------|---------------|
+| Library | 1 | 100 | book issues, fines, timings, machines |
+| Academics | 114 | 150 | teacher late, faculty, grades, exams |
+| Administration | 100 | 150 | certificates, office staff, documents |
+| IT Support | 100 | 150 | wifi, network, printer, portal, VPN |
+| Security / Discipline | 100 | 130 | theft, suspicious activity, fights |
+
+### Sample Predictions
+
+| Complaint Text | Predicted | Confidence |
+|---------------|-----------|------------|
+| "My hostel room has a broken fan and water leaking" | **Hostels** | 96.3% |
+| "The bus timing has changed and I missed my classes" | **Transport** | 94.7% |
+| "I have not received my scholarship amount" | **Fees / Finance** | 71.3% |
+| "Someone stole my laptop from the library" | **Security / Discipline** | 75.4% |
+| "Exam results are delayed, need grade card" | **Fees / Finance** | 30.2% |
+
+### Key Parameters
+- **alpha (Laplace smoothing):** 1.0
+- **min_df:** 3 (ignore words appearing in <3 documents)
+- **Train/Test split:** 80/20 stratified (preserves class proportions)
+- **Validation:** 5-fold cross-validation
+
+---
+
+# 📋 Session Prompt Log
+
+All prompts/instructions given during AI-assisted development sessions (chronological order):
+
+### Session 1 — Version Control Push
+1. "Can you push my code version wise control like 1st branch dashboard only, 2nd page signup, 3rd page backend working of login side"
+2. GitHub repo link provided: https://github.com/Cr7samiee/Student-Complainify.git
+3. "Bro is there any need of data cleaning? we need to preprocess the data"
+4. "We need to encode in correct manner so that in dashboard too it should work perfectly"
+5. "For now we don't go for train, we need to learn concept about Naive Bayes first"
+6. "Push in my branch with new version"
+7. "Where is this code inside workspace folder?"
+8. "For that data how to make ready for analysis?"
+9. "How to make chart here of that existed data"
+10. "How to run our web app"
+
+### Session 2 — Frontend & Data Fixes
+11. "Make cmd workable — run from correct directory"
+12. "What did you do to my frontend? It was good at start"
+13. "Inside GitHub README there is written? How to setup?"
+14. "How to run — provide stepwise command starting from activating conda myenv"
+15. "Bro previously it used to run, you have ruined all see errors"
+16. "We need to remove duplicates isn't it?"
+17. "If duplicate teacher will shout — remove duplicate rows and columns that show in dashboard"
+18. "Update HTML file too"
+19. "In dashboard, when I press any tab there is no back button, need to fix"
+20. "In signup form and login form, need error messages — not registered, validation. Also create password should show parameters like low, good, very good"
+21. "Data preprocessing — how to show?"
+22. "I don't need duplicates, if teacher sees duplicates he will shout. Also make good HTML dashboard showing how I have encoded data"
+23. "Can you make me meaningful dashboard so I can explain easily? Bar chart — Library not visible, show with line graph. Remove duplicates tab"
+24. "75 duplicates shown here — what means that?"
+25. "Text length distribution — meaning?"
+26. "How is this taken bro?"
+27. "I have idea — want to show total dataset before preprocessing, how much left after, and unique data"
+
+### Session 3 — Model Planning
+28. "Now lets go for model train — which can be best for this, Random Forest or Naive Bayes? Need to do from scratch, not using scikit-learn"
+29. "How Naive Bayes works here? Explain clearly"
+
+### Branch History
+| Branch | Content |
+|--------|---------|
+| v1-dashboard-ui | Student & Admin dashboard templates only |
+| v2-auth-pages | Login, Register, Forgot/Reset Password HTML |
+| v3-landing-pages | Index, Submit Complaint, Track Status pages |
+| v4-flask-backend | Flask app with session-based auth (in-memory) |
+| v5-database | MySQL integration via pymysql + complainify.sql |
+| v6-preprocessing | Data preprocessing, cleaning, encoding (815 unique rows) |
+| v7-signup-fixed-and-analysis | Signup validation, flash messages, password strength, preprocessing dashboard |

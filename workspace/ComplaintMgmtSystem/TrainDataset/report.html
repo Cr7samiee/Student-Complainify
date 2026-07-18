@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Training Dataset Report — Complainify v2</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#f8f9ff;color:#022448;padding:30px}
+.container{max-width:1100px;margin:0 auto}
+h1{font-size:28px;margin-bottom:4px;color:#022448}
+.subtitle{color:#43474e;font-size:14px;margin-bottom:28px}
+.card{background:white;border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,0.04);border:1px solid #e5eeff}
+.card h2{font-size:15px;margin-bottom:14px;color:#022448;display:flex;align-items:center;gap:8px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px}
+.stat{background:white;border-radius:12px;padding:18px 14px;text-align:center;border:1px solid #e5eeff}
+.stat .num{font-size:28px;font-weight:800;color:#0058be;line-height:1.2}
+.stat .label{font-size:12px;color:#43474e;margin-top:3px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#022448;color:white;padding:9px 12px;text-align:left;font-weight:600;font-size:12px}
+td{padding:8px 12px;border-bottom:1px solid #eef2f7}
+tr:hover td{background:#f5f8ff}
+.code{background:#e8f5e9;color:#2e7d32;font-weight:700;padding:2px 8px;border-radius:4px;font-size:13px;font-family:monospace}
+.sample-text{max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#43474e;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Training Dataset Report v2</h1>
+<p class="subtitle">Expanded dataset for Naive Bayes classification — 8,995 rows across 10 categories</p>
+
+<div class="stats">
+<div class="stat"><div class="num">8,995</div><div class="label">Total Rows</div></div>
+<div class="stat"><div class="num" style="color:#10b981">8,994</div><div class="label">Unique Texts</div></div>
+<div class="stat"><div class="num" style="color:#10b981">0</div><div class="label">Duplicates</div></div>
+<div class="stat"><div class="num" style="color:#6366f1">10</div><div class="label">Categories</div></div>
+<div class="stat"><div class="num" style="color:#0058be">52</div><div class="label">Avg Length (chars)</div></div>
+</div>
+
+<div class="card">
+<h2>Dataset Evolution</h2>
+<p style="font-size:13px;color:#43474e;line-height:1.6">
+The original dataset had <strong>815 unique</strong> complaint texts across <strong>9 categories</strong>.
+We expanded it synthetically to <strong>8,995 rows</strong> by generating variant templates for each category
+while preserving the original distinct texts. A new <strong>Canteen</strong> category (code 9) was added
+with 818 food/mess/kitchen-related complaints. Each category now has roughly <strong>818–932 rows</strong>
+for balanced training.
+</p>
+</div>
+
+<div class="grid-2">
+<div class="card">
+<h2>Category Distribution</h2>
+<canvas id="catChart" height="200"></canvas>
+</div>
+<div class="card">
+<h2>Text Length Distribution</h2>
+<canvas id="lenChart" height="200"></canvas>
+</div>
+</div>
+
+<div class="grid-2" style="grid-template-columns:1fr 1fr 1fr">
+<div class="card">
+<h2>Category Encoding</h2>
+<table>
+<thead><tr><th>Category</th><th>Code</th><th>Count</th></tr></thead>
+<tbody>
+<tr><td>IT Support</td><td class="code">0</td><td>918</td></tr>
+<tr><td>Hostels</td><td class="code">1</td><td>918</td></tr>
+<tr><td>Academics</td><td class="code">2</td><td>932</td></tr>
+<tr><td>Fees / Finance</td><td class="code">3</td><td>918</td></tr>
+<tr><td>Maintenance</td><td class="code">4</td><td>918</td></tr>
+<tr><td>Transport</td><td class="code">5</td><td>918</td></tr>
+<tr><td>Security / Discipline</td><td class="code">6</td><td>918</td></tr>
+<tr><td>Administration</td><td class="code">7</td><td>918</td></tr>
+<tr><td>Library</td><td class="code">8</td><td>819</td></tr>
+<tr><td>Canteen</td><td class="code">9</td><td>818</td></tr>
+</tbody>
+</table>
+</div>
+<div class="card">
+<h2>Priority Encoding</h2>
+<table>
+<thead><tr><th>Priority</th><th>Code</th><th>Index Type</th></tr></thead>
+<tbody>
+<tr><td>Medium</td><td class="code">0</td><td>Default (balanced)</td></tr>
+<tr><td>Low</td><td class="code">1</td><td>Low urgency</td></tr>
+<tr><td>High</td><td class="code">2</td><td>High urgency</td></tr>
+</tbody>
+</table>
+</div>
+<div class="card">
+<h2>Text Length Stats</h2>
+<table>
+<thead><tr><th>Metric</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>Average</td><td><strong>52 chars</strong></td></tr>
+<tr><td>Shortest</td><td>19 chars</td></tr>
+<tr><td>Longest</td><td>469 chars</td></tr>
+<tr><td>Median</td><td>38 chars</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h2>Sample Records</h2>
+<table>
+<thead><tr><th>#</th><th>Complaint Text</th><th>Category</th><th style="text-align:center">Code</th><th>Priority</th></tr></thead>
+<tbody>
+<tr><td>1</td><td class="sample-text">vpn intermittently disconnects during remote work connections drop every 20 30 minutes while on client calls please review vpn logs and stability for my profile</td><td>IT Support</td><td class="code" style="text-align:center">0</td><td>Medium</td></tr>
+<tr><td>2</td><td class="sample-text">request to map departmental research share i need read write access to the biology research drive the path in the wiki returns access denied</td><td>IT Support</td><td class="code" style="text-align:center">0</td><td>Low</td></tr>
+<tr><td>3</td><td class="sample-text">canvas submission blocked by sso loop right before deadline sign in passes then loops to login again tried different browsers and cleared cache</td><td>IT Support</td><td class="code" style="text-align:center">0</td><td>High</td></tr>
+<tr><td>4</td><td class="sample-text">matlab license request for course project i need matlab installed with the university license could you assist with activation on a managed laptop</td><td>IT Support</td><td class="code" style="text-align:center">0</td><td>Low</td></tr>
+<tr><td>5</td><td class="sample-text">library printer queue stuck at processing jobs appear in the queue but nothing prints i replaced the paper and checked for jams still not working</td><td>IT Support</td><td class="code" style="text-align:center">0</td><td>Medium</td></tr>
+<tr><td>6</td><td class="sample-text">continuous water supply cut for over 24 hours in block f we have no water for drinking cleaning or the washrooms the hygiene levels are becoming unbearable</td><td>Hostels</td><td class="code" style="text-align:center">1</td><td>High</td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<script>
+new Chart(document.getElementById('catChart'), {
+    type: 'bar',
+    data: {
+        labels: ['IT Support','Hostels','Academics','Fees/Finance','Maintenance','Transport','Security','Admin','Library','Canteen'],
+        datasets: [{ label: 'Count', data: [918,918,932,918,918,918,918,918,819,818],
+            backgroundColor: ['#3b82f6','#6366f1','#8b5cf6','#ec4899','#f43f5e','#f59e0b','#10b981','#06b6d4','#94a3b8','#f97316'],
+            borderRadius: 4 }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: { color: '#eef2f7' } } } }
+});
+new Chart(document.getElementById('lenChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Min','Max','Avg','Median'],
+        datasets: [{ label: 'Chars', data: [19, 469, 52, 38],
+            backgroundColor: ['#f59e0b','#ef4444','#3b82f6','#10b981'], borderRadius: 4 }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: { color: '#eef2f7' } } } }
+});
+</script>
+</body>
+</html>
