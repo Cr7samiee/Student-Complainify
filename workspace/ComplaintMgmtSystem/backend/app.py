@@ -1,10 +1,12 @@
-import os, csv, io, json, pymysql, hashlib, smtplib, ssl, sys
+import os, csv, io, json, pymysql, hashlib, smtplib, ssl, sys, random
 from email.message import EmailMessage
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from datetime import timedelta, datetime
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'train'))
-from classifier import auto_categorize
+from classifier import auto_categorize, categorize
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'train'))
+from sentiment import analyze_sentiment, sentiment_priority_boost
 
 app = Flask(
     __name__,
@@ -68,21 +70,41 @@ def submit_complaint():
             uid = session.get('user_id')
             description = request.form.get('description', '')
             subject = request.form.get('subject', '')
+            full_text = subject + ' ' + description
             manual_cat = request.form.get('category', '').strip()
 
             if manual_cat and manual_cat != 'auto':
                 category = manual_cat
                 confidence = 1.0
+                tier = 'auto'
             else:
-                full_text = subject + ' ' + description
-                category, confidence = auto_categorize(full_text)
-                flash(f'AI detected: {category} ({confidence*100:.1f}% confidence)', 'info')
+                result = categorize(full_text)
+                category = result['category']
+                confidence = result['confidence']
+                tier = result['tier']
+                if tier == 'auto':
+                    flash(f'AI auto-categorized: {category} ({confidence*100:.1f}%)', 'success')
+                elif tier == 'suggest':
+                    flash(f'AI suggests: {category} ({confidence*100:.1f}%) — please review', 'warning')
+                else:
+                    flash(f'Unclear complaint ({confidence*100:.1f}%) — category set to Other', 'warning')
+                    category = 'Other'
+
+            sentiment_result = analyze_sentiment(full_text)
+            sentiment = sentiment_result['label']
+            sentiment_score = sentiment_result['score']
+
+            priority = request.form.get('priority', 'Medium')
+            boosted = sentiment_priority_boost(sentiment, priority)
+            if boosted != priority:
+                flash(f'Priority auto-boosted from {priority} to {boosted} due to {sentiment_result["sub_label"]} tone', 'warning')
+                priority = boosted
 
             cur.execute("""INSERT INTO complaints
-                (ticket_id,user_id,fullname,email,category,priority,subject,description)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
+                (ticket_id,user_id,fullname,email,category,priority,subject,description,sentiment,sentiment_score)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                 (tid, uid, request.form.get('fullname'), request.form.get('email'),
-                 category, request.form.get('priority', 'Medium'), subject, description))
+                 category, priority, subject, description, sentiment, sentiment_score))
             conn.commit()
 
             if SMTP_CONFIG['user']:
@@ -128,13 +150,63 @@ def track_complaint():
 @app.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'POST':
-        flash('OTP has been sent to your phone number.', 'success')
+        email = request.form.get('email', '').strip()
+        conn = get_db(); cur = conn.cursor()
+        cur.execute("SELECT id FROM users WHERE email=%s", (email,))
+        user = cur.fetchone()
+        if not user:
+            flash('No account found with this email.', 'error')
+            cur.close(); conn.close()
+            return render_template('forgot_password.html')
+        otp = str(random.randint(100000, 999999))
+        expires = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        cur.execute("INSERT INTO otps (email, otp, expires_at) VALUES (%s, %s, DATE_ADD(NOW(), INTERVAL 10 MINUTE))",
+            (email, otp))
+        conn.commit()
+        sent = False
+        if SMTP_CONFIG['user'] and SMTP_CONFIG['password']:
+            sent = send_email_notification(email, f'Your OTP for Complainify Password Reset',
+                f'Your OTP is: {otp}\n\nThis code expires in 10 minutes.\n\nIf you did not request this, ignore this email.')
+        cur.close(); conn.close()
+        if sent:
+            flash(f'OTP sent to {email}. Check your inbox.', 'success')
+        else:
+            flash(f'OTP: {otp} (Email not configured — use this code)', 'info')
+        session['reset_email'] = email
+        return redirect(url_for('reset_password'))
     return render_template('forgot_password.html')
 
 @app.route('/reset-password', methods=['GET', 'POST'])
 def reset_password():
+    email = session.get('reset_email')
+    if not email:
+        flash('Please request an OTP first.', 'error')
+        return redirect(url_for('forgot_password'))
     if request.method == 'POST':
-        flash('Your password has been reset successfully. Please login.', 'success')
+        otp = request.form.get('otp', '').strip()
+        new_pw = request.form.get('new_password', '')
+        confirm = request.form.get('confirm_password', '')
+        if len(new_pw) < 6:
+            flash('Password must be at least 6 characters.', 'error')
+            return render_template('reset_password.html')
+        if new_pw != confirm:
+            flash('Passwords do not match.', 'error')
+            return render_template('reset_password.html')
+        conn = get_db(); cur = conn.cursor()
+        cur.execute("SELECT id FROM otps WHERE email=%s AND otp=%s AND used=0 AND expires_at > NOW() ORDER BY id DESC LIMIT 1",
+            (email, otp))
+        record = cur.fetchone()
+        if not record:
+            flash('Invalid or expired OTP. Please request a new one.', 'error')
+            cur.close(); conn.close()
+            return render_template('reset_password.html')
+        cur.execute("UPDATE users SET password=%s, plain_password=%s WHERE email=%s",
+            (hash_pw(new_pw), new_pw, email))
+        cur.execute("UPDATE otps SET used=1 WHERE email=%s AND otp=%s", (email, otp))
+        conn.commit()
+        cur.close(); conn.close()
+        session.pop('reset_email', None)
+        flash('Password reset successful! Please login.', 'success')
         return redirect(url_for('student_login'))
     return render_template('reset_password.html')
 
@@ -211,7 +283,7 @@ def student_dashboard():
     if not login_required('student'):
         return redirect(url_for('student_login'))
     conn = get_db(); cur = conn.cursor()
-    cur.execute("""SELECT ticket_id,category,priority,status,subject,
+    cur.execute("""SELECT ticket_id,category,priority,status,subject,sentiment,
         date_format(created_at,'%%d %%b %%Y') date,
         assigned_to,validated
         FROM complaints WHERE user_id=%s ORDER BY created_at DESC""", (session['user_id'],))
@@ -348,18 +420,48 @@ def admin_dashboard():
     if not login_required('admin'):
         return redirect(url_for('admin_login'))
     conn = get_db(); cur = conn.cursor()
-    cur.execute("""SELECT ticket_id,fullname student,category,priority,status,subject,
+    cur.execute("""SELECT ticket_id,fullname student,category,priority,status,subject,sentiment,
         date_format(created_at,'%%d %%b %%Y') date,
         assigned_to,validated
         FROM complaints ORDER BY created_at DESC""")
     complaints = cur.fetchall()
-    cur.close(); conn.close()
     total = len(complaints)
     resolved = sum(1 for c in complaints if c['status'] == 'Resolved')
     in_progress = sum(1 for c in complaints if c['status'] == 'In Progress')
     pending = total - resolved - in_progress
+
+    cur.execute("SELECT COUNT(*) cnt FROM complaints WHERE status='Resolved' AND resolved_at IS NOT NULL AND TIMESTAMPDIFF(HOUR, created_at, resolved_at) IS NOT NULL")
+    resolved_cnt_row = cur.fetchone()
+    resolved_cnt = resolved_cnt_row['cnt'] if resolved_cnt_row else 0
+    cur.execute("SELECT COALESCE(AVG(TIMESTAMPDIFF(HOUR, created_at, resolved_at)), 0) avg_hrs FROM complaints WHERE status='Resolved' AND resolved_at IS NOT NULL")
+    avg_row = cur.fetchone()
+    avg_resolution = round(float(avg_row['avg_hrs'])) if avg_row else 0
+
+    cur.execute("SELECT COUNT(*) cnt FROM complaints WHERE priority='High' AND status!='Resolved'")
+    critical_row = cur.fetchone()
+    critical = critical_row['cnt'] if critical_row else 0
+
+    cur.execute("""SELECT category, COUNT(*) cnt FROM complaints GROUP BY category ORDER BY cnt DESC""")
+    cat_rows = cur.fetchall()
+    cat_labels = [r['category'] for r in cat_rows]
+    cat_values = [r['cnt'] for r in cat_rows]
+    cat_total = sum(cat_values) or 1
+    cat_pcts = [round(v / cat_total * 100) for v in cat_values]
+
+    cur.execute("""SELECT sentiment, COUNT(*) cnt FROM complaints GROUP BY sentiment""")
+    sent_rows = cur.fetchall()
+    sent_map = {r['sentiment']: r['cnt'] for r in sent_rows}
+    sent_pos = sent_map.get('Positive', 0)
+    sent_neg = sent_map.get('Negative', 0)
+    sent_neu = sent_map.get('Neutral', 0)
+
+    cur.close(); conn.close()
     return render_template('admin/dashboard.html', total=total, resolved=resolved,
-        in_progress=in_progress, pending=pending, complaints=complaints,
+        in_progress=in_progress, pending=pending, critical=critical,
+        avg_resolution=avg_resolution,
+        cat_labels=cat_labels, cat_values=cat_values, cat_pcts=cat_pcts,
+        sent_pos=sent_pos, sent_neg=sent_neg, sent_neu=sent_neu,
+        complaints=complaints,
         admin_name=session.get('fullname', 'Admin'))
 
 @app.route('/admin/complaints')
@@ -369,7 +471,7 @@ def admin_complaints():
     conn = get_db(); cur = conn.cursor()
     status_filter = request.args.get('status', '')
     category_filter = request.args.get('category', '')
-    query = """SELECT ticket_id,fullname student,category,priority,status,subject,
+    query = """SELECT ticket_id,fullname student,category,priority,status,subject,sentiment,
         date_format(created_at,'%%d %%b %%Y') date, assigned_to, validated
         FROM complaints WHERE 1=1"""
     params = []
@@ -622,8 +724,12 @@ def api_predict():
     data = request.get_json()
     if not data or 'text' not in data:
         return jsonify({'error': 'No text provided'}), 400
-    category, confidence = auto_categorize(data['text'])
-    return jsonify({'category': category, 'confidence': round(confidence, 4)})
+    result = categorize(data['text'])
+    return jsonify({
+        'category': result['category'],
+        'confidence': round(result['confidence'], 4),
+        'tier': result['tier']
+    })
 
 @app.route('/logout')
 def logout():
