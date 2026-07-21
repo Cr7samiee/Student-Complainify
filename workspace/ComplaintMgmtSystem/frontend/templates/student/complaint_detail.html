@@ -36,9 +36,9 @@
 </div>
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 <div class="bg-surface rounded-xl p-4"><p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Category</p><p class="text-sm font-bold text-primary mt-1">{{ c.category }}</p></div>
+<div class="bg-surface rounded-xl p-4"><p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Sentiment</p><span class="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-semibold {% if c.sentiment == 'Positive' %}bg-on-tertiary-container/10 text-on-tertiary-container{% elif c.sentiment == 'Negative' %}bg-error-crimson/10 text-error-crimson{% else %}bg-on-surface-variant/10 text-on-surface-variant{% endif %}">{{ c.sentiment or 'Neutral' }}</span></div>
 <div class="bg-surface rounded-xl p-4"><p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Priority</p><span class="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-semibold {% if c.priority == 'High' %}bg-error-crimson/10 text-error-crimson{% elif c.priority == 'Medium' %}bg-warning-amber/10 text-warning-amber{% else %}bg-on-surface-variant/10 text-on-surface-variant{% endif %}">{{ c.priority }}</span></div>
 <div class="bg-surface rounded-xl p-4"><p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Assigned To</p><p class="text-sm font-bold text-primary mt-1">{{ c.assigned_to or 'Not assigned yet' }}</p></div>
-<div class="bg-surface rounded-xl p-4"><p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Validated</p><p class="text-sm font-bold {% if c.validated %}text-on-tertiary-container{% else %}text-warning-amber{% endif %} mt-1">{% if c.validated %}Yes{% else %}Pending{% endif %}</p></div>
 </div>
 <div class="mb-6"><h4 class="text-sm font-bold text-primary mb-2">Description</h4><p class="text-sm text-on-surface bg-surface rounded-xl p-4 whitespace-pre-wrap">{{ c.description }}</p></div>
 {% if c.admin_notes %}<div><h4 class="text-sm font-bold text-primary mb-2">Admin Response</h4><p class="text-sm text-on-surface bg-blue-50 rounded-xl p-4">{{ c.admin_notes }}</p></div>{% endif %}

@@ -63,12 +63,13 @@
 {% if complaints %}
 <div class="overflow-x-auto">
 <table class="w-full text-left">
-<thead><tr class="text-[11px] text-on-surface-variant font-semibold uppercase tracking-wider"><th class="px-6 py-4 bg-surface-container-low">Ticket</th><th class="px-6 py-4 bg-surface-container-low">Category</th><th class="px-6 py-4 bg-surface-container-low">Status</th><th class="px-6 py-4 bg-surface-container-low">Priority</th><th class="px-6 py-4 bg-surface-container-low">Date</th><th class="px-6 py-4 bg-surface-container-low">Action</th></tr></thead>
+<thead><tr class="text-[11px] text-on-surface-variant font-semibold uppercase tracking-wider"><th class="px-6 py-4 bg-surface-container-low">Ticket</th><th class="px-6 py-4 bg-surface-container-low">Category</th><th class="px-6 py-4 bg-surface-container-low">Sentiment</th><th class="px-6 py-4 bg-surface-container-low">Status</th><th class="px-6 py-4 bg-surface-container-low">Priority</th><th class="px-6 py-4 bg-surface-container-low">Date</th><th class="px-6 py-4 bg-surface-container-low">Action</th></tr></thead>
 <tbody class="divide-y divide-outline-variant/50">
 {% for c in complaints %}
 <tr class="hover:bg-slate-bg transition-colors">
 <td class="px-6 py-4 text-sm font-bold text-primary">#{{ c.ticket_id }}</td>
 <td class="px-6 py-4 text-sm text-on-surface">{{ c.category }}</td>
+<td class="px-6 py-4"><span class="px-2 py-1 rounded-full text-[11px] font-bold {% if c.sentiment == 'Positive' %}bg-green-50 text-green-700{% elif c.sentiment == 'Negative' %}bg-red-50 text-red-600{% else %}bg-gray-50 text-gray-500{% endif %}">{{ c.sentiment or 'Neutral' }}</span></td>
 <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-[11px] font-bold {% if c.status == 'Resolved' %}bg-green-50 text-green-700{% elif c.status == 'In Progress' %}bg-blue-50 text-blue-700{% else %}bg-amber-50 text-amber-700{% endif %}">{{ c.status }}</span></td>
 <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-[11px] font-bold {% if c.priority == 'High' %}bg-red-50 text-red-600{% elif c.priority == 'Medium' %}bg-amber-50 text-amber-600{% else %}bg-gray-50 text-gray-500{% endif %}">{{ c.priority }}</span></td>
 <td class="px-6 py-4 text-xs text-on-surface-variant">{{ c.date }}</td>

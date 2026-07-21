@@ -14,7 +14,7 @@
 <a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">dashboard</span>Dashboard</a>
 <a href="{{ url_for('admin_complaints') }}" class="flex items-center gap-3 bg-[#d32f2f]/20 text-white rounded-lg px-4 py-3 text-sm font-medium border-l-2 border-[#d32f2f]"><span class="material-symbols-outlined text-sm">assignment</span>All Complaints</a>
 <a href="{{ url_for('track_complaint') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">search</span>Track Status</a>
-<a href="#" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">bar_chart</span>Analytics</a>
+<a href="{{ url_for('admin_report') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">bar_chart</span>Reports</a>
 </nav>
 <div class="px-2 space-y-0.5 border-t border-white/10 pt-3 mt-2 mx-2">
 <a href="{{ url_for('index') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">arrow_back</span>Back to Home</a>
@@ -40,6 +40,7 @@
 <div><span class="text-gray-400 text-xs block">Email</span><span class="font-semibold text-[#0a1628]">{{ c.email }}</span></div>
 <div><span class="text-gray-400 text-xs block">Category</span><span class="font-semibold text-[#0a1628]">{{ c.category }}</span></div>
 <div><span class="text-gray-400 text-xs block">Priority</span><span class="font-semibold {% if c.priority == 'High' %}text-red-600{% elif c.priority == 'Medium' %}text-amber-600{% else %}text-gray-500{% endif %}">{{ c.priority }}</span></div>
+<div><span class="text-gray-400 text-xs block">Sentiment</span><span class="font-semibold {% if c.sentiment == 'Positive' %}text-green-600{% elif c.sentiment == 'Negative' %}text-red-600{% else %}text-gray-500{% endif %}">{{ c.sentiment or 'Neutral' }}</span></div>
 <div><span class="text-gray-400 text-xs block">Submitted</span><span class="font-semibold text-[#0a1628]">{{ c.created }}</span></div>
 <div><span class="text-gray-400 text-xs block">Validated</span><span class="font-semibold {% if c.validated %}text-green-600{% else %}text-amber-600{% endif %}">{% if c.validated %}Yes{% else %}No{% endif %}</span></div>
 </div>
