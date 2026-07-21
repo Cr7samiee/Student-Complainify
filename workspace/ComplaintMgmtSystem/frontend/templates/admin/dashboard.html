@@ -65,9 +65,9 @@
 {% set pos_h = (sent_pos / max_sent * 80)|int if max_sent > 0 else 0 %}
 {% set neu_h = (sent_neu / max_sent * 80)|int if max_sent > 0 else 0 %}
 {% set neg_h = (sent_neg / max_sent * 80)|int if max_sent > 0 else 0 %}
-<div class="flex-1 bg-green-400 rounded-t-lg relative group cursor-pointer hover:opacity-80" style="height:{{ pos_h + 10 }}%"><div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-600 opacity-0 group-hover:opacity-100">{{ sent_pos }}</div></div>
-<div class="flex-1 bg-blue-400 rounded-t-lg relative group cursor-pointer hover:opacity-80" style="height:{{ neu_h + 10 }}%"><div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-600 opacity-0 group-hover:opacity-100">{{ sent_neu }}</div></div>
-<div class="flex-1 bg-red-400 rounded-t-lg relative group cursor-pointer hover:opacity-80" style="height:{{ neg_h + 10 }}%"><div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-600 opacity-0 group-hover:opacity-100">{{ sent_neg }}</div></div>
+<a href="{{ url_for('admin_complaints', sentiment='Positive') }}" class="flex-1 bg-green-400 rounded-t-lg relative group hover:opacity-80" style="height:{{ pos_h + 10 }}%"><div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-600 opacity-0 group-hover:opacity-100">{{ sent_pos }}</div></a>
+<a href="{{ url_for('admin_complaints', sentiment='Neutral') }}" class="flex-1 bg-blue-400 rounded-t-lg relative group hover:opacity-80" style="height:{{ neu_h + 10 }}%"><div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-600 opacity-0 group-hover:opacity-100">{{ sent_neu }}</div></a>
+<a href="{{ url_for('admin_complaints', sentiment='Negative') }}" class="flex-1 bg-red-400 rounded-t-lg relative group hover:opacity-80" style="height:{{ neg_h + 10 }}%"><div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-600 opacity-0 group-hover:opacity-100">{{ sent_neg }}</div></a>
 </div>
 <div class="px-5 py-3 border-t border-gray-100 flex gap-4 text-[11px] font-medium">
 <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#d32f2f]"></span> Positive</span>
@@ -79,7 +79,7 @@
 <div class="px-5 py-3 border-b border-gray-100 bg-gray-50/50"><h3 class="text-sm font-bold text-[#0a1628]">Category Breakdown</h3></div>
 <div class="p-5 space-y-4">
 {% for i in range(cat_labels|length) %}
-<div><div class="flex justify-between text-xs mb-1.5"><span class="text-gray-700">{{ cat_labels[i] }}</span><span class="font-bold text-[#0a1628]">{{ cat_pcts[i] }}%</span></div><div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div class="bg-indigo-600 h-full rounded-full" style="width:{{ cat_pcts[i] }}%"></div></div></div>
+<a href="{{ url_for('admin_complaints', category=cat_labels[i]) }}"><div class="flex justify-between text-xs mb-1.5"><span class="text-gray-700 hover:text-[#d32f2f]">{{ cat_labels[i] }}</span><span class="font-bold text-[#0a1628]">{{ cat_pcts[i] }}%</span></div><div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div class="bg-indigo-600 h-full rounded-full hover:bg-indigo-700" style="width:{{ cat_pcts[i] }}%"></div></div></a>
 {% endfor %}
 </div>
 <div class="px-5 py-3 bg-gray-50 border-t border-gray-100"><button class="w-full text-xs text-indigo-600 font-semibold text-center hover:underline">View Full Analytics →</button></div>
