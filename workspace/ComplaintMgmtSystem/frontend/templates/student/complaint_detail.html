@@ -41,7 +41,8 @@
 <div class="bg-surface rounded-xl p-4"><p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Assigned To</p><p class="text-sm font-bold text-primary mt-1">{{ c.assigned_to or 'Not assigned yet' }}</p></div>
 </div>
 <div class="mb-6"><h4 class="text-sm font-bold text-primary mb-2">Description</h4><p class="text-sm text-on-surface bg-surface rounded-xl p-4 whitespace-pre-wrap">{{ c.description }}</p></div>
-{% if c.admin_notes %}<div><h4 class="text-sm font-bold text-primary mb-2">Admin Response</h4><p class="text-sm text-on-surface bg-blue-50 rounded-xl p-4">{{ c.admin_notes }}</p></div>{% endif %}
+{% if c.admin_notes %}<div><h4 class="text-sm font-bold text-primary mb-2">{% if c.status == 'Resolved' %}<span class="text-on-tertiary-container">✓</span> {% endif %}Admin Response</h4><p class="text-sm text-on-surface {% if c.status == 'Resolved' %}bg-green-50 border border-green-200{% else %}bg-blue-50{% endif %} rounded-xl p-4">{{ c.admin_notes }}</p></div>{% endif %}
+{% if c.attachment %}<div class="mt-3"><h4 class="text-sm font-bold text-primary mb-2">Attached File</h4><a href="{{ url_for('uploaded_file', filename=c.attachment) }}" target="_blank" class="inline-flex items-center gap-2 text-sm text-secondary font-semibold bg-surface-container-low rounded-xl px-4 py-2.5 hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm">download</span>Download Attachment</a></div>{% endif %}
 </div>
 <div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-6">
 <h3 class="text-sm font-bold text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-secondary">timeline</span>Progress Timeline</h3>

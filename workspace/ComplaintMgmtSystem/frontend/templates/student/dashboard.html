@@ -73,7 +73,7 @@
 <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-[11px] font-bold {% if c.status == 'Resolved' %}bg-green-50 text-green-700{% elif c.status == 'In Progress' %}bg-blue-50 text-blue-700{% else %}bg-amber-50 text-amber-700{% endif %}">{{ c.status }}</span></td>
 <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-[11px] font-bold {% if c.priority == 'High' %}bg-red-50 text-red-600{% elif c.priority == 'Medium' %}bg-amber-50 text-amber-600{% else %}bg-gray-50 text-gray-500{% endif %}">{{ c.priority }}</span></td>
 <td class="px-6 py-4 text-xs text-on-surface-variant">{{ c.date }}</td>
-<td class="px-6 py-4"><a href="{{ url_for('student_complaint_detail', ticket_id=c.ticket_id) }}" class="text-xs text-secondary font-semibold hover:underline">View</a></td>
+<td class="px-6 py-4"><a href="{{ url_for('student_complaint_detail', ticket_id=c.ticket_id) }}" class="text-xs text-secondary font-semibold hover:underline">View{% if c.status == 'Resolved' %} →{% endif %}</a></td>
 </tr>
 {% endfor %}
 </tbody>

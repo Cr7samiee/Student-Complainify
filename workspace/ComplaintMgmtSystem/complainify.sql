@@ -1,5 +1,6 @@
 -- Complainify Database Setup
 -- Run: mysql -u root < complainify.sql
+-- Migration: ALTER TABLE complaints ADD COLUMN attachment VARCHAR(255) DEFAULT NULL;
 
 CREATE DATABASE IF NOT EXISTS complainify CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE complainify;
@@ -36,6 +37,7 @@ CREATE TABLE IF NOT EXISTS complaints (
     admin_notes TEXT DEFAULT NULL,
     validated TINYINT(1) DEFAULT 0,
     email_sent TINYINT(1) DEFAULT 0,
+    attachment VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );

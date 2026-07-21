@@ -1,7 +1,8 @@
-import os, csv, io, json, pymysql, hashlib, smtplib, ssl, sys, random
+import os, csv, io, json, pymysql, hashlib, smtplib, ssl, sys, random, uuid
 from email.message import EmailMessage
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_from_directory
 from datetime import timedelta, datetime
+from werkzeug.utils import secure_filename
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'train'))
 from classifier import auto_categorize, categorize
@@ -24,6 +25,9 @@ SMTP_CONFIG = dict(
 )
 
 DB_CONFIG = dict(host='127.0.0.1', user='root', password='', database='complainify', port=3306, charset='utf8mb4')
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'uploads')
+ALLOWED_EXTENSIONS = {'pdf', 'svg', 'png', 'jpg', 'jpeg', 'doc', 'docx', 'xls', 'xlsx', 'csv', 'txt', 'zip'}
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def get_db():
     return pymysql.connect(**DB_CONFIG, cursorclass=pymysql.cursors.DictCursor)
@@ -554,13 +558,29 @@ def admin_update_status(ticket_id):
     if status not in valid_statuses:
         flash('Invalid status.', 'error')
         return redirect(url_for('admin_complaint_detail', ticket_id=ticket_id))
+    attachment = request.files.get('attachment')
+    attachment_name = None
+    if attachment and attachment.filename and '.' in attachment.filename:
+        ext = attachment.filename.rsplit('.', 1)[1].lower()
+        if ext in ALLOWED_EXTENSIONS:
+            unique_name = f"{ticket_id}_{uuid.uuid4().hex[:8]}.{ext}"
+            attachment.save(os.path.join(UPLOAD_FOLDER, unique_name))
+            attachment_name = unique_name
     conn = get_db(); cur = conn.cursor()
-    if status == 'Resolved':
-        cur.execute("UPDATE complaints SET status=%s, admin_notes=%s, resolved_at=NOW() WHERE ticket_id=%s",
-            (status, admin_notes, ticket_id))
+    if attachment_name:
+        if status == 'Resolved':
+            cur.execute("UPDATE complaints SET status=%s, admin_notes=%s, resolved_at=NOW(), attachment=%s WHERE ticket_id=%s",
+                (status, admin_notes, attachment_name, ticket_id))
+        else:
+            cur.execute("UPDATE complaints SET status=%s, admin_notes=%s, attachment=%s WHERE ticket_id=%s",
+                (status, admin_notes, attachment_name, ticket_id))
     else:
-        cur.execute("UPDATE complaints SET status=%s, admin_notes=%s WHERE ticket_id=%s",
-            (status, admin_notes, ticket_id))
+        if status == 'Resolved':
+            cur.execute("UPDATE complaints SET status=%s, admin_notes=%s, resolved_at=NOW() WHERE ticket_id=%s",
+                (status, admin_notes, ticket_id))
+        else:
+            cur.execute("UPDATE complaints SET status=%s, admin_notes=%s WHERE ticket_id=%s",
+                (status, admin_notes, ticket_id))
     conn.commit()
     cur.execute("SELECT email, subject FROM complaints WHERE ticket_id=%s", (ticket_id,))
     c = cur.fetchone()
@@ -747,6 +767,10 @@ def api_predict():
         'confidence': round(result['confidence'], 4),
         'tier': result['tier']
     })
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 @app.route('/dashboard-redirect')
 def dashboard_redirect():
