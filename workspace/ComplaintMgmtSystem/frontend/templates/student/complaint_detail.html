@@ -2,10 +2,10 @@
 {% block title %}Complaint #{{ c.ticket_id }} — Complainify{% endblock %}
 {% block content %}
 <aside class="fixed left-0 h-full w-64 bg-primary text-on-primary shadow-md flex flex-col py-6 hidden md:flex z-50">
-<div class="px-6 mb-8 flex items-center gap-3">
+<a href="{{ url_for('student_dashboard') }}" class="px-6 mb-8 flex items-center gap-3 hover:opacity-80">
 <span class="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-container flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-white">school</span></span>
-<span class="text-xl font-bold text-white tracking-tight">Student Hub</span>
-</div>
+<span class="text-xl font-bold text-white tracking-tight">Complainify</span>
+</a>
 <div class="px-4 mb-6 flex items-center gap-3 border-b border-on-primary-fixed-variant pb-4 mx-2">
 <div class="w-10 h-10 rounded-full bg-gradient-to-br from-secondary to-purple-400 flex items-center justify-center text-white font-bold text-sm shadow-md">{{ student_name[:2]|upper }}</div>
 <div><p class="text-sm text-white font-medium truncate">{{ student_name }}</p><p class="text-[10px] text-blue-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span> Student</p></div>

@@ -1,0 +1,1807 @@
+text,category,priority,source,category_encoded,priority_encoded
+handle plaster loose lock replace,Maintenance,Low,synth_highacc,4,1
+book reference damaged card membership,Library,High,synth_highacc,8,2
+i feel like the drivers need more training on how to operate the new electric buses they are very jerky with the brakes and it makes a lot of people feel motion sick,Transport,Medium,complaint_triage,5,0
+mirror driver cracked accident rickshaw,Transport,High,synth_highacc,5,2
+reimbursement credit pending concession pending,Fees / Finance,High,synth_highacc,3,2
+transaction balance error installment withdrawal,Fees / Finance,High,synth_highacc,3,2
+patrol trespass fight investigate insult,Security / Discipline,Low,synth_highacc,6,1
+bulb stair fused window brick,Maintenance,Medium,synth_highacc,4,0
+window bunk shutter warden table,Hostels,Medium,synth_highacc,1,0
+registration procedure completed policy delay,Administration,Medium,synth_highacc,7,0
+window hammer pane socket door,Maintenance,High,synth_highacc,4,2
+arrest harrass suspect investigate senior,Security / Discipline,High,synth_highacc,6,2
+lecture chapter timing project tutorial,Academics,Low,synth_highacc,2,1
+could we have a few more plants in the lobby area it s a bit stark at the moment and some greenery would make the maintenance office entrance look much more welcoming for the students,Maintenance,Low,complaint_triage,4,1
+ebook scan audiobook locate audiobook,Library,High,synth_highacc,8,2
+balance stipend enquiry transaction outstanding,Fees / Finance,Low,synth_highacc,3,1
+towel bucket detergent expensive tap,Hostels,High,synth_highacc,1,2
+browser latency storage download log,IT Support,Low,synth_highacc,0,1
+during the rain yesterday the roof of the bus was leaking right over the middle seats my bag and laptop got soaked this is a basic maintenance issue that shouldn t be happening,Transport,Medium,complaint_triage,5,0
+homework grade delayed project credit,Academics,Medium,synth_highacc,2,0
+the bus driver refused to let me on with my project model even though it wasn t that big i had to walk 20 minutes in the wind and it got damaged i don t understand why there isn t a clearer policy on luggage,Transport,Medium,complaint_triage,5,0
+laptop router screen error processor,IT Support,Low,synth_highacc,0,1
+bibliography print section audiobook periodical,Library,High,synth_highacc,8,2
+hackathon mentors did not show up on time for the event,Administration,Medium,manual,7,0
+valve gutter leaking sparking garbage,Maintenance,High,synth_highacc,4,2
+document missing verification signature awaiting,Administration,Low,synth_highacc,7,1
+tutorial workshop extra exam textbook,Academics,Medium,synth_highacc,2,0
+my financial aid counselor has been changed four times this semester every time i get a new one i have to re explain my entire financial situation from scratch it s exhausting,Administration,Medium,complaint_triage,7,0
+finance due section bill arrear,Fees / Finance,High,synth_highacc,3,2
+laundry inverter machine cotton stinking,Hostels,High,synth_highacc,1,2
+cleaning peeling lock sweeping cracked,Maintenance,High,synth_highacc,4,2
+paint plaster construction mopping damage,Maintenance,Low,synth_highacc,4,1
+food oil rotten cheap kitchen,Canteen,Medium,synth_highacc,9,0
+card installment declined cleared bill,Fees / Finance,High,synth_highacc,3,2
+curtain slipper tap geyser ventilator,Hostels,Medium,synth_highacc,1,0
+window fuse pane garbage valve,Maintenance,High,synth_highacc,4,2
+floor fix mopping stair dust,Maintenance,Low,synth_highacc,4,1
+certificate fee delayed status processing,Administration,Low,synth_highacc,7,1
+report notebook submission score professor,Academics,High,synth_highacc,2,2
+librarian abstract help author penalty,Library,Medium,synth_highacc,8,0
+there is an intruder in our dorm building a man who doesn t live here is wandering the halls and knocking on doors asking for the girl in the photo he looks very agitated and is shouting,Security / Discipline,High,complaint_triage,6,2
+roommate balcony chair staircase,Hostels,High,synth_highacc,1,2
+renew print request overdue nonfiction,Library,Low,synth_highacc,8,1
+withdrawal finance processed tuition credit,Fees / Finance,High,synth_highacc,3,2
+stipend concession disbursed online fund,Fees / Finance,Low,synth_highacc,3,1
+cloud dns sync router scanner,IT Support,Medium,synth_highacc,0,0
+ventilator tap exhaust cupboard geyser,Hostels,Low,synth_highacc,1,1
+balcony bed cupboard corridor bucket,Hostels,High,synth_highacc,1,2
+dinner meal plate snack overcharge,Canteen,Low,synth_highacc,9,1
+taillight rickshaw damaged pickup bus,Transport,Low,synth_highacc,5,1
+the evening route home is consistently skipping the stop near the engineering block we wait there for ages and watch the bus go by on the main road without turning in this has happened four times this week and it s very frustrating,Transport,Medium,complaint_triage,5,0
+internship placement opportunity final exam,Academics,Low,synth_highacc,2,1
+balcony slow shampoo corridor service,Hostels,Low,synth_highacc,1,1
+return catalogue reminder audiobook librarian,Library,High,synth_highacc,8,2
+threatened laptop killed harass arrest,Security / Discipline,Low,synth_highacc,6,1
+enrollment delay confirmed document signature,Administration,Medium,synth_highacc,7,0
+arrest harrass weapon offence harassment,Security / Discipline,High,synth_highacc,6,2
+socket fuse cracked screwdriver crack,Maintenance,Low,synth_highacc,4,1
+schedule gear weekend headlight horn,Transport,Medium,synth_highacc,5,0
+food bill shortage breakfast breakfast,Canteen,Low,synth_highacc,9,1
+slipper water locker bed roommate,Hostels,High,synth_highacc,1,2
+report answer submission topic timetable,Academics,Low,synth_highacc,2,1
+wifi ethernet printer reboot,IT Support,High,synth_highacc,0,2
+locker mug key mug bunk,Hostels,Medium,synth_highacc,1,0
+drainage balcony overflowing table exhaust,Hostels,Low,synth_highacc,1,1
+dust ceiling accumulation carpenter repair,Maintenance,Medium,synth_highacc,4,0
+fallen tree blocking the hostel exit a branch has snapped and is leaning against the main gate of block b it is unstable and could fall on anyone trying to leave for their 9 am exam maintenance needs to clear this path immediately,Hostels,High,complaint_triage,1,2
+update offline failing cable log,IT Support,High,synth_highacc,0,2
+conductor seat behaviour brake vehicle,Transport,High,synth_highacc,5,2
+assignment score deadline faculty project,Academics,Medium,synth_highacc,2,0
+plumber broken tap broken cleaning,Maintenance,Low,synth_highacc,4,1
+hinge burst rusted leaking brick,Maintenance,Low,synth_highacc,4,1
+steal case caught working stolen,Security / Discipline,Low,synth_highacc,6,1
+seminar degree postponed timetable absent,Academics,High,synth_highacc,2,2
+admission pending form submission notary,Administration,Medium,synth_highacc,7,0
+interest late outstanding waiver bill,Fees / Finance,Medium,synth_highacc,3,0
+bathroom inverter dirty bathroom blanket,Hostels,Low,synth_highacc,1,1
+regulation download registrar guideline regulation,Administration,High,synth_highacc,7,2
+installment account plan application finance,Fees / Finance,High,synth_highacc,3,2
+midterm submission results mentor quiz,Academics,Medium,synth_highacc,2,0
+bank pending transfer tuition tuition,Fees / Finance,Medium,synth_highacc,3,0
+matlab license request for course project i need matlab installed with the university license could you assist with activation on a managed laptop,IT Support,Low,complaint_triage,0,1
+saml assertion too large for vendor integration i m getting a saml response exceeds size error when trying to log into the vendor portal is that a me problem or a system problem,IT Support,Medium,complaint_triage,0,0
+parking stop full taxi license,Transport,High,synth_highacc,5,2
+sexual patrol harrash haras haras,Security / Discipline,Medium,synth_highacc,6,0
+i ve noticed the shuttle stops aren t very well lit at night as a student who works late shifts at the library waiting at the north stop feels very sketchy installing even one small light would make a big difference for safety,Transport,High,complaint_triage,5,2
+menu lunch rate quality pickle,Canteen,High,synth_highacc,9,2
+ticket ticket counter van route,Transport,High,synth_highacc,5,2
+photocopy penalty machine rack article,Library,Medium,synth_highacc,8,0
+approval signature certificate signature regulation,Administration,Low,synth_highacc,7,1
+affidavit submit sworn letterhead clerk,Administration,Medium,synth_highacc,7,0
+washroom toilet ventilator hostel noisy,Hostels,Low,synth_highacc,1,1
+kitchen kitchen hygiene oil coffee,Canteen,Medium,synth_highacc,9,0
+mosquito heating infestation heating table,Hostels,Low,synth_highacc,1,1
+homework thesis scholar project workshop,Academics,Medium,synth_highacc,2,0
+journal librarian binding almanac desk,Library,High,synth_highacc,8,2
+admission certificate cancellation submission form,Administration,Medium,synth_highacc,7,0
+violence injured stole weapon fight,Security / Discipline,High,synth_highacc,6,2
+route mandatory extended mirror tyre,Transport,Medium,synth_highacc,5,0
+tyre bicycle puncture accident petrol,Transport,Medium,synth_highacc,5,0
+article edition unavailable penalty librarian,Library,Low,synth_highacc,8,1
+queue price bill counter price,Canteen,High,synth_highacc,9,2
+mess water dinner food rotten,Canteen,High,synth_highacc,9,2
+cab taxi diesel charges shuttle,Transport,High,synth_highacc,5,2
+book journal recommendation zone fine,Library,Low,synth_highacc,8,1
+someone has been scratching cars in the faculty parking lot i found a long key mark on my passenger door this afternoon this is the third car i ve seen with similar damage this week,Security / Discipline,Medium,complaint_triage,6,0
+salad milk worth sauce food,Canteen,Low,synth_highacc,9,1
+schedule horn parking fare numberplate,Transport,Medium,synth_highacc,5,0
+incorrect grade assigned due to a clerical error in the mark sheet my internal marks for the lab component were recorded as 0 out of 30 even though i attended every session and submitted all reports this error has dropped my cgpa significantly affecting my eligibility for the upcoming placement drive starting on monday please fix the records urgently,Academics,High,complaint_triage,2,2
+download slow stuck laptop projector,IT Support,Medium,synth_highacc,0,0
+threaten bully life stalking report,Security / Discipline,High,synth_highacc,6,2
+book photocopy overdue subscription citation,Library,Medium,synth_highacc,8,0
+nonfiction subscription collection available abstract,Library,Medium,synth_highacc,8,0
+bandwidth antivirus insufficient projector battery,IT Support,Medium,synth_highacc,0,0
+edition search outdated locate magazine,Library,Low,synth_highacc,8,1
+harrass teased sexual accused unsafe,Security / Discipline,Medium,synth_highacc,6,0
+can we have a bike pump available at the security desk many of us cycle to class and it s a hassle to go to the main gate every time we need to check the tire pressure a basic hand pump would be enough,Hostels,Low,complaint_triage,1,1
+homework tutorial marks project workshop,Academics,Medium,synth_highacc,2,0
+vegetable water tea chicken rotten,Canteen,Medium,synth_highacc,9,0
+shuttle petrol cancelled clutch meter,Transport,High,synth_highacc,5,2
+tile pipe mopping drill cleaning,Maintenance,High,synth_highacc,4,2
+upload update slow scanner ssd,IT Support,Low,synth_highacc,0,1
+tea meal meal coffee pickle,Canteen,High,synth_highacc,9,2
+concession stipend applied cashier audit,Fees / Finance,Medium,synth_highacc,3,0
+attack fought robbery theft insult,Security / Discipline,Medium,synth_highacc,6,0
+evidence harassment tease interrogate abuse,Security / Discipline,Low,synth_highacc,6,1
+presentation absent evaluated group subject,Academics,Low,synth_highacc,2,1
+thesis scholar overdue seminar practical,Academics,High,synth_highacc,2,2
+the staff at the records office are taking their lunch break all at the same time leaving the desk unattended for an hour there is a huge line forming,Administration,Low,complaint_triage,7,1
+drink salad mess juice cup,Canteen,Low,synth_highacc,9,1
+diploma absent verification final postpone,Academics,Low,synth_highacc,2,1
+rice counter spoon chapati plate,Canteen,High,synth_highacc,9,2
+drill bulb noise door valve,Maintenance,High,synth_highacc,4,2
+exam teacher schedule topic workshop,Academics,High,synth_highacc,2,2
+how to reset my university portal password,Academics,Medium,query_test,2,0
+exam presentation postponement absent midterm,Academics,Medium,synth_highacc,2,0
+bill penalty incorrect finance payable,Fees / Finance,Medium,synth_highacc,3,0
+report professor presentation lecture degree,Academics,Medium,synth_highacc,2,0
+quiz workshop score midterm topic,Academics,Medium,synth_highacc,2,0
+download restart speed ssd slow usb,IT Support,Low,synth_highacc,0,1
+regulation enrollment strict submission download,Administration,High,synth_highacc,7,2
+pipe fix joint handle broken,Maintenance,Low,synth_highacc,4,1
+stolen assaulted laptop harassment threatened,Security / Discipline,High,synth_highacc,6,2
+why can t i change my background on zoom anymore the button is grey i m in a shared house and it s messy behind me i really need this enabled for privacy,IT Support,Medium,complaint_triage,0,0
+membership subscription expire scan stack,Library,High,synth_highacc,8,2
+lock construction broken garbage ceiling,Maintenance,High,synth_highacc,4,2
+diesel meter petrol clutch taillight,Transport,High,synth_highacc,5,2
+bibliography stack section photocopy article,Library,Medium,synth_highacc,8,0
+ventilator towel exhaust balcony heater,Hostels,Medium,synth_highacc,1,0
+diploma faculty verification mentor grading,Academics,Medium,synth_highacc,2,0
+submission status late status registration,Administration,Medium,synth_highacc,7,0
+placement mentor drive quiz seminar,Academics,Medium,synth_highacc,2,0
+i d like to know if there are any grants available for students who are attending international conferences the website mentions funding but the link is dead,Administration,Low,complaint_triage,7,1
+trespass fraud stalking vandalism weapon,Security / Discipline,High,synth_highacc,6,2
+blanket mattress soap cotton bucket,Hostels,Medium,synth_highacc,1,0
+fine book waived locate audiobook,Library,Low,synth_highacc,8,1
+rotten pickle chapati spoil daal,Canteen,Medium,synth_highacc,9,0
+accused sexually weapon witness drugs,Security / Discipline,High,synth_highacc,6,2
+account credit credited invoice online,Fees / Finance,Medium,synth_highacc,3,0
+tap chair dripping shampoo towel,Hostels,Medium,synth_highacc,1,0
+my work study paycheck was short by 10 hours this week my supervisor says he approved all my hours so the error must be in the payroll processing,Administration,Medium,complaint_triage,7,0
+i m trying to change my major from biology to chemistry but the advisor says the admin department hasn t processed the paperwork i signed two months ago now the chemistry classes are all full,Administration,Medium,complaint_triage,7,0
+workshop topic material score paper,Academics,High,synth_highacc,2,2
+bill statement payment charges budget,Fees / Finance,Medium,synth_highacc,3,0
+pipeline window leakage renovation fuse,Maintenance,Low,synth_highacc,4,1
+ransomware alert on shared research drive endpoint security flagged mass renames the suspected workstation was isolated request incident response engagement and scoping validate signatures and protect affected shares backups confirmed last week need restore readiness status updates every 30 minutes please high impact to research continuity,IT Support,High,complaint_triage,0,2
+request for a fee concession form for siblings studying in the same university my younger sister just joined the architecture department and we were told there s a family discount where can we download the form and what are the required documents,Fees / Finance,Medium,complaint_triage,3,0
+auto cycle overcharge traffic indicator,Transport,Low,synth_highacc,5,1
+fare bicycle refund bicycle bus,Transport,High,synth_highacc,5,2
+fund budget tuition credit upi,Fees / Finance,Low,synth_highacc,3,1
+assignment viva feedback missing professor,Academics,Low,synth_highacc,2,1
+tablet pen wont connect to the pc in room 302 it worked last week i tried clicking the button on the top but nothing happens,IT Support,Low,complaint_triage,0,1
+schedule cab delayed horn clutch,Transport,Medium,synth_highacc,5,0
+receipt cleared generated payment gst,Fees / Finance,High,synth_highacc,3,2
+bulb cement fused hinge wrench,Maintenance,Medium,synth_highacc,4,0
+cement brick dust fuse wrench,Maintenance,Low,synth_highacc,4,1
+seminar chapter certificate midterm topic,Academics,High,synth_highacc,2,2
+my roommate is bringing unauthorized guests into our room every single night and they stay until 4 00 am it s making it impossible for me to sleep or study and it s against our housing contract,Security / Discipline,Medium,complaint_triage,6,0
+switch hammer spark stair renovation,Maintenance,Low,synth_highacc,4,1
+vegetable canteen oily rice cook,Canteen,High,synth_highacc,9,2
+section aisle citation counter aisle,Library,High,synth_highacc,8,2
+report thieves ragging case danger,Security / Discipline,Medium,synth_highacc,6,0
+kitchen vegetable menu meal kitchen,Canteen,Low,synth_highacc,9,1
+a student is being bullied in the group chat for our course the messages have turned into threats of physical violence i have screenshots if you need to see them,Security / Discipline,Medium,complaint_triage,6,0
+transaction deposit failed credit reimbursement,Fees / Finance,High,synth_highacc,3,2
+conductor brake behaviour ticket bus,Transport,High,synth_highacc,5,2
+charger software adapter printer vpn,IT Support,Medium,synth_highacc,0,0
+parking clutch fee horn windscreen,Transport,Low,synth_highacc,5,1
+ragging camera stopped thief unsafe,Security / Discipline,Medium,synth_highacc,6,0
+workshop midterm material schedule marks,Academics,Low,synth_highacc,2,1
+print publisher queue membership citation,Library,Low,synth_highacc,8,1
+numberplate gear missing shuttle route,Transport,Medium,synth_highacc,5,0
+switch replace spark wrench hinge,Maintenance,High,synth_highacc,4,2
+is there a way to track the shuttle s carbon emissions it would be a cool project for our environmental science class if that data was made public,Transport,Low,complaint_triage,5,1
+fought molest injured sexually hostel,Security / Discipline,Low,synth_highacc,6,1
+scholarship application renewal grant deduction,Fees / Finance,Medium,synth_highacc,3,0
+ticket headlight van seat conductor,Transport,Medium,synth_highacc,5,0
+computer login desktop laptop wifi,IT Support,Medium,synth_highacc,0,0
+plumber wrench tap dust pipe,Maintenance,High,synth_highacc,4,2
+sexual assault harrash rape report,Security / Discipline,High,synth_highacc,6,2
+installment processed credited receipt delayed,Fees / Finance,Low,synth_highacc,3,1
+construction handle debris cracked brick,Maintenance,Low,synth_highacc,4,1
+pillow detergent flat drainage towel,Hostels,Medium,synth_highacc,1,0
+online tax payment processed scholarship,Fees / Finance,Medium,synth_highacc,3,0
+software portal license software install,IT Support,High,synth_highacc,0,2
+balance payment enquiry pending bank,Fees / Finance,Low,synth_highacc,3,1
+hostel heating gate fan geyser,Hostels,Medium,synth_highacc,1,0
+catalogue audiobook search abstract index,Library,High,synth_highacc,8,2
+enrollment transfer examination registration submit,Administration,High,synth_highacc,7,2
+pipe brick burst crack lock,Maintenance,Low,synth_highacc,4,1
+book reference overdue audiobook zone,Library,High,synth_highacc,8,2
+cupboard staircase broken tap hostel,Hostels,Low,synth_highacc,1,1
+deposit transfer refund payable receipt,Fees / Finance,High,synth_highacc,3,2
+the academic achievement board in the main hallway hasn t been updated with this year s winners it would be motivating for the current students to see the latest photos and projects displayed there,Academics,Low,complaint_triage,2,1
+rdp client error 0x204 to vdi gateway connection fails after credentials kindly review gateway or policy changes,IT Support,Medium,complaint_triage,0,0
+stolen caught tease harassment fraud,Security / Discipline,Medium,synth_highacc,6,0
+cement brick pipe garbage fixture,Maintenance,High,synth_highacc,4,2
+the policy regarding incomplete grades is very vague can someone please clarify if i have one semester or one year to finish the work before it turns into an f,Administration,Low,complaint_triage,7,1
+bonafide guideline certificate admission enrollment,Administration,High,synth_highacc,7,2
+bus windscreen diesel rickshaw,Transport,Medium,synth_highacc,5,0
+payment waiver gateway installment remit,Fees / Finance,High,synth_highacc,3,2
+sink toilet pipe sink mattress,Hostels,High,synth_highacc,1,2
+librarian renew help locate card,Library,High,synth_highacc,8,2
+access to campus research ssid requested approved for a research group mac address available if needed please grant access to run measurements thank you,IT Support,Low,complaint_triage,0,1
+rice juice undercook rate food,Canteen,Medium,synth_highacc,9,0
+database edition access counter silent,Library,Low,synth_highacc,8,1
+borrow abstract limit audiobook shelf,Library,High,synth_highacc,8,2
+approval requested pending pending processing,Administration,Low,synth_highacc,7,1
+deduction bill wrong card card,Fees / Finance,High,synth_highacc,3,2
+enrollment approval number issue migration,Administration,Medium,synth_highacc,7,0
+mouse crash clicking connect vpn,IT Support,High,synth_highacc,0,2
+presentation postpone postpone group tutorial,Academics,High,synth_highacc,2,2
+coffee coffee bitter salad coffee,Canteen,High,synth_highacc,9,2
+cashier interest counter transfer statement,Fees / Finance,Low,synth_highacc,3,1
+thesis chapter submission lecturer thesis,Academics,High,synth_highacc,2,2
+van tyre overloaded driver auto,Transport,Low,synth_highacc,5,1
+configure reboot setup ethernet laptop,IT Support,Medium,synth_highacc,0,0
+threatened environment killed senior harrass,Security / Discipline,Low,synth_highacc,6,1
+article available unavailable catalogue reading,Library,Low,synth_highacc,8,1
+authentication printer browser usb,IT Support,Low,synth_highacc,0,1
+violence steals physical drugs haras,Security / Discipline,Low,synth_highacc,6,1
+conductor vehicle rude ticket auto,Transport,Low,synth_highacc,5,1
+conductor route behaviour clutch tyre,Transport,Low,synth_highacc,5,1
+roommate exhaust noisy drainage curtain,Hostels,Low,synth_highacc,1,1
+policy official amendment form issue,Administration,High,synth_highacc,7,2
+someone is using the emergency exit as a regular door in the science building and the alarm keeps going off every five minutes it s making it impossible to focus on the lecture,Security / Discipline,Low,complaint_triage,6,1
+vpn ssd down server scanner,IT Support,Medium,synth_highacc,0,0
+socket sewage loose ceiling wrench,Maintenance,Medium,synth_highacc,4,0
+dinner lunch kitchen snack counter,Canteen,Low,synth_highacc,9,1
+admission notarized cancellation download status,Administration,Medium,synth_highacc,7,0
+install configure cloud firmware firewall,IT Support,Low,synth_highacc,0,1
+fine abstract waived borrow fiction,Library,High,synth_highacc,8,2
+heater table element towel almirah,Hostels,Low,synth_highacc,1,1
+admission hostel cancellation verification official,Administration,High,synth_highacc,7,2
+refund concession process online processed,Fees / Finance,High,synth_highacc,3,2
+i had a flat tire on my bike and tried to use the bus but the bike rack was broken and wouldn t lock i had to leave my bike behind and now it s been stolen,Transport,Medium,complaint_triage,5,0
+software laptop printer update install,IT Support,Low,synth_highacc,0,1
+lock leaking broken construction replace,Maintenance,Medium,synth_highacc,4,0
+staircase noisy window laundry sink,Hostels,Low,synth_highacc,1,1
+bucket dirty cracked strict ventilator,Hostels,High,synth_highacc,1,2
+towel warden rough laundry mug,Hostels,High,synth_highacc,1,2
+suspicious offence activity raped molest,Security / Discipline,Medium,synth_highacc,6,0
+canteen food overcharge tea,Canteen,High,synth_highacc,9,2
+router modem slow cloud mouse,IT Support,Low,synth_highacc,0,1
+pipe wire rusted bulb construction,Maintenance,Low,synth_highacc,4,1
+stop fare unsafe rickshaw windscreen,Transport,Low,synth_highacc,5,1
+patrol alcohol increased thief arrest,Security / Discipline,High,synth_highacc,6,2
+numberplate auto driver driver taxi,Transport,Low,synth_highacc,5,1
+print database black shelf database,Library,Medium,synth_highacc,8,0
+question submission paper scholar absent,Academics,High,synth_highacc,2,2
+indicator taxi broken parking overcrowded,Transport,High,synth_highacc,5,2
+harrass teased sexual arrest molested,Security / Discipline,Low,synth_highacc,6,1
+laundry blanket service cupboard drainage,Hostels,Low,synth_highacc,1,1
+violence camera physical robbery stole,Security / Discipline,High,synth_highacc,6,2
+i submitted my application for the work study program over a month ago and haven t heard anything back most of my friends already have their assignments could someone please check if my application was even received,Administration,Medium,complaint_triage,7,0
+rotten queue vegetable spoil overcharge,Canteen,Low,synth_highacc,9,1
+email browser sending network backup,IT Support,High,synth_highacc,0,2
+parking meter fee numberplate provided,Transport,High,synth_highacc,5,2
+bluetooth ram pairing software mac,IT Support,Medium,synth_highacc,0,0
+bulb drain fused pipeline plaster,Maintenance,Medium,synth_highacc,4,0
+request for a suggestion box in the mess it would be easier for students to give feedback on the daily menu if there was a place to drop small notes for the mess committee to review,Hostels,Low,complaint_triage,1,1
+reading abstract area overdue citation,Library,High,synth_highacc,8,2
+curtain curtain staircase geyser washroom,Hostels,Medium,synth_highacc,1,0
+mess glass quality hygiene chapati,Canteen,High,synth_highacc,9,2
+photocopy nonfiction charges absent desk,Library,Medium,synth_highacc,8,0
+heater expensive element stinking hanger,Hostels,High,synth_highacc,1,2
+the floor boards in the old music room are creaking loudly every time someone walks across the floor it makes a piercing sound we think some of the nails have come loose can maintenance secure the loose planks,Maintenance,Medium,complaint_triage,4,0
+invoice upi cleared bill account,Fees / Finance,High,synth_highacc,3,2
+mopping worn socket garbage paint,Maintenance,High,synth_highacc,4,2
+schedule indicator delayed windscreen taillight,Transport,Medium,synth_highacc,5,0
+headlight shuttle dim overcrowded vehicle,Transport,Low,synth_highacc,5,1
+grade subject calculation seminar grading,Academics,High,synth_highacc,2,2
+locker flush jammed window toilet,Hostels,High,synth_highacc,1,2
+fine fiction waived locate scan,Library,High,synth_highacc,8,2
+account cashier credited account treasury,Fees / Finance,High,synth_highacc,3,2
+bluetooth antivirus pairing port bandwidth,IT Support,Low,synth_highacc,0,1
+receipt due lost credited balance,Fees / Finance,Medium,synth_highacc,3,0
+pipeline pane leakage exposed cleaning,Maintenance,Low,synth_highacc,4,1
+emergency sewage overflow in the ground floor corridor of girls hostel block a the drains have completely backed up and foul smelling water is entering the rooms it is a major health hazard and making the wing uninhabitable please dispatch a plumbing team before it ruins more furniture,Hostels,High,complaint_triage,1,2
+tile pipe plumber hammer dust,Maintenance,Medium,synth_highacc,4,0
+examination registrar form delay hostel,Administration,High,synth_highacc,7,2
+document submission missing approval affidavit,Administration,High,synth_highacc,7,2
+monitor driver display cache antivirus,IT Support,Medium,synth_highacc,0,0
+invoice netbanking duplicate online pending,Fees / Finance,Medium,synth_highacc,3,0
+stalk weapon stalking patrol environment,Security / Discipline,High,synth_highacc,6,2
+steal evidence trespass thief teasing,Security / Discipline,High,synth_highacc,6,2
+abuse harassment verbal assaulted culprit,Security / Discipline,Medium,synth_highacc,6,0
+projector authentication blurry upload projector,IT Support,Medium,synth_highacc,0,0
+charger cache adapter desktop log,IT Support,Low,synth_highacc,0,1
+there s a person in the computer lab who is looking at very disturbing and violent imagery it s making everyone around them feel extremely uncomfortable and unsafe,Security / Discipline,Medium,complaint_triage,6,0
+cloud working sync display email,IT Support,High,synth_highacc,0,2
+case stranger pending incident scam,Security / Discipline,Low,synth_highacc,6,1
+vegetable sabzi oily cheap vegetable,Canteen,Medium,synth_highacc,9,0
+helmet windscreen seat license parking,Transport,High,synth_highacc,5,2
+queue food long coffee overcharge,Canteen,High,synth_highacc,9,2
+due charges date online pending,Fees / Finance,Low,synth_highacc,3,1
+parking headlight full battery fare,Transport,Low,synth_highacc,5,1
+subject professor presentation topic final,Academics,Low,synth_highacc,2,1
+syllabus quiz revision question score,Academics,Medium,synth_highacc,2,0
+ventilator exhaust exhaust ventilator heater,Hostels,Medium,synth_highacc,1,0
+suspicious ragging offence stranger sexually,Security / Discipline,Medium,synth_highacc,6,0
+journal photocopy binding borrow newspaper,Library,Low,synth_highacc,8,1
+bus traffic accident numberplate,Transport,Low,synth_highacc,5,1
+smuggling report fraud harrash caught,Security / Discipline,Medium,synth_highacc,6,0
+accused offence abusing witness murder,Security / Discipline,Low,synth_highacc,6,1
+vpn laptop routing bluetooth password,IT Support,Medium,synth_highacc,0,0
+mopping screwdriver pipeline garbage paint,Maintenance,High,synth_highacc,4,2
+toilet sink blocked dirty table,Hostels,Low,synth_highacc,1,1
+grade teacher calculation quiz final,Academics,Medium,synth_highacc,2,0
+the lighting in the accounts office waiting area is a bit dim when we are trying to fill out the challan forms it s hard to see the small text adding one or two extra lights would make the process much easier for us,Fees / Finance,Low,complaint_triage,3,1
+paint wrench colour renovation repairman,Maintenance,Medium,synth_highacc,4,0
+valve renovation damaged hammer drill,Maintenance,High,synth_highacc,4,2
+hammer fixture construction screwdriver fix,Maintenance,High,synth_highacc,4,2
+question group paper report lesson,Academics,Low,synth_highacc,2,1
+bunk locker balcony curtain pillow,Hostels,Medium,synth_highacc,1,0
+mopping garbage ladder garbage drill,Maintenance,Low,synth_highacc,4,1
+tea breakfast sabzi coffee stale,Canteen,Low,synth_highacc,9,1
+submission requested late seal download,Administration,Medium,synth_highacc,7,0
+schedule rickshaw mandatory fare stop,Transport,Low,synth_highacc,5,1
+food sabzi rotten meal tea,Canteen,High,synth_highacc,9,2
+battery log draining mac software,IT Support,Low,synth_highacc,0,1
+submission scholarship late form requested,Administration,High,synth_highacc,7,2
+motherboard processor processor cable freeze,IT Support,Low,synth_highacc,0,1
+elevator stuck between the 5th and 6th floors with four students inside the emergency alarm is ringing but the lift car isn t moving and the fan has stopped working one of the students is starting to panic due to the heat and lack of ventilation we need the lift technician to manually override the system and rescue them before they run out of air,Maintenance,High,complaint_triage,4,2
+search locate ebook ebook edition,Library,High,synth_highacc,8,2
+ssl warning on internal faculty dashboard browser reports certificate name mismatch peers report identical interstitial warnings is this a renewal delay or misconfiguration please confirm san entries and chain trust provide guidance if pinning affects clients a short post incident note would help prefer resolution before grade submission week,IT Support,Medium,complaint_triage,0,0
+exam paper timetable training assignment,Academics,High,synth_highacc,2,2
+weapon witness seized working weapon,Security / Discipline,High,synth_highacc,6,2
+bandwidth shutdown insufficient slow wlan,IT Support,Low,synth_highacc,0,1
+blanket mattress bucket curtain flush,Hostels,High,synth_highacc,1,2
+auto horn overcharge headlight vehicle,Transport,High,synth_highacc,5,2
+drainage pillow clogged hostel mosquito,Hostels,High,synth_highacc,1,2
+modem shutdown signal backup adapter,IT Support,Low,synth_highacc,0,1
+egg milk curry daal rotten,Canteen,High,synth_highacc,9,2
+ragging prohibited stopped tease sexually,Security / Discipline,High,synth_highacc,6,2
+chair locker broken slow pillow,Hostels,Medium,synth_highacc,1,0
+enrollment affidavit number seal requested,Administration,High,synth_highacc,7,2
+password reset link expired mid process i tried to reset my password but the link expired before i could click it now i m locked out of my email right before my tutorial starts pls reset,IT Support,Low,complaint_triage,0,1
+procedure fee enquiry notarized stamp,Administration,High,synth_highacc,7,2
+fee bank pending outstanding fee,Fees / Finance,Medium,synth_highacc,3,0
+paint sweeping colour sweeping dust,Maintenance,Low,synth_highacc,4,1
+photocopy renew machine periodical author,Library,Medium,synth_highacc,8,0
+search locate subscription almanac desk,Library,Low,synth_highacc,8,1
+procedure fee enquiry verification document,Administration,Low,synth_highacc,7,1
+backup cache restore printer ssd,IT Support,Medium,synth_highacc,0,0
+curtain rods falling off in the common room the heavy drapes are sagging because the brackets have come loose from the wall one side actually fell yesterday and almost hit someone please secure them properly,Hostels,Medium,complaint_triage,1,0
+penalty penalty author membership database,Library,High,synth_highacc,8,2
+fare cycle increased helmet clutch,Transport,Low,synth_highacc,5,1
+dinner rice fresh snack fresh,Canteen,Low,synth_highacc,9,1
+abuse interrogate case threaten accused,Security / Discipline,Medium,synth_highacc,6,0
+document transfer missing processing policy,Administration,High,synth_highacc,7,2
+form status download notary sworn,Administration,High,synth_highacc,7,2
+cctv security footage molested injured,Security / Discipline,Medium,synth_highacc,6,0
+journal zone missing volume print,Library,Medium,synth_highacc,8,0
+netbanking tuition upi due balance,Fees / Finance,Low,synth_highacc,3,1
+for the third day in a row the ac in bus number 12 isn t working it s nearly 40 degrees outside and the cabin is like an oven it s very difficult to focus on my notes when i m sweating through my clothes before i even reach the department,Transport,Medium,complaint_triage,5,0
+i noticed that the security guard at the front gate is often asleep during the night shift i ve walked past him three times this week and he didn t even notice i was there,Security / Discipline,Medium,complaint_triage,6,0
+keyboard bandwidth typing backup authentication,IT Support,Low,synth_highacc,0,1
+mattress dirty hard exhaust blanket,Hostels,Low,synth_highacc,1,1
+hygiene water poor chicken rotten,Canteen,High,synth_highacc,9,2
+gutter floor cleaning fix replace,Maintenance,Medium,synth_highacc,4,0
+arrest senior made interrogate murder,Security / Discipline,Low,synth_highacc,6,1
+verification status done circular submission,Administration,Low,synth_highacc,7,1
+rate spoil increased tea worth,Canteen,Medium,synth_highacc,9,0
+registration registrar deadline scholarship policy,Administration,Low,synth_highacc,7,1
+tea dinner breakfast coffee rice,Canteen,Medium,synth_highacc,9,0
+my diploma arrived in the mail today and it is bent and creased because it was shoved into a small envelope i paid 50 for this and expected it to be handled with care,Administration,Medium,complaint_triage,7,0
+curtain drainage damaged towel slipper,Hostels,Medium,synth_highacc,1,0
+smuggling culprit fraud violence stole,Security / Discipline,Low,synth_highacc,6,1
+weapon hostel seized harrash fraud,Security / Discipline,Low,synth_highacc,6,1
+alcohol interrogate harass smoke harassment,Security / Discipline,Medium,synth_highacc,6,0
+exam delayed postponement topic textbook,Academics,High,synth_highacc,2,2
+journal librarian periodical magazine catalogue,Library,High,synth_highacc,8,2
+grill crack welding drill plumber,Maintenance,Medium,synth_highacc,4,0
+smoke disrespect detected weapon cctv,Security / Discipline,High,synth_highacc,6,2
+latency freeze modem connectivity cache,IT Support,Medium,synth_highacc,0,0
+backup patch restore projector hardware,IT Support,High,synth_highacc,0,2
+cotton heating ventilator pillow slipper,Hostels,Low,synth_highacc,1,1
+request for a copy of the previous year s question papers for the new elective cyber laws since this is the first time it s being offered we don t have any reference for the exam pattern any sample papers or mock tests would be greatly appreciated,Academics,Medium,complaint_triage,2,0
+sabzi bill snack pickle cup,Canteen,High,synth_highacc,9,2
+clerk official rude application missing,Administration,High,synth_highacc,7,2
+silent citation zone section almanac,Library,Medium,synth_highacc,8,0
+paint drill job brick screwdriver,Maintenance,High,synth_highacc,4,2
+roof floor leak grill leaking,Maintenance,Medium,synth_highacc,4,0
+plumber gutter replace plaster,Maintenance,Low,synth_highacc,4,1
+official certificate document notary document,Administration,Low,synth_highacc,7,1
+renew absent nonfiction fine fiction,Library,Low,synth_highacc,8,1
+almanac available absent bibliography absent,Library,Medium,synth_highacc,8,0
+floor repair mopping sparking peeling,Maintenance,Low,synth_highacc,4,1
+bed washroom squeaky expensive window,Hostels,Low,synth_highacc,1,1
+paint door job repairman pipeline,Maintenance,Low,synth_highacc,4,1
+can we get a digital version of the student handbook the physical copies are heavy and most of us just end up losing them anyway,Administration,Low,complaint_triage,7,1
+detergent cupboard over soap geyser,Hostels,Medium,synth_highacc,1,0
+viva workshop conducted teacher project,Academics,Medium,synth_highacc,2,0
+exam syllabus schedule seminar mentor,Academics,High,synth_highacc,2,2
+join request for student developer git org i m on the course roster please add me to the dev students team needed for assignment repos thanks,IT Support,Low,complaint_triage,0,1
+vegetable overcharge oily rice stale,Canteen,Low,synth_highacc,9,1
+examination document form submission signature,Administration,High,synth_highacc,7,2
+table window wobbling slipper hostel,Hostels,Medium,synth_highacc,1,0
+verification admission guideline attestation dean,Administration,High,synth_highacc,7,2
+enrollment stamp regulation registration issue,Administration,High,synth_highacc,7,2
+refund transfer process application outstanding,Fees / Finance,Low,synth_highacc,3,1
+the streetlights on the path leading to the north dorms are all flickering or completely out it s pitch black at night and i ve seen people tripping on the uneven pavement,Security / Discipline,Medium,complaint_triage,6,0
+notebook professor correction seminar practical,Academics,Low,synth_highacc,2,1
+certificate affidavit delayed enrollment transfer,Administration,Low,synth_highacc,7,1
+arrest environment made haras teasing,Security / Discipline,Medium,synth_highacc,6,0
+gear indicator schedule helmet parking,Transport,Low,synth_highacc,5,1
+transaction online error cleared bill,Fees / Finance,Low,synth_highacc,3,1
+login portal adapter slow fail,IT Support,Medium,synth_highacc,0,0
+scholarship upi eligibility invoice receipt,Fees / Finance,Medium,synth_highacc,3,0
+reboot shutdown antivirus working usb,IT Support,Low,synth_highacc,0,1
+refund installment process netbanking remit,Fees / Finance,Medium,synth_highacc,3,0
+evidence accused destroyed victim accused,Security / Discipline,Medium,synth_highacc,6,0
+syllabus homework revision revaluation practical,Academics,High,synth_highacc,2,2
+heater bed element shampoo slipper,Hostels,Low,synth_highacc,1,1
+lecture group timing report mentor,Academics,High,synth_highacc,2,2
+fare overcrowded refund shuttle battery,Transport,High,synth_highacc,5,2
+waiver due rejected credit bank,Fees / Finance,Low,synth_highacc,3,1
+pillow mattress flat dirty noisy,Hostels,High,synth_highacc,1,2
+patrol senior rape investigate victim,Security / Discipline,Low,synth_highacc,6,1
+ceiling door repair cement pane,Maintenance,High,synth_highacc,4,2
+evidence abusing trespass interrogate offence,Security / Discipline,Low,synth_highacc,6,1
+traffic tyre parking accident conductor,Transport,Low,synth_highacc,5,1
+result question published exam schedule,Academics,High,synth_highacc,2,2
+i d like to suggest more frequent bag checks at the entrance of the stadium for tonight s game there are rumors that some people are planning to bring in prohibited items,Security / Discipline,Low,complaint_triage,6,1
+regulation application strict regulation deadline,Administration,High,synth_highacc,7,2
+the brakes on the bus ending in plate 442 are screeching very loudly every time it stops it sounds like the pads are completely worn out and it s quite alarming to hear when the bus is full of people,Transport,High,complaint_triage,5,2
+upload firmware speed install login,IT Support,Medium,synth_highacc,0,0
+bully camera complaint stranger insult,Security / Discipline,Low,synth_highacc,6,1
+upload connectivity processor scanner modem,IT Support,Low,synth_highacc,0,1
+keyboard install typing adapter ram,IT Support,Low,synth_highacc,0,1
+carpenter jammed furniture door peeling,Maintenance,Medium,synth_highacc,4,0
+membership index renewal subscription available,Library,Medium,synth_highacc,8,0
+mopping wrench wrench garbage drill,Maintenance,High,synth_highacc,4,2
+book print recommendation available citation,Library,Low,synth_highacc,8,1
+course coordinator changed the project requirements 24 hours before the submission we have spent two months on the original brief and it is impossible to redo the entire architecture in one day this will lead to a mass failure for the entire batch we need the original rubric restored or a one week extension,Academics,High,complaint_triage,2,2
+stop cycle skipped rickshaw charges,Transport,Medium,synth_highacc,5,0
+tutorial final assignment presentation scholar,Academics,High,synth_highacc,2,2
+repairman socket leaking maintenance lock,Maintenance,Medium,synth_highacc,4,0
+document attestation verification application procedure,Administration,Low,synth_highacc,7,1
+admission registrar cancellation guideline form,Administration,Medium,synth_highacc,7,0
+reading fine area periodical audiobook,Library,High,synth_highacc,8,2
+kitchen rotten hygiene chapati menu,Canteen,Medium,synth_highacc,9,0
+git repo access with lfs objects blocked can clone code but lfs files deny access please add me to the lfs enabled group this blocks reproducing builds repo name available,IT Support,Medium,complaint_triage,0,0
+subject delay elective final absent,Academics,High,synth_highacc,2,2
+socket fuse worn jammed cracked,Maintenance,High,synth_highacc,4,2
+wifi network wifi dropping install,IT Support,Low,synth_highacc,0,1
+cleaning roof jammed sweeping damage,Maintenance,Low,synth_highacc,4,1
+enrollment bonafide deadline registration notarized,Administration,Low,synth_highacc,7,1
+presentation faculty postpone group training,Academics,Low,synth_highacc,2,1
+journal absent newspaper magazine shelf,Library,Low,synth_highacc,8,1
+lock fuse broken fuse fixture,Maintenance,High,synth_highacc,4,2
+procedure verification clerk policy official,Administration,Medium,synth_highacc,7,0
+keyboard connectivity typing connectivity slow,IT Support,Medium,synth_highacc,0,0
+drain sewage drain bulb maintenance,Maintenance,Medium,synth_highacc,4,0
+subject topic missing topic lecturer,Academics,Low,synth_highacc,2,1
+tuition waiver remission cleared debit,Fees / Finance,High,synth_highacc,3,2
+almanac borrow bibliography bibliography search,Library,High,synth_highacc,8,2
+registrar awaiting requested dean migration,Administration,Medium,synth_highacc,7,0
+membership fine renewal book rack,Library,High,synth_highacc,8,2
+shelf research labelling borrow citation,Library,Medium,synth_highacc,8,0
+socket fuse fix floor replace,Maintenance,High,synth_highacc,4,2
+registration dean completed rejected seal,Administration,High,synth_highacc,7,2
+the bus driver told me i couldn t board because the bus was full but i could clearly see several empty seats in the back i think he just wanted to leave early,Transport,Medium,complaint_triage,5,0
+renew research available fine penalty,Library,High,synth_highacc,8,2
+interest interest rate card deposit,Fees / Finance,High,synth_highacc,3,2
+handle hole loose leaking renovation,Maintenance,High,synth_highacc,4,2
+bill payment payment grant grant,Fees / Finance,Medium,synth_highacc,3,0
+roommate inverter noisy corridor washroom,Hostels,Low,synth_highacc,1,1
+dust grill accumulation fuse pipe,Maintenance,High,synth_highacc,4,2
+approval clerk awaited admission policy,Administration,Low,synth_highacc,7,1
+meal egg spoiled rice taste,Canteen,High,synth_highacc,9,2
+rate counter increased pickle canteen,Canteen,Medium,synth_highacc,9,0
+ip log address down server,IT Support,High,synth_highacc,0,2
+return photocopy reminder return catalogue,Library,Medium,synth_highacc,8,0
+examination signature form notary document,Administration,Medium,synth_highacc,7,0
+canteen menu quality spoil,Canteen,High,synth_highacc,9,2
+ticket rickshaw counter schedule stop,Transport,Low,synth_highacc,5,1
+dean registrar approval notice delay,Administration,Low,synth_highacc,7,1
+indicator taxi broken diesel stop,Transport,Low,synth_highacc,5,1
+bibliography citation section desk audiobook,Library,Medium,synth_highacc,8,0
+cashier application counter scholarship tuition,Fees / Finance,Low,synth_highacc,3,1
+audit balance report transfer bank,Fees / Finance,Low,synth_highacc,3,1
+penalty almanac reference membership reference,Library,High,synth_highacc,8,2
+ip ram address vpn motherboard,IT Support,Medium,synth_highacc,0,0
+reference publisher section zone renew,Library,Medium,synth_highacc,8,0
+hygiene mess poor spoon sauce,Canteen,Low,synth_highacc,9,1
+milk taste sour fresh lunch,Canteen,Low,synth_highacc,9,1
+event venue was not properly arranged for the competition,Administration,Medium,manual,7,0
+scholarship deduction not reimbursement budget,Fees / Finance,Medium,synth_highacc,3,0
+license pickup suspended taxi petrol,Transport,Low,synth_highacc,5,1
+approval bonafide awaited affidavit document,Administration,High,synth_highacc,7,2
+clerk bonafide rude notary migration,Administration,Medium,synth_highacc,7,0
+shuttle van indicator petrol traffic,Transport,High,synth_highacc,5,2
+my fee receipt shows the wrong course name it says b sc instead of b tech which is causing issues with my education loan provider as they think i ve changed my stream i need a corrected receipt with the right department name,Fees / Finance,Medium,complaint_triage,3,0
+license rickshaw suspended pickup taxi,Transport,Low,synth_highacc,5,1
+kidnap vandalism murder danger stalk,Security / Discipline,Low,synth_highacc,6,1
+mess coffee quality sauce chicken,Canteen,Low,synth_highacc,9,1
+construction fused debris plumber damage,Maintenance,Low,synth_highacc,4,1
+scholarship payment eligibility due payable,Fees / Finance,Medium,synth_highacc,3,0
+attestation pending needed issue migration,Administration,Low,synth_highacc,7,1
+wi fi drops in auditorium during live guest lecture signal reads strong yet connection resets intermittently audience can t view shared content when it drops please stabilize access points currently disruptive live session in progress,IT Support,High,complaint_triage,0,2
+catalogue article search card catalogue,Library,Low,synth_highacc,8,1
+identity theft alert someone else used my student id to pay their fees via a stolen card and now my account is flagged for fraud i am being threatened with suspension i need the finance department to verify the payment source and clear my name before the hearing tomorrow,Fees / Finance,High,complaint_triage,3,2
+journal counter missing rack citation,Library,Medium,synth_highacc,8,0
+i lost my prescription glasses near the track field they are in a red case if they ve been found please let me know as i literally can t see my lectures without them,Security / Discipline,Low,complaint_triage,6,1
+tea taste cold bill hygiene,Canteen,Medium,synth_highacc,9,0
+receipt penalty lost due waiver,Fees / Finance,High,synth_highacc,3,2
+marks teacher incorrect homework result,Academics,Medium,synth_highacc,2,0
+charges audit tuition outstanding tuition,Fees / Finance,Medium,synth_highacc,3,0
+midterm textbook results placement grading,Academics,High,synth_highacc,2,2
+crack hinge wall paint socket,Maintenance,High,synth_highacc,4,2
+group training project thesis teacher,Academics,Low,synth_highacc,2,1
+fan heater speed stinking stinking,Hostels,Medium,synth_highacc,1,0
+the clock in the cafeteria is five minutes slow it s not a big deal but it does cause some confusion for students trying to get to their 1 pm lectures on time it just needs to be synced with the digital campus clock,Maintenance,Low,complaint_triage,4,1
+horn battery not taillight clutch,Transport,Medium,synth_highacc,5,0
+presentation lecture diploma group lecturer,Academics,High,synth_highacc,2,2
+construction leak debris sparking socket,Maintenance,High,synth_highacc,4,2
+transaction treasury error due gst,Fees / Finance,High,synth_highacc,3,2
+pipeline fix leakage worn bulb,Maintenance,Low,synth_highacc,4,1
+heater laundry element door sink,Hostels,Low,synth_highacc,1,1
+staircase bathroom stinking laundry almirah,Hostels,Low,synth_highacc,1,1
+sabzi food snack pickle milk,Canteen,Medium,synth_highacc,9,0
+the water pressure in the water fountain near the gym is a bit low it s hard to fill up a large bottle quickly it s not a major problem but a small adjustment to the valve would be appreciated,Maintenance,Low,complaint_triage,4,1
+harass stolen sexually bully thieves,Security / Discipline,High,synth_highacc,6,2
+tea fork cold water spoon,Canteen,High,synth_highacc,9,2
+seminar lecture certificate exam curriculum,Academics,Medium,synth_highacc,2,0
+membership available expire nonfiction reading,Library,Low,synth_highacc,8,1
+kitchen spoil hygiene spoil rice,Canteen,High,synth_highacc,9,2
+queue bill long meal pickle,Canteen,Medium,synth_highacc,9,0
+i want to change my elective subject,Academics,Medium,query_test,2,0
+document document missing status policy,Administration,Low,synth_highacc,7,1
+clerk letterhead rude submit clerk,Administration,Medium,synth_highacc,7,0
+pending deadline application sworn approval,Administration,Low,synth_highacc,7,1
+approval verification pending sworn download,Administration,Medium,synth_highacc,7,0
+submission processing late migration submit,Administration,Low,synth_highacc,7,1
+lecture timetable cancelled quiz teacher,Academics,Medium,synth_highacc,2,0
+when will the library issue new id cards,Academics,Low,query_test,2,1
+flush sink mosquito hanger detergent,Hostels,Low,synth_highacc,1,1
+drainage dirty clogged exhaust soap,Hostels,High,synth_highacc,1,2
+antivirus firmware authentication firewall bluetooth,IT Support,Medium,synth_highacc,0,0
+the door to the pantry makes a slight squeak when it opens it s not loud enough to bother most people but a drop of oil on the hinges would make the environment a bit quieter during late night study sessions,Maintenance,Low,complaint_triage,4,1
+registration deadline slip examination deadline,Administration,Low,synth_highacc,7,1
+curriculum professor outdated schedule teacher,Academics,Low,synth_highacc,2,1
+midterm mentor faculty final paper,Academics,Low,synth_highacc,2,1
+scholar seminar registration practical degree,Academics,Medium,synth_highacc,2,0
+kitchen lunch hygiene glass food,Canteen,High,synth_highacc,9,2
+unsafe case feel harrass environment,Security / Discipline,High,synth_highacc,6,2
+hanger hanger broken detergent staircase,Hostels,Low,synth_highacc,1,1
+snack salad items curry snack,Canteen,Medium,synth_highacc,9,0
+email fail ssd password keyboard,IT Support,High,synth_highacc,0,2
+presentation exam faculty group lecturer,Academics,Medium,synth_highacc,2,0
+evidence injured culprit interrogate environment,Security / Discipline,Medium,synth_highacc,6,0
+notary guideline attest requested requested,Administration,Medium,synth_highacc,7,0
+steal sexual incident thief sexually,Security / Discipline,High,synth_highacc,6,2
+ssd bandwidth storage connect latency,IT Support,Low,synth_highacc,0,1
+gst receipt charges pending gst,Fees / Finance,Medium,synth_highacc,3,0
+mfa reset needed after phone replacement authenticator app on new device not recognized urgent reset required to access email and lms,IT Support,High,complaint_triage,0,2
+reference rack section membership absent,Library,High,synth_highacc,8,2
+result thesis published assignment homework,Academics,High,synth_highacc,2,2
+tea lunch cold rotten cook,Canteen,High,synth_highacc,9,2
+lunch quality delayed overcharge coffee,Canteen,High,synth_highacc,9,2
+tuition arrear remission receipt bill,Fees / Finance,Low,synth_highacc,3,1
+vehicle clutch inspection taillight petrol,Transport,Medium,synth_highacc,5,0
+garbage ceiling removal ladder cleaning,Maintenance,Medium,synth_highacc,4,0
+seat diesel reserved tyre bus,Transport,High,synth_highacc,5,2
+circular fee clarification signature submit,Administration,Low,synth_highacc,7,1
+pipe cement burst replace maintenance,Maintenance,Low,synth_highacc,4,1
+the tiles in the laundry area are a bit uneven it doesn t cause any major issues but you have to be careful when walking with a heavy basket maybe they can be leveled during future renovations,Hostels,Low,complaint_triage,1,1
+violence trespass attack weapon weapon,Security / Discipline,High,synth_highacc,6,2
+deduction card extra deposit interest,Fees / Finance,Medium,synth_highacc,3,0
+the water dispenser is making a loud vibrating noise every time it chills the water the whole unit rattles against the wall it s very annoying for the students in the adjacent study room please check the compressor mounts,Maintenance,Medium,complaint_triage,4,0
+thesis viva submission scholar postpone,Academics,High,synth_highacc,2,2
+invoice penalty cleared bill reimbursement,Fees / Finance,Low,synth_highacc,3,1
+i ve been trying to pay my semester tuition for three days now but the portal keeps giving me a server error 500 the payment deadline is today at 5 00 pm and if i don t pay i ll lose my enrollment and my scholarship please i need a manual way to pay or an extension immediately,Administration,High,complaint_triage,7,2
+fare charges increased cab charges,Transport,Low,synth_highacc,5,1
+software adapter license mouse ip,IT Support,Low,synth_highacc,0,1
+stipend tuition disbursed payment credit,Fees / Finance,High,synth_highacc,3,2
+due deposit cashier cashier outstanding,Fees / Finance,Low,synth_highacc,3,1
+interest reimbursement late waiver finance,Fees / Finance,High,synth_highacc,3,2
+fiction nonfiction locate bibliography index,Library,Medium,synth_highacc,8,0
+finance deposit section waiver cleared,Fees / Finance,Medium,synth_highacc,3,0
+penalty fee late stipend credited,Fees / Finance,Low,synth_highacc,3,1
+brake brake failure stop vehicle,Transport,High,synth_highacc,5,2
+latency bandwidth portal connectivity driver,IT Support,Low,synth_highacc,0,1
+window ceiling pane ladder screwdriver,Maintenance,Low,synth_highacc,4,1
+usb laptop port backup usb,IT Support,Medium,synth_highacc,0,0
+pipeline tile leakage mopping jammed,Maintenance,High,synth_highacc,4,2
+ram firewall upgrade display network,IT Support,Medium,synth_highacc,0,0
+hostel stinking slow blanket,Hostels,Medium,synth_highacc,1,0
+stair pipe railing brick fused,Maintenance,Low,synth_highacc,4,1
+outstanding stipend amount arrear delayed,Fees / Finance,Medium,synth_highacc,3,0
+electrician door paint repair fuse,Maintenance,High,synth_highacc,4,2
+stipend debit disbursed withdrawal deposit,Fees / Finance,Low,synth_highacc,3,1
+harass assault report bully senior,Security / Discipline,High,synth_highacc,6,2
+update protocol failing vpn usb,IT Support,Low,synth_highacc,0,1
+milk plate counter food bill,Canteen,Low,synth_highacc,9,1
+scholarship dean form regulation transfer,Administration,Medium,synth_highacc,7,0
+transaction statement failed invoice delayed,Fees / Finance,High,synth_highacc,3,2
+deduction gst wrong remit interest,Fees / Finance,Medium,synth_highacc,3,0
+server cache maintenance mac freeze,IT Support,Medium,synth_highacc,0,0
+violence camera physical surveillance injured,Security / Discipline,Medium,synth_highacc,6,0
+stole robbery laptop senior sexually,Security / Discipline,Low,synth_highacc,6,1
+cook quality menu curry fork,Canteen,High,synth_highacc,9,2
+threaten abuse life stalking harass,Security / Discipline,High,synth_highacc,6,2
+bus diesel vehicle seat,Transport,Medium,synth_highacc,5,0
+internet restart desktop network protocol,IT Support,Low,synth_highacc,0,1
+brake clutch cab license bicycle,Transport,Low,synth_highacc,5,1
+endorse affidavit notice issue admission,Administration,Low,synth_highacc,7,1
+almanac expired edition bibliography counter,Library,Low,synth_highacc,8,1
+circular issue issued affidavit submission,Administration,High,synth_highacc,7,2
+staircase pillow heater laundry table,Hostels,High,synth_highacc,1,2
+traffic stop jam stop diesel,Transport,High,synth_highacc,5,2
+price quality price expensive rice,Canteen,High,synth_highacc,9,2
+i just received an email saying i ve been withdrawn from the university for non attendance but i have attended every single lecture there must be a massive mistake in the digital roll call system please fix this before my parents see the notification,Administration,High,complaint_triage,7,2
+reading database area reference fine,Library,Medium,synth_highacc,8,0
+fan ventilator speed cupboard soap,Hostels,High,synth_highacc,1,2
+towel slipper rough shampoo roommate,Hostels,Low,synth_highacc,1,1
+scholarship transaction not loan withdrawal,Fees / Finance,High,synth_highacc,3,2
+journal stack article magazine print,Library,Low,synth_highacc,8,1
+vegetable fresh oily egg water,Canteen,Medium,synth_highacc,9,0
+thesis quiz submission revaluation notebook,Academics,Medium,synth_highacc,2,0
+cement brick ceiling leak paint,Maintenance,Low,synth_highacc,4,1
+scholarship cashier eligibility pending bank,Fees / Finance,Low,synth_highacc,3,1
+professor presentation training lecture report,Academics,Low,synth_highacc,2,1
+training notebook program teacher topic,Academics,Low,synth_highacc,2,1
+configure cache setup bluetooth scanner,IT Support,Medium,synth_highacc,0,0
+harrash molested complaint threaten culprit,Security / Discipline,Medium,synth_highacc,6,0
+notebook diploma topic curriculum subject,Academics,Low,synth_highacc,2,1
+journal bibliography photocopy magazine newspaper,Library,High,synth_highacc,8,2
+spoon glass cup fork drink,Canteen,High,synth_highacc,9,2
+washroom service stinking bucket shampoo,Hostels,High,synth_highacc,1,2
+table geyser wobbling cupboard towel,Hostels,High,synth_highacc,1,2
+cable laptop loose update network,IT Support,Medium,synth_highacc,0,0
+queue lunch spoon counter mess,Canteen,Low,synth_highacc,9,1
+loan late application penalty statement,Fees / Finance,High,synth_highacc,3,2
+driver driver down patch latency,IT Support,Medium,synth_highacc,0,0
+form awaiting download guideline issue,Administration,Low,synth_highacc,7,1
+processing certificate slow dean regulation,Administration,Medium,synth_highacc,7,0
+helmet seat license license clutch,Transport,High,synth_highacc,5,2
+drugs teased stole security caught,Security / Discipline,Medium,synth_highacc,6,0
+meter fare tampered vehicle petrol,Transport,Low,synth_highacc,5,1
+fir security injured complaint case,Security / Discipline,High,synth_highacc,6,2
+notebook training correction thesis topic,Academics,Medium,synth_highacc,2,0
+server server down firmware software,IT Support,Low,synth_highacc,0,1
+smuggling kidnap fraud assault arrest,Security / Discipline,Low,synth_highacc,6,1
+loose door handle on the seminar room you have to jiggle it several times to get it to latch properly sometimes students get locked in for a few seconds because it won t turn it just needs the internal screws tightened,Maintenance,Medium,complaint_triage,4,0
+due deposit balance grant payable,Fees / Finance,Low,synth_highacc,3,1
+diploma training verification textbook score,Academics,Low,synth_highacc,2,1
+curtain almirah chair geyser laundry,Hostels,High,synth_highacc,1,2
+procedure stamp lengthy regulation verification,Administration,High,synth_highacc,7,2
+protocol dns display battery display,IT Support,Low,synth_highacc,0,1
+auto rickshaw driver taxi horn,Transport,Low,synth_highacc,5,1
+placement mentor drive assignment degree,Academics,Medium,synth_highacc,2,0
+mess expensive queue food rate,Canteen,Medium,synth_highacc,9,0
+hanger hostel broken water water,Hostels,Medium,synth_highacc,1,0
+printer vpn connect not mouse,IT Support,Medium,synth_highacc,0,0
+alcohol offence consumption raped molest,Security / Discipline,High,synth_highacc,6,2
+thesis score submission delayed internship,Academics,High,synth_highacc,2,2
+vehicle indicator indicator parking mandatory,Transport,Medium,synth_highacc,5,0
+ram ethernet upgrade router server,IT Support,Low,synth_highacc,0,1
+the emergency exit door in the library is jammed shut in case of a fire people on the second floor would be trapped as the main stairs would be the only exit this is a serious safety violation the door needs to be unjammed and the hinges lubricated today,Maintenance,High,complaint_triage,4,2
+i d like to suggest adding a request stop button to the older buses right now you have to shout to the driver or pull a string that doesn t always work,Transport,Low,complaint_triage,5,1
+sewage ceiling smell fused worn,Maintenance,Low,synth_highacc,4,1
+circular fee issued signature official,Administration,High,synth_highacc,7,2
+waiver application rejected waiver card,Fees / Finance,Low,synth_highacc,3,1
+printer working jam processor protocol,IT Support,Medium,synth_highacc,0,0
+milk fresh sour canteen overcharge,Canteen,Medium,synth_highacc,9,0
+clerk guideline policy admission submit,Administration,High,synth_highacc,7,2
+approval certificate pending processing pending,Administration,Medium,synth_highacc,7,0
+latency ethernet usb connectivity mouse,IT Support,Low,synth_highacc,0,1
+washroom window stinking stinking tap,Hostels,High,synth_highacc,1,2
+fee loan waiver transaction payment,Fees / Finance,Medium,synth_highacc,3,0
+someone is currently trying to kick down the door of my dorm room i m locked inside and i don t know who it is but they are screaming threats please get here fast i think the wood is starting to splinter,Security / Discipline,High,complaint_triage,6,2
+inverter towel backup tap cotton,Hostels,High,synth_highacc,1,2
+credit debit delayed receipt late,Fees / Finance,Medium,synth_highacc,3,0
+can the university provide a more detailed breakdown of where our general student fee goes it s a lot of money and we don t see much benefit from it,Administration,Low,complaint_triage,7,1
+price chicken worth expensive price,Canteen,High,synth_highacc,9,2
+milk cook sour daal rotten,Canteen,Medium,synth_highacc,9,0
+reading silent borrow shelf borrow,Library,High,synth_highacc,8,2
+carpenter damage burst leak exposed,Maintenance,Medium,synth_highacc,4,0
+drainage strict overflowing table blanket,Hostels,High,synth_highacc,1,2
+marks score question grade workshop,Academics,Medium,synth_highacc,2,0
+kidnap incident murder cctv evidence,Security / Discipline,Low,synth_highacc,6,1
+vpn split tunneling misroutes cloud storage cloud drive is very slow unless vpn is off impacts large file sync for coursework please review split routes and dns high priority due to deadlines,IT Support,High,complaint_triage,0,2
+teacher degree overdue submission,Academics,High,synth_highacc,2,2
+keyboard mouse router network usb,IT Support,Medium,synth_highacc,0,0
+backup ethernet download bandwidth login,IT Support,Medium,synth_highacc,0,0
+registration migration slip verification attestation,Administration,Medium,synth_highacc,7,0
+the carpet in the waiting area of the accounts office is quite worn out and has a few trip hazards it might be time to replace it with some easy to clean tiling or a new rug,Fees / Finance,Low,complaint_triage,3,1
+upload bluetooth storage scanner bandwidth,IT Support,High,synth_highacc,0,2
+stolen sexually suspicious harassment security,Security / Discipline,High,synth_highacc,6,2
+paint pipe colour plaster urgent,Maintenance,Medium,synth_highacc,4,0
+outstanding bank amount finance charges,Fees / Finance,High,synth_highacc,3,2
+download printer stuck cable firewall,IT Support,High,synth_highacc,0,2
+tease molested sexual trespass disrespect,Security / Discipline,Low,synth_highacc,6,1
+stipend stipend disbursed card tax,Fees / Finance,Low,synth_highacc,3,1
+overcharge water sauce water kitchen,Canteen,Low,synth_highacc,9,1
+request to extend the library hours during the week before the mid semester exams closing at 8 pm is a bit early when we have back to back tests staying open until 10 pm for just that one week would be a huge help,Academics,Low,complaint_triage,2,1
+receipt payable lost debit concession,Fees / Finance,High,synth_highacc,3,2
+payment deduction gst refund stipend,Fees / Finance,High,synth_highacc,3,2
+theft kidnap harrash teasing,Security / Discipline,Medium,synth_highacc,6,0
+transfer issue certificate clerk seal,Administration,Medium,synth_highacc,7,0
+geyser bathroom leaking mug washroom,Hostels,Medium,synth_highacc,1,0
+guard cybercrime sleeping theft teasing,Security / Discipline,Medium,synth_highacc,6,0
+stamp seal pending delay migration,Administration,Low,synth_highacc,7,1
+mattress tap hard slow dirty,Hostels,High,synth_highacc,1,2
+penalty silent return membership reference,Library,Low,synth_highacc,8,1
+quiz syllabus schedule assignment timetable,Academics,Medium,synth_highacc,2,0
+the door to the advanced coding lab is very heavy and makes a loud slamming noise when it closes a simple door closer or a rubber bumper would prevent the noise from disrupting the students working inside,Academics,Low,complaint_triage,2,1
+configure computer setup speed slow,IT Support,Low,synth_highacc,0,1
+fee processed pending receipt receipt,Fees / Finance,Medium,synth_highacc,3,0
+chapter missing summary faculty training,Academics,Medium,synth_highacc,2,0
+soap inverter missing strict tap,Hostels,Low,synth_highacc,1,1
+tea tea cold tea mess,Canteen,Low,synth_highacc,9,1
+warden mattress permission drainage geyser,Hostels,Medium,synth_highacc,1,0
+vandalism alcohol property smuggling disrespect,Security / Discipline,Medium,synth_highacc,6,0
+smoke coming from the central air conditioning vent in the auditorium during the seminar we noticed a burning smell and grey smoke emitting from the ceiling units we have turned off the ac but we need a technician to inspect the motor for a fire before the next session begins,Maintenance,High,complaint_triage,4,2
+food juice shortage fresh spoil,Canteen,High,synth_highacc,9,2
+coffee rice bitter drink stale,Canteen,High,synth_highacc,9,2
+bullied incident harassed accused tease,Security / Discipline,Medium,synth_highacc,6,0
+professor assignment leave training scholar,Academics,Medium,synth_highacc,2,0
+cupboard water broken washroom heating,Hostels,High,synth_highacc,1,2
+tube drain flicker mopping gutter,Maintenance,High,synth_highacc,4,2
+due deposit cashier cashier charges,Fees / Finance,High,synth_highacc,3,2
+cab taxi license schedule indicator,Transport,High,synth_highacc,5,2
+audit delayed report bank account,Fees / Finance,Medium,synth_highacc,3,0
+accident indicator reported clutch accident,Transport,Low,synth_highacc,5,1
+projector computer port cable desktop,IT Support,Low,synth_highacc,0,1
+drink queue vegetable juice tea,Canteen,Medium,synth_highacc,9,0
+headlight traffic dim bicycle fare,Transport,Low,synth_highacc,5,1
+result assignment published submission lesson,Academics,High,synth_highacc,2,2
+request for replacement of a torn mattress the mattress provided at the start of the semester has a huge rip in the center and the springs are poking through it is very uncomfortable and i am unable to get a good night s rest can i get a new one from the store,Hostels,Medium,complaint_triage,1,0
+dean submit approval circular circular,Administration,Low,synth_highacc,7,1
+hygiene overcharge poor juice cup,Canteen,Medium,synth_highacc,9,0
+towel chair rough flush blanket,Hostels,Low,synth_highacc,1,1
+fiction citation available volume overdue,Library,Medium,synth_highacc,8,0
+sports day event organisation was very bad need improvement,Administration,Medium,manual,7,0
+route shuttle diversion fare cab,Transport,Low,synth_highacc,5,1
+scan borrow document reference volume,Library,Medium,synth_highacc,8,0
+paint burst colour burst bulb,Maintenance,Medium,synth_highacc,4,0
+tax concession deduction bank online,Fees / Finance,Medium,synth_highacc,3,0
+evidence thieves collected incident guard,Security / Discipline,Medium,synth_highacc,6,0
+fuel overcrowded shortage brake route,Transport,High,synth_highacc,5,2
+driver slow upload patch ram,IT Support,Low,synth_highacc,0,1
+backup driver restore software keyboard,IT Support,High,synth_highacc,0,2
+headlight driver dim meter traffic,Transport,Medium,synth_highacc,5,0
+tyre van puncture windscreen conductor,Transport,Low,synth_highacc,5,1
+drill burst noise hinge exposed,Maintenance,Low,synth_highacc,4,1
+smuggling steals fraud investigate evidence,Security / Discipline,High,synth_highacc,6,2
+internship workshop opportunity group placement,Academics,Low,synth_highacc,2,1
+hostel chair gate blanket roommate,Hostels,High,synth_highacc,1,2
+driver charges absent vehicle accident,Transport,High,synth_highacc,5,2
+cable firmware loose restart ip,IT Support,High,synth_highacc,0,2
+shampoo cotton finished curtain corridor,Hostels,Medium,synth_highacc,1,0
+receipt finance lost grant penalty,Fees / Finance,Low,synth_highacc,3,1
+heater shampoo element service tap,Hostels,Low,synth_highacc,1,1
+fiction scan available nonfiction thesis,Library,High,synth_highacc,8,2
+chapter practical summary internship mentor,Academics,High,synth_highacc,2,2
+book bibliography desk database,Library,Medium,synth_highacc,8,0
+locker soap jammed bucket service,Hostels,Low,synth_highacc,1,1
+route diesel extended fare indicator,Transport,Low,synth_highacc,5,1
+weapon environment seized stolen incident,Security / Discipline,Low,synth_highacc,6,1
+bill upi incorrect interest credited,Fees / Finance,Medium,synth_highacc,3,0
+thesis exam midterm seminar overdue,Academics,High,synth_highacc,2,2
+form notarized download letterhead verification,Administration,Low,synth_highacc,7,1
+locate thesis shelf counter absent,Library,Low,synth_highacc,8,1
+rotten dinner drink spoil dinner,Canteen,Medium,synth_highacc,9,0
+the add drop link for courses is not appearing on my student dashboard my friends are able to see it and change their electives but my page just shows an error i need to swap one of my subjects before the deadline on wednesday,Academics,Medium,complaint_triage,2,0
+fine edition waived penalty article,Library,High,synth_highacc,8,2
+bill menu sabzi rate spoon,Canteen,Low,synth_highacc,9,1
+canteen meal stale rate snack,Canteen,Low,synth_highacc,9,1
+sexually disrespect teasing fraud complaint,Security / Discipline,Low,synth_highacc,6,1
+fine subscription calculation rack fiction,Library,High,synth_highacc,8,2
+flush sink mug shampoo pillow,Hostels,Low,synth_highacc,1,1
+violence theft stalking weapon steal,Security / Discipline,Low,synth_highacc,6,1
+lecture lecture timing curriculum homework,Academics,High,synth_highacc,2,2
+registrar hostel approval dean bonafide,Administration,High,synth_highacc,7,2
+cable internet loose rebooting crash,IT Support,Medium,synth_highacc,0,0
+why does the bus driver always take a 20 minute break at the student center it s right in the middle of the route and it makes everyone late for their next class can the shift changes happen at the terminus instead,Transport,Low,complaint_triage,5,1
+workshop placement registration syllabus postpone,Academics,High,synth_highacc,2,2
+mess dinner menu food cook,Canteen,High,synth_highacc,9,2
+dust accumulation in the ac vents of the reading room whenever the air turns on it blows out a cloud of dust that triggers my allergies the vents haven t been vacuumed in a long time please schedule a cleaning of the duct covers,Maintenance,Medium,complaint_triage,4,0
+door fan lock sink towel,Hostels,High,synth_highacc,1,2
+treasury balance department reimbursement outstanding,Fees / Finance,High,synth_highacc,3,2
+router software rebooting speed printer,IT Support,Medium,synth_highacc,0,0
+queue lunch sabzi counter curry,Canteen,Low,synth_highacc,9,1
+bank remit statement processed arrear,Fees / Finance,High,synth_highacc,3,2
+window leaking pane valve floor,Maintenance,Low,synth_highacc,4,1
+sexually culprit teasing surveillance teased,Security / Discipline,Low,synth_highacc,6,1
+arrest raped made stalking cybercrime,Security / Discipline,Medium,synth_highacc,6,0
+fuel rickshaw shortage meter bicycle,Transport,High,synth_highacc,5,2
+the doorstop in room 204 has come loose the rubber part fell off so the door hits the wall now it just needs to be screwed back in or replaced with a new one to prevent wall damage,Maintenance,Low,complaint_triage,4,1
+i need a certificate of english proficiency for an internship in the uk does the administration provide this based on our grades or do i have to take an external test,Administration,Low,complaint_triage,7,1
+the industrial visit planned for this semester has been postponed three times we have already paid the registration fee and arranged for our own transport to the hub we need a clear final date and an itinerary or a full refund of the collected fees,Academics,Medium,complaint_triage,2,0
+price sauce glass expensive coffee,Canteen,Low,synth_highacc,9,1
+transaction bank loan bank interest,Fees / Finance,Low,synth_highacc,3,1
+concession remit applied transaction tax,Fees / Finance,High,synth_highacc,3,2
+stamp seal verification attestation download,Administration,High,synth_highacc,7,2
+letterhead status format affidavit transfer,Administration,Medium,synth_highacc,7,0
+sewage plaster backup replace leaking,Maintenance,Medium,synth_highacc,4,0
+suggestion to add a suggestion box for infrastructure improvements we often have ideas for small things like better bike racks or extra benches and a box would be a great way to collect those thoughts,Maintenance,Low,complaint_triage,4,1
+traffic charges jam accident bicycle,Transport,Medium,synth_highacc,5,0
+bus overcrowded route helmet,Transport,High,synth_highacc,5,2
+drain sewage wrench door ceiling,Maintenance,Low,synth_highacc,4,1
+installment remit outstanding receipt upi,Fees / Finance,High,synth_highacc,3,2
+tutorial deadline extra credit marks,Academics,Medium,synth_highacc,2,0
+concession treasury applied due bill,Fees / Finance,Low,synth_highacc,3,1
+drainage bathroom clogged cupboard washroom,Hostels,Medium,synth_highacc,1,0
+configure firewall setup cable printer,IT Support,Medium,synth_highacc,0,0
+fir report offence complaint fought,Security / Discipline,Medium,synth_highacc,6,0
+bios password reset for surplus laptop purchased approved surplus device need bios reset to enable virtualization,IT Support,Low,complaint_triage,0,1
+construction fixture noise sewage mopping,Maintenance,High,synth_highacc,4,2
+server software down dns offline,IT Support,Medium,synth_highacc,0,0
+meal rotten spoiled chapati water,Canteen,High,synth_highacc,9,2
+internal marks for the python lab have not been uploaded even though the semester is almost over we have no idea where we stand in terms of our internals and it s making it hard to prioritize our study plan for the finals can the department ensure the instructor updates the portal by this friday,Academics,Medium,complaint_triage,2,0
+overcharge sauce spoil water spoil,Canteen,Medium,synth_highacc,9,0
+the software required for the digital image processing lab is not installed on the systems we were told it would be ready by the second week but we are still using trial versions that expire every few days this is interrupting our practical work,Academics,Medium,complaint_triage,2,0
+request for a few more pens to be kept at the challan counter often there are none available and we have to keep asking other students it s a small thing but it would make the experience smoother for everyone,Fees / Finance,Low,complaint_triage,3,1
+shortage of cleaning supplies for the floor cleaners i noticed the staff is only using water to mop the floors because they ran out of disinfectant days ago the bathrooms are not being cleaned properly and it s starting to show please restock the supplies,Hostels,Medium,complaint_triage,1,0
+i saw someone trying to sell drugs behind the basketball courts they were showing a small bag of pills to a group of younger students,Security / Discipline,High,complaint_triage,6,2
+sexual report harassment sexually arrest,Security / Discipline,High,synth_highacc,6,2
+approval enrollment awaited examination affidavit,Administration,Low,synth_highacc,7,1
+protocol dns desktop backup battery,IT Support,Medium,synth_highacc,0,0
+crack hinge wall maintenance drill,Maintenance,High,synth_highacc,4,2
+staircase table roommate laundry mug,Hostels,Low,synth_highacc,1,1
+charges diesel extra conductor driver,Transport,High,synth_highacc,5,2
+breakfast breakfast menu egg quality,Canteen,Low,synth_highacc,9,1
+stipend receipt disbursed deposit budget,Fees / Finance,Low,synth_highacc,3,1
+the gym treadmill has a frayed belt it s starting to slip when you run at higher speeds which could cause someone to fall off the machine is otherwise fine but the belt definitely needs to be replaced before it snaps completely,Maintenance,Medium,complaint_triage,4,0
+project practical submission assignment presentation,Academics,High,synth_highacc,2,2
+workshop curriculum material lecture score,Academics,Medium,synth_highacc,2,0
+bullied security harassed fraud fraud,Security / Discipline,Low,synth_highacc,6,1
+penalty receipt late due credited,Fees / Finance,Low,synth_highacc,3,1
+withdrawal debit processed payable cashier,Fees / Finance,Low,synth_highacc,3,1
+parking brake fee overcrowded parking,Transport,Low,synth_highacc,5,1
+water cheap unclean worth spoil,Canteen,Medium,synth_highacc,9,0
+stalk stalk stalking assault patrol,Security / Discipline,High,synth_highacc,6,2
+steal cybercrime smoke thief trespass,Security / Discipline,High,synth_highacc,6,2
+nonfiction rack collection zone index,Library,Low,synth_highacc,8,1
+ssd wifi storage dns authentication,IT Support,Medium,synth_highacc,0,0
+project project submission absent missing,Academics,Medium,synth_highacc,2,0
+laptop antivirus screen antivirus keyboard,IT Support,Medium,synth_highacc,0,0
+letterhead registration migration official attestation,Administration,Low,synth_highacc,7,1
+steal abuse caught steals violence,Security / Discipline,Low,synth_highacc,6,1
+renew publisher thesis fine volume,Library,Medium,synth_highacc,8,0
+smoke threaten banned security smuggling,Security / Discipline,Low,synth_highacc,6,1
+concession due receipt reimbursement charges,Fees / Finance,Medium,synth_highacc,3,0
+procedure awaiting lengthy status fee,Administration,High,synth_highacc,7,2
+endorse registration document stamp awaiting,Administration,High,synth_highacc,7,2
+curriculum delayed outdated syllabus scholar,Academics,Medium,synth_highacc,2,0
+fare helmet increased numberplate taillight,Transport,Medium,synth_highacc,5,0
+washroom tap stinking slipper noisy,Hostels,Low,synth_highacc,1,1
+cab brake unavailable provided schedule,Transport,High,synth_highacc,5,2
+vandalism culprit property fought haras,Security / Discipline,Medium,synth_highacc,6,0
+maintenance hole needed exposed hinge,Maintenance,Low,synth_highacc,4,1
+hostel inverter gate blanket cupboard,Hostels,Medium,synth_highacc,1,0
+cctv disrespect footage laptop victim,Security / Discipline,High,synth_highacc,6,2
+socket sewage loose repair crack,Maintenance,Low,synth_highacc,4,1
+cook queue mess curry rate,Canteen,Low,synth_highacc,9,1
+return borrow reminder card overdue,Library,Medium,synth_highacc,8,0
+seminar workshop certificate overdue final,Academics,Low,synth_highacc,2,1
+policy migration amendment download rejected,Administration,Low,synth_highacc,7,1
+toilet noisy blocked geyser heater,Hostels,Low,synth_highacc,1,1
+hardware download firmware mac projector,IT Support,High,synth_highacc,0,2
+queue kitchen egg counter daal,Canteen,High,synth_highacc,9,2
+invoice fee duplicate application reimbursement,Fees / Finance,Medium,synth_highacc,3,0
+ram computer upgrade latency ethernet,IT Support,Low,synth_highacc,0,1
+investigate suspicious complaint complaint unsafe,Security / Discipline,Low,synth_highacc,6,1
+sewage ladder smell tile pipeline,Maintenance,Low,synth_highacc,4,1
+route cab diversion helmet seat,Transport,High,synth_highacc,5,2
+request for a small rack for wet umbrellas at the entrance of the maintenance wing it would stop people from bringing dripping umbrellas inside and making the floor slippery for the staff,Maintenance,Low,complaint_triage,4,1
+charges payment application outstanding refund,Fees / Finance,Low,synth_highacc,3,1
+account waiver installment deduction interest,Fees / Finance,Low,synth_highacc,3,1
+spoon lunch hygiene fork coffee,Canteen,Low,synth_highacc,9,1
+sexually steal abusing trespass tease,Security / Discipline,Low,synth_highacc,6,1
+bill penalty payment penalty application,Fees / Finance,Low,synth_highacc,3,1
+cctv senior footage accused harassment,Security / Discipline,Low,synth_highacc,6,1
+payment cleared failed account outstanding,Fees / Finance,High,synth_highacc,3,2
+the 3 00 pm shuttle is always 10 minutes late which means i miss my connection to the city bus could the schedule be adjusted to be more realistic,Transport,Low,complaint_triage,5,1
+horn charges not van meter,Transport,Medium,synth_highacc,5,0
+login cloud failing printer offline,IT Support,Low,synth_highacc,0,1
+mac update filter keyboard speed,IT Support,Medium,synth_highacc,0,0
+egg pickle water daal spoil,Canteen,Low,synth_highacc,9,1
+scholarship tuition outstanding tuition receipt,Fees / Finance,Medium,synth_highacc,3,0
+ventilator roommate exhaust curtain inverter,Hostels,Medium,synth_highacc,1,0
+stale expensive menu fresh vegetable,Canteen,Low,synth_highacc,9,1
+fiction nonfiction print magazine publisher,Library,Low,synth_highacc,8,1
+shared mailbox search inconsistent searching by sender returns no results intermittently other users see the same behavior can indexing be rebuilt server side please advise,IT Support,Medium,complaint_triage,0,0
+haras prohibited sexually smuggling stranger,Security / Discipline,Medium,synth_highacc,6,0
+ventilator blanket exhaust towel towel,Hostels,Medium,synth_highacc,1,0
+card bibliography renewal renew volume,Library,Low,synth_highacc,8,1
+canteen vegetable vegetable curry,Canteen,High,synth_highacc,9,2
+stalk rape stalking abusing harrass,Security / Discipline,Low,synth_highacc,6,1
+drink sauce taste juice fork,Canteen,Low,synth_highacc,9,1
+textbook score unavailable degree lesson,Academics,Low,synth_highacc,2,1
+backup protocol driver bandwidth adapter,IT Support,Low,synth_highacc,0,1
+theft haras reported raped harassed,Security / Discipline,Medium,synth_highacc,6,0
+connectivity upload unstable display dns,IT Support,Low,synth_highacc,0,1
+notebook lesson diploma curriculum delay,Academics,Medium,synth_highacc,2,0
+switch dust spark mopping urgent,Maintenance,Low,synth_highacc,4,1
+photocopy database expired print bibliography,Library,Low,synth_highacc,8,1
+internet download shutdown network crash,IT Support,Medium,synth_highacc,0,0
+evidence cctv destroyed senior murder,Security / Discipline,High,synth_highacc,6,2
+horn mandatory not cycle bus,Transport,High,synth_highacc,5,2
+plumber pane tap stair tile,Maintenance,Medium,synth_highacc,4,0
+bus tyre cleaning mandatory windscreen,Transport,Low,synth_highacc,5,1
+carpenter hinge jammed leak pane,Maintenance,Medium,synth_highacc,4,0
+card treasury declined remit penalty,Fees / Finance,Low,synth_highacc,3,1
+marks training incorrect grade final,Academics,High,synth_highacc,2,2
+hinge wire rusted switch ladder,Maintenance,Medium,synth_highacc,4,0
+driver shuttle rash schedule fuel,Transport,High,synth_highacc,5,2
+form scholarship download form approval,Administration,High,synth_highacc,7,2
+meter traffic tampered conductor driver,Transport,High,synth_highacc,5,2
+approval certificate pending issue endorse,Administration,Medium,synth_highacc,7,0
+antivirus hardware freeze firewall firmware,IT Support,High,synth_highacc,0,2
+enrollment notice bonafide registration notary,Administration,High,synth_highacc,7,2
+battery driver dead shuttle headlight,Transport,High,synth_highacc,5,2
+application official fee guideline seal,Administration,Low,synth_highacc,7,1
+upload install speed update printer,IT Support,High,synth_highacc,0,2
+article locate unavailable fine return,Library,Low,synth_highacc,8,1
+blanket mattress stinking toilet hostel,Hostels,High,synth_highacc,1,2
+my admit card has incorrect details,Academics,High,query_test,2,2
+staircase laundry roommate laundry hostel,Hostels,High,synth_highacc,1,2
+midterm submission placement final thesis,Academics,Low,synth_highacc,2,1
+investigate molest complaint molested fight,Security / Discipline,Low,synth_highacc,6,1
+tax reimbursement deduction upi statement,Fees / Finance,Low,synth_highacc,3,1
+circular scholarship clarification affidavit dean,Administration,High,synth_highacc,7,2
+ip dns address ip ethernet,IT Support,Medium,synth_highacc,0,0
+vpn rebooting disconnecting freeze charger,IT Support,Medium,synth_highacc,0,0
+window replace pane replace lock,Maintenance,Low,synth_highacc,4,1
+result thesis published lecture scholar,Academics,Low,synth_highacc,2,1
+transaction delayed failed processed transaction,Fees / Finance,Low,synth_highacc,3,1
+outstanding withdrawal amount processed audit,Fees / Finance,High,synth_highacc,3,2
+submission hostel pending migration approval,Administration,Low,synth_highacc,7,1
+salad spoon daal sauce bill,Canteen,Medium,synth_highacc,9,0
+browser connectivity cache backup wlan,IT Support,Medium,synth_highacc,0,0
+can we get a small rack for umbrellas near the gate during the rainy season people bring wet umbrellas into the corridor and it makes the floor very slippery a stand would keep the water at the entrance,Hostels,Low,complaint_triage,1,1
+driver rickshaw driver conductor rickshaw,Transport,Low,synth_highacc,5,1
+rotten queue overcharge spoil egg,Canteen,Low,synth_highacc,9,1
+hardware down firmware server login,IT Support,High,synth_highacc,0,2
+upload crash speed crash install,IT Support,Low,synth_highacc,0,1
+syllabus homework syllabus lesson answer,Academics,Low,synth_highacc,2,1
+print stack black search fiction,Library,Low,synth_highacc,8,1
+abstract absent journal article journal,Library,High,synth_highacc,8,2
+verification scholarship clerk attestation pending,Administration,Low,synth_highacc,7,1
+seminar training certificate scholar delay,Academics,High,synth_highacc,2,2
+deadline registrar missed notary seal,Administration,Medium,synth_highacc,7,0
+fought camera injured attack stalking,Security / Discipline,Medium,synth_highacc,6,0
+breakfast water menu stale food,Canteen,Medium,synth_highacc,9,0
+static ip reservation for lab instrument we need a reserved ip on the local vlan mac and switch port available no internet access required please advise the process,IT Support,Low,complaint_triage,0,1
+food rate shortage quality counter,Canteen,Medium,synth_highacc,9,0
+schedule license shuttle fare license,Transport,Medium,synth_highacc,5,0
+antivirus working download firewall authentication,IT Support,Low,synth_highacc,0,1
+mirror provided cracked seat fare,Transport,High,synth_highacc,5,2
+syllabus submission revision lecturer timetable,Academics,High,synth_highacc,2,2
+shuttle mandatory cancelled fuel taillight,Transport,High,synth_highacc,5,2
+sexually suspicious teasing bully fraud,Security / Discipline,High,synth_highacc,6,2
+chapati quality hard tea salad,Canteen,Low,synth_highacc,9,1
+librarian rack help return absent,Library,Low,synth_highacc,8,1
+endorse affidavit document migration hostel,Administration,Low,synth_highacc,7,1
+alcohol surveillance consumption steals prohibited,Security / Discipline,Medium,synth_highacc,6,0
+kitchen rotten hygiene cook spoil,Canteen,High,synth_highacc,9,2
+mosquito drainage infestation toilet heater,Hostels,Low,synth_highacc,1,1
+mosquito balcony infestation almirah chair,Hostels,Low,synth_highacc,1,1
+document attestation missing affidavit clerk,Administration,High,synth_highacc,7,2
+syllabus professor incomplete exam question,Academics,Medium,synth_highacc,2,0
+laundry slow machine bucket drainage,Hostels,Medium,synth_highacc,1,0
+fine thesis waived abstract catalogue,Library,Medium,synth_highacc,8,0
+photocopy locate photocopy print renew,Library,High,synth_highacc,8,2
+circular scholarship issued policy rejected,Administration,Medium,synth_highacc,7,0
+kitchen drink fork meal dinner,Canteen,Low,synth_highacc,9,1
+verification transfer pending sworn clerk,Administration,Medium,synth_highacc,7,0
+route ticket changed petrol stop,Transport,Medium,synth_highacc,5,0
+attestation issue signature pending affidavit,Administration,High,synth_highacc,7,2
+stolen hostel smuggling harassment patrol,Security / Discipline,Low,synth_highacc,6,1
+canteen food worth lunch,Canteen,Low,synth_highacc,9,1
+reading silent available research stack,Library,High,synth_highacc,8,2
+scholarship endorse form registration letterhead,Administration,Medium,synth_highacc,7,0
+bunk locker mug fan fan,Hostels,Medium,synth_highacc,1,0
+wall clock in the study hall has stopped working it s been stuck at 4 15 for two days it s helpful to have a working clock during timed practice sessions please replace the battery or the clock,Hostels,Medium,complaint_triage,1,0
+tile pipe plaster hinge drain,Maintenance,High,synth_highacc,4,2
+canteen fresh costly cup sauce,Canteen,Low,synth_highacc,9,1
+exam textbook postponement missing credit,Academics,Low,synth_highacc,2,1
+shuttle brake cancelled conductor helmet,Transport,Low,synth_highacc,5,1
+rice curry tea chapati kitchen,Canteen,High,synth_highacc,9,2
+reading desk area photocopy almanac,Library,Low,synth_highacc,8,1
+wire urgent exposed burst carpenter,Maintenance,Medium,synth_highacc,4,0
+registrar requested requested dean stamp,Administration,Low,synth_highacc,7,1
+guideline bonafide followed document regulation,Administration,Medium,synth_highacc,7,0
+vehicle petrol helmet parking rickshaw,Transport,High,synth_highacc,5,2
+status guideline unknown document policy,Administration,High,synth_highacc,7,2
+excess fee payment for the lab component i accidentally added an extra zero and paid 50 000 instead of 5 000 my parents are extremely upset as this was for our home rent i need the 45 000 refunded to the source account within 24 hours,Fees / Finance,High,complaint_triage,3,2
+menu mess spoil quality oil,Canteen,Low,synth_highacc,9,1
+numberplate seat conductor driver cab,Transport,Low,synth_highacc,5,1
+enrollment document confirmed sworn bonafide,Administration,High,synth_highacc,7,2
+upload reboot slow scanner network,IT Support,High,synth_highacc,0,2
+attestation approval needed certificate deadline,Administration,Low,synth_highacc,7,1
+cable cloud loose modem download,IT Support,Medium,synth_highacc,0,0
+official clerk letter certificate verification,Administration,Low,synth_highacc,7,1
+quiz diploma revaluation result postpone,Academics,Low,synth_highacc,2,1
+tea expensive cold salad rate,Canteen,Low,synth_highacc,9,1
+cheap menu cheap worth menu,Canteen,Medium,synth_highacc,9,0
+vpn offline projector server ip,IT Support,High,synth_highacc,0,2
+scan reading document article periodical,Library,Medium,synth_highacc,8,0
+blanket chair torn expensive water,Hostels,Medium,synth_highacc,1,0
+evidence threatened offence interrogate culprit,Security / Discipline,Low,synth_highacc,6,1
+subject chapter elective tutorial marks,Academics,Medium,synth_highacc,2,0
+fan towel speed mosquito service,Hostels,Low,synth_highacc,1,1
+paint repair job gutter damage,Maintenance,Low,synth_highacc,4,1
+admission bonafide form form download,Administration,Low,synth_highacc,7,1
+update latency failing authentication shutdown,IT Support,Low,synth_highacc,0,1
+washroom toilet stinking dirty bed,Hostels,Low,synth_highacc,1,1
+return aisle reminder journal publisher,Library,Medium,synth_highacc,8,0
+auto accident overcharge schedule route,Transport,Medium,synth_highacc,5,0
+overcharge chapati dinner water stale,Canteen,High,synth_highacc,9,2
+due deposit deposit withdrawal grant,Fees / Finance,Medium,synth_highacc,3,0
+milk juice sour chapati chicken,Canteen,Medium,synth_highacc,9,0
+large tree limb has fallen across the power lines near the cafeteria the lines are sagging dangerously low and are humming loudly if they snap they will hit the crowded walkway below maintenance needs to clear the branch and secure the lines before someone gets hurt,Maintenance,High,complaint_triage,4,2
+exam teacher schedule workshop assignment,Academics,Low,synth_highacc,2,1
+canteen overcharge stale salad glass,Canteen,High,synth_highacc,9,2
+finance online section charges refund,Fees / Finance,Low,synth_highacc,3,1
+journal index missing return scan,Library,High,synth_highacc,8,2
+policy submission unclear seal dean,Administration,Low,synth_highacc,7,1
+teacher curriculum lecturer training,Academics,High,synth_highacc,2,2
+mess chapati fresh food breakfast,Canteen,Medium,synth_highacc,9,0
+can we get a few more indoor plants for the lobby it would make the entrance look more welcoming and improve the atmosphere of the hostel a few low maintenance palms would be great,Hostels,Low,complaint_triage,1,1
+drink oil water juice bill,Canteen,High,synth_highacc,9,2
+bus indicator cleaning bus ticket,Transport,Low,synth_highacc,5,1
+upload password speed slow software,IT Support,High,synth_highacc,0,2
+professor workshop leave project workshop,Academics,Low,synth_highacc,2,1
+chapati daal hard overcharge pickle,Canteen,Medium,synth_highacc,9,0
+book penalty overdue citation index,Library,Low,synth_highacc,8,1
+cashier concession account loan transfer,Fees / Finance,High,synth_highacc,3,2
+upload speed speed fail bug,IT Support,Medium,synth_highacc,0,0
+drainage shampoo clogged almirah door,Hostels,High,synth_highacc,1,2
+the 8 00 am bus simply didn t show up today a group of about 30 of us were left waiting and most of us missed our mid term presentations we need a more reliable service for morning peak hours,Transport,High,complaint_triage,5,2
+fiction nonfiction ebook absent counter,Library,Medium,synth_highacc,8,0
+cloud slow sync motherboard computer,IT Support,Low,synth_highacc,0,1
+drain hammer overflowing roof valve,Maintenance,Low,synth_highacc,4,1
+download driver speed error slow connectivity,IT Support,Medium,synth_highacc,0,0
+cotton bucket hostel pillow laundry,Hostels,Medium,synth_highacc,1,0
+night light toggles off after reboot my screen keeps going bright every time i reboot i turn on night light but it doesn t stay on my eyes are hurting lol,IT Support,Low,complaint_triage,0,1
+i m trying to add a second major but the system says i ve exceeded the maximum credit limit i need an administrative override to continue my studies,Administration,Medium,complaint_triage,7,0
+evidence suspicious destroyed attack attack,Security / Discipline,Low,synth_highacc,6,1
+cctv environment footage teasing teasing,Security / Discipline,Low,synth_highacc,6,1
+stop driver unsafe horn bus,Transport,High,synth_highacc,5,2
+router update rebooting cable display,IT Support,High,synth_highacc,0,2
+degree exam delayed viva workshop,Academics,Medium,synth_highacc,2,0
+brake seat failure pickup mirror,Transport,High,synth_highacc,5,2
+credit practical transfer missing group,Academics,High,synth_highacc,2,2
+ragging raped stopped cctv harrash,Security / Discipline,Medium,synth_highacc,6,0
+stranger unsafe entry report report,Security / Discipline,Low,synth_highacc,6,1
+cupboard heater broken bucket bucket,Hostels,High,synth_highacc,1,2
+the fee structure pdf on the website is outdated it still shows the 2023 rates which is confusing for those of us trying to plan our finances for the upcoming year can the accounts department upload the 2025 26 fee schedule as soon as possible,Fees / Finance,Medium,complaint_triage,3,0
+database thesis access zone article,Library,Medium,synth_highacc,8,0
+driver cab speeding bus charges,Transport,High,synth_highacc,5,2
+chapati pickle hard water quality,Canteen,High,synth_highacc,9,2
+mattress staircase hard blanket bed,Hostels,Low,synth_highacc,1,1
+professor final leave tutorial degree,Academics,Low,synth_highacc,2,1
+cashier fee online loan application,Fees / Finance,Medium,synth_highacc,3,0
+reference database section zone desk,Library,Low,synth_highacc,8,1
+scanner cloud detecting wlan ip,IT Support,High,synth_highacc,0,2
+scholarship scholarship not delayed stipend,Fees / Finance,High,synth_highacc,3,2
+can we have a small bin specifically for the discarded challan carbon copies near the bank people usually just leave them on the desks which makes the area look quite untidy by the end of the day,Fees / Finance,Low,complaint_triage,3,1
+lesson deadline difficult midterm lesson,Academics,Medium,synth_highacc,2,0
+socket fuse garbage burst lock,Maintenance,Medium,synth_highacc,4,0
+garbage wire removal construction repairman,Maintenance,High,synth_highacc,4,2
+one of the tiles in the shower area has a small chip it s not sharp enough to cut anyone but it s a bit of an eyesore filling it with a bit of white grout would make the floor look perfect again,Maintenance,Low,complaint_triage,4,1
+trespass vandalism bullied vandalism molested,Security / Discipline,Medium,synth_highacc,6,0
+garbage leaking removal repairman stair,Maintenance,Low,synth_highacc,4,1
+mentor delayed guidance revaluation viva,Academics,Medium,synth_highacc,2,0
+hammer brick dust screwdriver ceiling,Maintenance,Low,synth_highacc,4,1
+wrench ladder repairman wire dust,Maintenance,Low,synth_highacc,4,1
+weapon unsafe found harass steals,Security / Discipline,Low,synth_highacc,6,1
+taste meal bad egg bill,Canteen,Medium,synth_highacc,9,0
+violence corridor physical camera complaint,Security / Discipline,Low,synth_highacc,6,1
+professor missing leave revaluation assignment,Academics,Medium,synth_highacc,2,0
+pipeline gutter drain fixture hinge,Maintenance,High,synth_highacc,4,2
+desk penalty staff stack journal,Library,High,synth_highacc,8,2
+vehicle provided breakdown fare driver,Transport,Medium,synth_highacc,5,0
+bluetooth connectivity pairing download modem,IT Support,Medium,synth_highacc,0,0
+midterm absent thesis final lecture,Academics,Medium,synth_highacc,2,0
+print thesis queue journal article,Library,High,synth_highacc,8,2
+latency shutdown router connectivity connect,IT Support,Medium,synth_highacc,0,0
+application seal rejected attestation issue,Administration,High,synth_highacc,7,2
+harrass environment sexual hostel ragging,Security / Discipline,Low,synth_highacc,6,1
+patrol fought witness investigate hostel,Security / Discipline,Medium,synth_highacc,6,0
+chapter syllabus summary placement report,Academics,Medium,synth_highacc,2,0
+practical chapter exam viva assignment,Academics,Low,synth_highacc,2,1
+the student profile section on the portal doesn t allow us to upload a new photograph the one from our first year is quite old and we d like to update it with a more professional one for our ids,Academics,Low,complaint_triage,2,1
+thesis grade lecturer seminar workshop,Academics,Low,synth_highacc,2,1
+bullied smuggling harassed threatened unsafe,Security / Discipline,Low,synth_highacc,6,1
+milk oil canteen food stale,Canteen,High,synth_highacc,9,2
+balance waiver enquiry application waiver,Fees / Finance,Low,synth_highacc,3,1
+washroom hanger stinking hanger strict,Hostels,Low,synth_highacc,1,1
+subject absent registration scholar revaluation,Academics,High,synth_highacc,2,2
+threaten assault life report arrest,Security / Discipline,Low,synth_highacc,6,1
+construction plumber debris fixture peeling,Maintenance,Medium,synth_highacc,4,0
+cctv smoke footage stalking examined ragging,Security / Discipline,High,synth_highacc,6,2
+charges card stipend outstanding reimbursement,Fees / Finance,Low,synth_highacc,3,1
+examination examination form registration attestation,Administration,Low,synth_highacc,7,1
+hygiene counter poor rotten worth,Canteen,High,synth_highacc,9,2
+cctv guard footage security examined offence,Security / Discipline,High,synth_highacc,6,2
+registration verification deadline signature scholarship,Administration,High,synth_highacc,7,2
+chair detergent broken table noisy,Hostels,High,synth_highacc,1,2
+the online portal for study abroad applications is incredibly slow it takes five minutes to load a single page and then it often times out and loses all my progress,Administration,Low,complaint_triage,7,1
+approval notary awaited rejected admission,Administration,High,synth_highacc,7,2
+clerk procedure rude guideline notice,Administration,Low,synth_highacc,7,1
+balance credited enquiry charges online,Fees / Finance,Medium,synth_highacc,3,0
+mosquito shampoo infestation hostel ventilator,Hostels,High,synth_highacc,1,2
+subject delay registration practical homework,Academics,Medium,synth_highacc,2,0
+tile pipe drill wire damage,Maintenance,Low,synth_highacc,4,1
+reading librarian area stack silent,Library,High,synth_highacc,8,2
+mosquito door net hostel shampoo,Hostels,High,synth_highacc,1,2
+policy missing amendment dean issue,Administration,Medium,synth_highacc,7,0
+cable freeze loose battery freeze,IT Support,High,synth_highacc,0,2
+the hallway lights on the 3rd floor of block g have been dead for three days it is pitch black at night and we have to use our phone torches to find our room keys it s a safety issue for the students please replace the tube lights or check the starter,Maintenance,Medium,complaint_triage,4,0
+stairwell railing is loose between the 2nd and 3rd floors the wooden handrail wobbles when you put weight on it it s a safety hazard especially when people are carrying heavy laundry bags up and down please tighten the brackets,Hostels,Medium,complaint_triage,1,0
+smuggling violence fraud rape abusing,Security / Discipline,Medium,synth_highacc,6,0
+concession installment payment reimbursement tax,Fees / Finance,Low,synth_highacc,3,1
+cycle bicycle bus overcrowded indicator,Transport,Low,synth_highacc,5,1
+deduction treasury extra bank grant,Fees / Finance,Medium,synth_highacc,3,0
+notebook timetable presentation curriculum textbook,Academics,Low,synth_highacc,2,1
+heater curtain element bunk shampoo,Hostels,Medium,synth_highacc,1,0
+journal scan subscription print author,Library,Low,synth_highacc,8,1
+fine stack waived expired zone,Library,Medium,synth_highacc,8,0
+the windows in the mess hall are a bit smudgy it would be nice if they could be cleaned on the outside once in a while so we can see the garden clearly while having our meals,Hostels,Low,complaint_triage,1,1
+form notarized download registration fee,Administration,Medium,synth_highacc,7,0
+roof brick leak broken worn,Maintenance,High,synth_highacc,4,2
+the door handle to the terrace is a bit stiff it works fine but you have to use a bit more force than usual to turn it a quick spray of wd 40 on the mechanism would probably make it move smoothly again,Maintenance,Low,complaint_triage,4,1
+clerk admission rude certificate fee,Administration,Medium,synth_highacc,7,0
+cashier finance credit loan waiver,Fees / Finance,High,synth_highacc,3,2
+chapati rice hard menu cheap,Canteen,Low,synth_highacc,9,1
+exam report schedule degree faculty,Academics,Medium,synth_highacc,2,0
+enrollment processing confirmed registrar approval,Administration,High,synth_highacc,7,2
+cctv investigate footage stole sexual,Security / Discipline,High,synth_highacc,6,2
+the graduation fee is 150 can someone explain why it costs so much just to get a piece of paper that we already earned,Administration,Low,complaint_triage,7,1
+milk chapati sauce food snack,Canteen,Medium,synth_highacc,9,0
+withdrawal delayed statement tuition finance,Fees / Finance,Medium,synth_highacc,3,0
+fixture lock replacement grill grill,Maintenance,Low,synth_highacc,4,1
+citation renew format borrow magazine,Library,Medium,synth_highacc,8,0
+weapon harrass seized abusing environment,Security / Discipline,Low,synth_highacc,6,1
+fiction absent available citation index,Library,High,synth_highacc,8,2
+card absent renewal index absent,Library,High,synth_highacc,8,2
+vegetable vegetable breakfast chicken quality,Canteen,Low,synth_highacc,9,1
+charges petrol extra mandatory mandatory,Transport,High,synth_highacc,5,2
+transaction upi finance bank reimbursement,Fees / Finance,Low,synth_highacc,3,1
+cook worth pickle curry spoil,Canteen,Low,synth_highacc,9,1
+server upload down firmware battery,IT Support,Medium,synth_highacc,0,0
+gear ticket problem provided battery,Transport,Medium,synth_highacc,5,0
+washroom toilet flush geyser window,Hostels,High,synth_highacc,1,2
+tea cheap cold sabzi daal,Canteen,Medium,synth_highacc,9,0
+carpenter garbage damage leak hinge,Maintenance,Low,synth_highacc,4,1
+hackathon scheduling was not communicated properly to students,Administration,Low,manual,7,1
+investigate arrest complaint camera thief,Security / Discipline,Medium,synth_highacc,6,0
+queue food long quality chicken,Canteen,High,synth_highacc,9,2
+thesis delay submission project scholar,Academics,Low,synth_highacc,2,1
+is there a way to get my student id photo changed the one i have is from four years ago and i don t even look like that person anymore,Administration,Low,complaint_triage,7,1
+application download rejected application attestation,Administration,Low,synth_highacc,7,1
+windscreen tyre broken diesel charges,Transport,Medium,synth_highacc,5,0
+scholarship payment renewal transaction card,Fees / Finance,High,synth_highacc,3,2
+latency upload desktop connectivity portal,IT Support,Medium,synth_highacc,0,0
+coffee taste bitter price meal,Canteen,High,synth_highacc,9,2
+transaction payment payable bank bank,Fees / Finance,Low,synth_highacc,3,1
+photocopy shelf journal print available,Library,High,synth_highacc,8,2
+penalty grant late processed grant,Fees / Finance,High,synth_highacc,3,2
+submission dean late certificate download,Administration,Medium,synth_highacc,7,0
+refund tax process fund receipt,Fees / Finance,Medium,synth_highacc,3,0
+subject project training topic diploma,Academics,Medium,synth_highacc,2,0
+research author paper publisher article,Library,Low,synth_highacc,8,1
+database penalty access audiobook almanac,Library,Medium,synth_highacc,8,0
+dust hinge accumulation maintenance window,Maintenance,High,synth_highacc,4,2
+receipt transaction generated application arrear,Fees / Finance,High,synth_highacc,3,2
+gym equipment in the hostel basement is poorly maintained two of the treadmills have frayed belts and the weights are rusting it s becoming unsafe for us to use the facility we would appreciate it if maintenance could oil the machines and check the cables,Hostels,Medium,complaint_triage,1,0
+theft harrass reported smoke laptop,Security / Discipline,Medium,synth_highacc,6,0
+vpn firewall routing freeze wlan,IT Support,Low,synth_highacc,0,1
+viva training conducted exam submission,Academics,Low,synth_highacc,2,1
+theft investigate laptop patrol,Security / Discipline,High,synth_highacc,6,2
+faculty postpone subject exam final,Academics,Low,synth_highacc,2,1
+registrar form office seal document,Administration,Medium,synth_highacc,7,0
+grill plaster welding exposed electrician,Maintenance,High,synth_highacc,4,2
+lock sewage broken brick cement,Maintenance,High,synth_highacc,4,2
+bandwidth scanner insufficient laptop down,IT Support,High,synth_highacc,0,2
+print borrow queue ebook ebook,Library,Low,synth_highacc,8,1
+patrol patrol caught investigate threaten,Security / Discipline,High,synth_highacc,6,2
+price fork water expensive menu,Canteen,High,synth_highacc,9,2
+article expired unavailable research fiction,Library,High,synth_highacc,8,2
+circular issue clarification pending notice,Administration,High,synth_highacc,7,2
+browser modem cache modem backup,IT Support,High,synth_highacc,0,2
+valve peeling damaged screwdriver socket,Maintenance,Low,synth_highacc,4,1
+scam teasing cybercrime complaint raped,Security / Discipline,Low,synth_highacc,6,1
+there is a group of people at the library entrance who are being very loud and making it hard to study they ve been there for two hours and don t seem to be students,Security / Discipline,Low,complaint_triage,6,1
+volume silent missing database zone,Library,High,synth_highacc,8,2
+seminar delayed certificate schedule lesson,Academics,Low,synth_highacc,2,1
+ragging molest vandalism fight molested,Security / Discipline,High,synth_highacc,6,2
+scholarship processing form admission transfer,Administration,High,synth_highacc,7,2
+snack vegetable items expensive expensive,Canteen,High,synth_highacc,9,2
+mosquito stinking infestation chair washroom,Hostels,High,synth_highacc,1,2
+college fest event registration was not working properly,Administration,High,manual,7,2
+roommate chair shifting shampoo detergent,Hostels,Medium,synth_highacc,1,0
+firewall desktop restricting server mac,IT Support,Low,synth_highacc,0,1
+pipe leaking joint leaking fix,Maintenance,Low,synth_highacc,4,1
+journal search binding aisle aisle,Library,Medium,synth_highacc,8,0
+pipeline fixture plumber fixture paint,Maintenance,Medium,synth_highacc,4,0
+hygiene meal poor daal plate,Canteen,High,synth_highacc,9,2
+scam sexual cybercrime sexual harassed,Security / Discipline,Medium,synth_highacc,6,0
+license provided suspended provided overcrowded,Transport,High,synth_highacc,5,2
+washroom toilet bathroom hostel drainage,Hostels,Low,synth_highacc,1,1
+assignment exam deadline paper syllabus,Academics,Low,synth_highacc,2,1
+lock wire broken wrench exposed,Maintenance,Low,synth_highacc,4,1
+patrol accused stole investigate hostel,Security / Discipline,High,synth_highacc,6,2
+exam quiz postponement schedule midterm,Academics,Medium,synth_highacc,2,0
+numberplate schedule cycle driver accident,Transport,Medium,synth_highacc,5,0
+enrollment hostel number examination clerk,Administration,Low,synth_highacc,7,1
+credit assignment transfer marks tutorial,Academics,Low,synth_highacc,2,1
+cycle provided stolen stop bicycle,Transport,Medium,synth_highacc,5,0
+drainage curtain clogged stinking sink,Hostels,High,synth_highacc,1,2
+latency working shutdown connectivity email,IT Support,High,synth_highacc,0,2
+why is the marketplace timed out i m trying to install a python extension on the campus wifi and it just spins,IT Support,Low,complaint_triage,0,1
+fee withdrawal structure fee audit,Fees / Finance,Medium,synth_highacc,3,0
+deadline submission sworn registration approval,Administration,High,synth_highacc,7,2
+reference reading desk article counter,Library,High,synth_highacc,8,2
+endorse circular document form application,Administration,High,synth_highacc,7,2
+battery rickshaw dead horn cab,Transport,Low,synth_highacc,5,1
+workshop lesson registration lecture answer,Academics,High,synth_highacc,2,2
+document fee missing guideline download,Administration,High,synth_highacc,7,2
+fee loan structure fund budget,Fees / Finance,High,synth_highacc,3,2
+registrar dean scholarship dean stamp,Administration,Medium,synth_highacc,7,0
+install configure authentication bug modem,IT Support,Medium,synth_highacc,0,0
+socket drill loose gutter wire,Maintenance,Medium,synth_highacc,4,0
+rotten mess pickle spoil stale,Canteen,Low,synth_highacc,9,1
+license petrol suspended diesel ticket,Transport,High,synth_highacc,5,2
+textbook seminar unavailable revaluation absent,Academics,Medium,synth_highacc,2,0
+attestation document signature processing attestation,Administration,Low,synth_highacc,7,1
+stalk molested stalking vandalism accused,Security / Discipline,High,synth_highacc,6,2
+edition print outdated fiction research,Library,Medium,synth_highacc,8,0
+bsods started after recent driver bundle blue screen roughly once per day event viewer indicates driver power state failure display driver rollback did not fix it please advise stable driver versions or rollback plan memory disk diagnostics passed logs are available moderate recurring impact,IT Support,Medium,complaint_triage,0,0
+hanger table broken heater slow,Hostels,Medium,synth_highacc,1,0
+route auto changed diesel cycle,Transport,High,synth_highacc,5,2
+subject final degree topic degree,Academics,Medium,synth_highacc,2,0
+tax bill deduction online deposit,Fees / Finance,Medium,synth_highacc,3,0
+bus license cleaning accident windscreen,Transport,Medium,synth_highacc,5,0
+bathroom almirah dirty bucket bathroom,Hostels,High,synth_highacc,1,2
+trespass ragging prohibited insult accused,Security / Discipline,Medium,synth_highacc,6,0
+mopping dust sweeping garbage drill,Maintenance,Low,synth_highacc,4,1
+conductor cab behaviour stop provided,Transport,Low,synth_highacc,5,1
+chair curtain broken almirah door,Hostels,Low,synth_highacc,1,1
+degree textbook delayed homework tutorial,Academics,Low,synth_highacc,2,1
+the water pressure in the bidet spray is way too high it s almost painful to use and it splashes water everywhere in the stall could the plumber adjust the pressure valve for the ground floor washrooms,Maintenance,Medium,complaint_triage,4,0
+install configure processor bug install,IT Support,Low,synth_highacc,0,1
+invoice finance pending bill gst,Fees / Finance,High,synth_highacc,3,2
+outstanding invoice amount stipend installment,Fees / Finance,Low,synth_highacc,3,1
+certificate guideline delayed circular examination,Administration,Medium,synth_highacc,7,0
+fan shampoo speed ventilator mosquito,Hostels,Medium,synth_highacc,1,0
+fare parking refund accident traffic,Transport,Low,synth_highacc,5,1
+coffee taste bitter lunch rice,Canteen,Medium,synth_highacc,9,0
+danger abusing warning danger cctv,Security / Discipline,Low,synth_highacc,6,1
+database almanac access aisle abstract,Library,Medium,synth_highacc,8,0
+fund budget concession credit application,Fees / Finance,High,synth_highacc,3,2
+the clock in the main hallway is stuck it s been showing 10 15 for two days it s a small thing but it s the only clock we have to check if we are on time for our lectures please replace the battery or the unit,Maintenance,Medium,complaint_triage,4,0
+midterm quiz teacher final credit,Academics,High,synth_highacc,2,2
+stop auto skipped seat shuttle,Transport,Medium,synth_highacc,5,0
+silent fiction zone desk renew,Library,Low,synth_highacc,8,1
+slipper heating shampoo bed towel,Hostels,High,synth_highacc,1,2
+accident pickup reported parking seat,Transport,Medium,synth_highacc,5,0
+research zone thesis reference journal,Library,Medium,synth_highacc,8,0
+vehicle gear inspection accident vehicle,Transport,Low,synth_highacc,5,1
+bathroom curtain dirty drainage stinking,Hostels,High,synth_highacc,1,2
+printer router offline protocol protocol,IT Support,High,synth_highacc,0,2
+canteen expensive stale cheap quality,Canteen,Medium,synth_highacc,9,0
+receipt payable generated due loan,Fees / Finance,Low,synth_highacc,3,1
+heater roommate element dirty washroom,Hostels,High,synth_highacc,1,2
+cement brick switch jammed hole,Maintenance,Medium,synth_highacc,4,0
+membership available renewal audiobook available,Library,Low,synth_highacc,8,1
+bill queue curry rate lunch,Canteen,High,synth_highacc,9,2
+smuggling complaint fraud fir teased,Security / Discipline,Low,synth_highacc,6,1
+water expensive unclean sauce mess,Canteen,High,synth_highacc,9,2
+chapati bill hard overcharge cook,Canteen,Low,synth_highacc,9,1
+registration missing slip application requested,Administration,Medium,synth_highacc,7,0
+fund budget bill delayed withdrawal,Fees / Finance,High,synth_highacc,3,2
+shelf rack aisle aisle edition,Library,Low,synth_highacc,8,1
+software install display update latency,IT Support,Low,synth_highacc,0,1
+withdrawal upi treasury tuition credited,Fees / Finance,Medium,synth_highacc,3,0
+research expired material article almanac,Library,Medium,synth_highacc,8,0
+practical project chapter viva practical,Academics,Low,synth_highacc,2,1
+abuse guard verbal thief caught,Security / Discipline,High,synth_highacc,6,2
+socket fuse socket stair pipeline,Maintenance,High,synth_highacc,4,2
+thesis database binding expired journal,Library,Low,synth_highacc,8,1
+window sink shutter shampoo expensive,Hostels,High,synth_highacc,1,2
+carpenter electrician crack leak sewage,Maintenance,Low,synth_highacc,4,1
+degree viva delayed internship tutorial,Academics,Low,synth_highacc,2,1
+warden bunk strict service stinking,Hostels,Medium,synth_highacc,1,0
+dean requested approval download notarized,Administration,High,synth_highacc,7,2
+locker slipper key heater soap,Hostels,Low,synth_highacc,1,1
+borrow fine period subscription expired,Library,Low,synth_highacc,8,1
+socket dust loose damage damage,Maintenance,Medium,synth_highacc,4,0
+server mac down bluetooth connect,IT Support,Low,synth_highacc,0,1
+dns connection shutdown bug error,IT Support,Low,synth_highacc,0,1
+patrol sexual environment investigate insult,Security / Discipline,Low,synth_highacc,6,1
+harass threatened smuggling bully smuggling,Security / Discipline,Medium,synth_highacc,6,0
+reading silent index citation return,Library,Medium,synth_highacc,8,0
+cashier debit online loan deposit,Fees / Finance,High,synth_highacc,3,2
+arrest insulting harassed offence offence,Security / Discipline,High,synth_highacc,6,2
+subject quiz registration notebook result,Academics,High,synth_highacc,2,2
+printer patch server not log,IT Support,Low,synth_highacc,0,1
+cable motherboard loose network display,IT Support,Medium,synth_highacc,0,0
+balance penalty enquiry scholarship audit,Fees / Finance,Medium,synth_highacc,3,0
+roommate corridor shifting tap curtain,Hostels,Low,synth_highacc,1,1
+penalty processed late tax deduction,Fees / Finance,Medium,synth_highacc,3,0
+parking taxi fee stop bicycle,Transport,Low,synth_highacc,5,1
+research print material scan almanac,Library,High,synth_highacc,8,2
+repairman electrician fuse maintenance roof,Maintenance,Medium,synth_highacc,4,0
+tyre taillight puncture fuel conductor,Transport,High,synth_highacc,5,2
+bill juice overcharge milk sauce,Canteen,High,synth_highacc,9,2
+loan withdrawal sanction refund concession,Fees / Finance,High,synth_highacc,3,2
+construction tube noise floor tile,Maintenance,Low,synth_highacc,4,1
+fee payment deadline is today but portal is not working,Library,High,query_test,8,2
+due deposit processed outstanding delayed,Fees / Finance,Medium,synth_highacc,3,0
+assignment grade deadline result delay,Academics,High,synth_highacc,2,2
+counter oil staff drink plate,Canteen,Low,synth_highacc,9,1
+threaten bullied life cctv harrass,Security / Discipline,High,synth_highacc,6,2
+abuse attack verbal investigate environment,Security / Discipline,Medium,synth_highacc,6,0
+kitchen counter glass meal rotten,Canteen,Medium,synth_highacc,9,0
+sabzi water food pickle canteen,Canteen,Low,synth_highacc,9,1
+ragging steal rape fight caught,Security / Discipline,Medium,synth_highacc,6,0
+approval regulation pending seal circular,Administration,Medium,synth_highacc,7,0
+attestation deadline needed signature clerk,Administration,Medium,synth_highacc,7,0
+curtain laundry hanger geyser geyser,Hostels,Low,synth_highacc,1,1
+bill snack overcharge cup pickle,Canteen,Low,synth_highacc,9,1
+locker balcony key cotton fan,Hostels,Medium,synth_highacc,1,0
+wire switch window tile hole,Maintenance,Medium,synth_highacc,4,0
+almirah cupboard corridor corridor drainage,Hostels,Medium,synth_highacc,1,0
+driver horn rash taillight windscreen,Transport,High,synth_highacc,5,2
+queue spoon long rate food,Canteen,High,synth_highacc,9,2
+shelf article labelling catalogue counter,Library,High,synth_highacc,8,2
+broken window latch on a ground floor room facing the main road the lock snapped and the window can now be opened from the outside by anyone this is a major security breach for the student living there especially at night i cannot leave my room unattended please send a carpenter to fix the latch before sunset,Maintenance,High,complaint_triage,4,2
+parking cycle full helmet provided,Transport,High,synth_highacc,5,2
+router modem fail download firewall,IT Support,Medium,synth_highacc,0,0
+photocopy thesis charges reference return,Library,High,synth_highacc,8,2
+vehicle numberplate inspection battery route,Transport,High,synth_highacc,5,2
+my bike was stolen from the racks outside the science block i locked it at 9 00 am and when i came back at 3 00 pm the lock was cut and the bike was gone this is the second time this month i ve seen a cut lock there,Security / Discipline,Medium,complaint_triage,6,0
+index aisle page stack magazine,Library,High,synth_highacc,8,2
+trespass fir prohibited abusing injured,Security / Discipline,Medium,synth_highacc,6,0
+driver headlight indicator conductor vehicle,Transport,Medium,synth_highacc,5,0
+scholarship card budget tuition receipt,Fees / Finance,Medium,synth_highacc,3,0
+oil food oil plate mess,Canteen,High,synth_highacc,9,2
+antivirus crash server firewall adapter,IT Support,Medium,synth_highacc,0,0
+the water dispenser near the main auditorium is always empty during the afternoon lectures it s the only one in that wing and students have to walk to the other side of the building for water can the refilling frequency be increased,Academics,Medium,complaint_triage,2,0
+detergent bathroom over strict locker,Hostels,Medium,synth_highacc,1,0
+plagiarism flag on a completely original assignment the software claims 90 similarity with a paper that doesn t exist the professor has given me a zero and reported me to the disciplinary committee i have a hearing tomorrow and i need the raw log files from the academic server to prove it was a system glitch,Academics,High,complaint_triage,2,2
+diesel windscreen petrol tyre vehicle,Transport,Low,synth_highacc,5,1
+pipeline cracked leakage pipe hole,Maintenance,Medium,synth_highacc,4,0
+clerk dean issue admission status,Administration,Low,synth_highacc,7,1
+bus taxi late brake rickshaw,Transport,Low,synth_highacc,5,1
+install configure reboot password download,IT Support,Low,synth_highacc,0,1
+fir cybercrime lodged sexually injured,Security / Discipline,Low,synth_highacc,6,1
+dust roof accumulation broken leaking,Maintenance,High,synth_highacc,4,2
+traffic tyre charges accident numberplate,Transport,Medium,synth_highacc,5,0
+transaction interest failed remit debit,Fees / Finance,Medium,synth_highacc,3,0
+penalty scholarship late delayed online,Fees / Finance,Medium,synth_highacc,3,0
+circular procedure clarification processing certificate,Administration,High,synth_highacc,7,2
+credit debit delayed stipend credited,Fees / Finance,Medium,synth_highacc,3,0
+evidence insulting destroyed ragging raped,Security / Discipline,Low,synth_highacc,6,1
+rice oil undercook sabzi water,Canteen,Low,synth_highacc,9,1
+cotton curtain roommate pillow ventilator,Hostels,High,synth_highacc,1,2
+stop provided unsafe route brake,Transport,Low,synth_highacc,5,1
+result submission published syllabus score,Academics,Medium,synth_highacc,2,0
+electrical sparks coming from the bathroom geyser in block b every time i switch on the water heater there is a loud pop and visible blue sparks this is a massive fire risk and someone could get electrocuted i have turned off the mains but this needs an emergency electrician right now,Hostels,High,complaint_triage,1,2
+door hanger lock bunk roommate,Hostels,Medium,synth_highacc,1,0
+patrol molest increased prohibited unsafe,Security / Discipline,Low,synth_highacc,6,1
+journal edition missing card fine,Library,Low,synth_highacc,8,1
+snack salad items tea plate,Canteen,High,synth_highacc,9,2
+sewage cement backup plaster dust,Maintenance,High,synth_highacc,4,2
+membership reference expire ebook subscription,Library,High,synth_highacc,8,2
+download laptop stuck login bandwidth,IT Support,High,synth_highacc,0,2
+notice status board fee dean,Administration,Low,synth_highacc,7,1
+the 5 30 pm bus is always late because of the traffic at the main intersection maybe the route could be changed to avoid that light,Transport,Low,complaint_triage,5,1
+stipend finance disbursed concession finance,Fees / Finance,Medium,synth_highacc,3,0
+circular notice download requested procedure,Administration,Medium,synth_highacc,7,0
+volume edition publisher nonfiction audiobook,Library,Medium,synth_highacc,8,0
+form notice download processing processing,Administration,Medium,synth_highacc,7,0
+route vehicle changed diesel schedule,Transport,Low,synth_highacc,5,1
+danger laptop warning stole molested,Security / Discipline,High,synth_highacc,6,2
+headlight taillight bicycle brake meter,Transport,Medium,synth_highacc,5,0
+installment upi refund receipt penalty,Fees / Finance,High,synth_highacc,3,2
+edition article outdated card card,Library,Medium,synth_highacc,8,0
+the water fountain in the sports wing of the academic block has a very low arc it s hard to drink from it directly without touching the metal adjusting the water pressure slightly would be more hygienic,Academics,Low,complaint_triage,2,1
+enrollment submission circular registration pending,Administration,Medium,synth_highacc,7,0
+fund budget deposit fund credited,Fees / Finance,Medium,synth_highacc,3,0
+brake clutch seat cycle conductor,Transport,Low,synth_highacc,5,1
+enrollment clerk attestation registration form,Administration,Medium,synth_highacc,7,0
+balance application enquiry withdrawal delayed,Fees / Finance,Low,synth_highacc,3,1
+curtain expensive bunk geyser fan,Hostels,Medium,synth_highacc,1,0
+drink vegetable overcharge juice mess,Canteen,Medium,synth_highacc,9,0
+abuse assault harrass threaten abusing,Security / Discipline,Medium,synth_highacc,6,0
+training notebook program delayed delayed,Academics,High,synth_highacc,2,2
+bully harassed complaint assaulted assault,Security / Discipline,Low,synth_highacc,6,1
+stop traffic missing taxi gear,Transport,Low,synth_highacc,5,1
+rotten juice bill spoil water,Canteen,Low,synth_highacc,9,1
+seat charges reserved diesel ticket,Transport,Medium,synth_highacc,5,0
+floor construction mopping stair floor,Maintenance,Medium,synth_highacc,4,0
+examination verification form circular letterhead,Administration,Low,synth_highacc,7,1
+kidnap thieves murder fir patrol,Security / Discipline,Low,synth_highacc,6,1
+subject chapter elective viva credit,Academics,High,synth_highacc,2,2
+bill waiver payment invoice credited,Fees / Finance,High,synth_highacc,3,2
+fuel gear shortage taxi mandatory,Transport,High,synth_highacc,5,2
+bus accident cleaning clutch helmet,Transport,High,synth_highacc,5,2
+attack steals robbery bully harrash,Security / Discipline,Medium,synth_highacc,6,0
+keyboard patch typing download usb,IT Support,Low,synth_highacc,0,1
+mess vegetable chapati food cheap,Canteen,Low,synth_highacc,9,1
+plaster replace falling screwdriver crack,Maintenance,Medium,synth_highacc,4,0
+bathroom towel dirty service drainage,Hostels,Low,synth_highacc,1,1
+syllabus professor revision practical project,Academics,Low,synth_highacc,2,1
+projector install shutdown cable firewall,IT Support,High,synth_highacc,0,2
+cheap snack fork worth menu,Canteen,High,synth_highacc,9,2
+endorse dean document verification regulation,Administration,Low,synth_highacc,7,1
+backup log restore usb log,IT Support,Medium,synth_highacc,0,0
+presentation seminar submission group credit,Academics,High,synth_highacc,2,2
+group lecturer project result project,Academics,Low,synth_highacc,2,1
+bill drink quality rate spoil,Canteen,Low,synth_highacc,9,1
+attestation fee signature notarized scholarship,Administration,Medium,synth_highacc,7,0
+socket dust loose jammed paint,Maintenance,Low,synth_highacc,4,1
+journal periodical subscription search nonfiction,Library,Low,synth_highacc,8,1
+danger harrash environment unsafe bullied,Security / Discipline,Low,synth_highacc,6,1
+laundry pillow machine heating cotton,Hostels,Medium,synth_highacc,1,0
+approval registration pending delay notarized,Administration,Low,synth_highacc,7,1
+floor drill slippery window jammed,Maintenance,Medium,synth_highacc,4,0
+roof dust leak sparking carpenter,Maintenance,Medium,synth_highacc,4,0
+interest payable rate bill budget,Fees / Finance,High,synth_highacc,3,2
+water hostel supply strict chair,Hostels,High,synth_highacc,1,2
+tutorial delay cancelled project submission,Academics,High,synth_highacc,2,2
+alcohol violence harrass smoke prohibited,Security / Discipline,High,synth_highacc,6,2
+brake clutch accident route taillight,Transport,Low,synth_highacc,5,1
+schedule taillight accident fare diesel,Transport,High,synth_highacc,5,2
+harrass unsafe sexual complaint sexually,Security / Discipline,High,synth_highacc,6,2
+card catalogue search zone return,Library,High,synth_highacc,8,2
+battery petrol dead mirror windscreen,Transport,Low,synth_highacc,5,1
+registrar verification office letterhead notice,Administration,Low,synth_highacc,7,1
+due balance date arrear interest,Fees / Finance,Medium,synth_highacc,3,0
+fund budget transfer scholarship statement,Fees / Finance,Low,synth_highacc,3,1
+procedure migration enquiry notary document,Administration,Low,synth_highacc,7,1
+suggestion to organize a small workshop on latex for the first year students most of us are struggling with formatting our lab reports and a basic one hour introductory session would be very beneficial,Academics,Low,complaint_triage,2,1
+topic textbook unclear absent revaluation,Academics,High,synth_highacc,2,2
+mentor overdue guidance missing homework,Academics,Medium,synth_highacc,2,0
+professor faculty lesson lecture postpone,Academics,Low,synth_highacc,2,1
+curtain towel exhaust geyser expensive,Hostels,Low,synth_highacc,1,1
+kidnap smuggling murder surveillance smoke,Security / Discipline,Low,synth_highacc,6,1
+mess cheap quality oil mess,Canteen,High,synth_highacc,9,2
+mopping burst mopping garbage fused,Maintenance,Medium,synth_highacc,4,0
+transfer form certificate bonafide guideline,Administration,Medium,synth_highacc,7,0
+pillow strict flat shampoo ventilator,Hostels,Low,synth_highacc,1,1
+internet configure mouse network download,IT Support,High,synth_highacc,0,2
+i was dropped from my nursing clinicals because the admin office lost my cpr certification card i gave them the original and now they say they never saw it i can t finish my degree without those hours,Administration,High,complaint_triage,7,2
+snack rice items worth daal,Canteen,High,synth_highacc,9,2
+the door to the terrace makes a loud squeaking sound it s a bit annoying for the students living in the rooms right next to the stairs a little bit of oil on the hinges should solve it easily,Hostels,Low,complaint_triage,1,1
+sink window pipe window locker,Hostels,Medium,synth_highacc,1,0
+gear indicator seat bicycle vehicle,Transport,High,synth_highacc,5,2
+practical group internship viva training,Academics,Medium,synth_highacc,2,0
+towel bed rough pillow table,Hostels,Low,synth_highacc,1,1
+homework viva internship project deadline,Academics,Medium,synth_highacc,2,0
+sexual assaulted harassment theft cctv,Security / Discipline,Medium,synth_highacc,6,0
+meter seat tampered clutch gear,Transport,High,synth_highacc,5,2
+aisle article light nonfiction librarian,Library,High,synth_highacc,8,2
+roommate chair shifting window mosquito,Hostels,Medium,synth_highacc,1,0
+circular notice policy stamp registrar,Administration,Low,synth_highacc,7,1
+application notarized rejected registrar processing,Administration,High,synth_highacc,7,2
+patrol culprit bullied investigate culprit,Security / Discipline,Low,synth_highacc,6,1
+hammer sewage cement screwdriver brick,Maintenance,Medium,synth_highacc,4,0
+conductor bus behaviour route bus,Transport,Low,synth_highacc,5,1
+certificate guideline circular application migration,Administration,Medium,synth_highacc,7,0
+scholarship charges account tuition cashier,Fees / Finance,Low,synth_highacc,3,1
+counter scan staff volume stack,Library,Medium,synth_highacc,8,0
+exam topic schedule midterm absent,Academics,Medium,synth_highacc,2,0
+helmet rickshaw provided license accident,Transport,High,synth_highacc,5,2
+driver clutch van conductor overcrowded,Transport,High,synth_highacc,5,2
+bill deduction payment refund credit,Fees / Finance,Medium,synth_highacc,3,0
+antivirus internet email firewall antivirus,IT Support,Low,synth_highacc,0,1
+registrar enrollment stamp dean download,Administration,High,synth_highacc,7,2
+kidnap guard murder fought steal,Security / Discipline,Low,synth_highacc,6,1
+bunk locker bathroom door slow,Hostels,Low,synth_highacc,1,1
+the lighting in the laundry room is a bit yellow switching to a cool white led would make it much easier to see if there are any stains left on our white lab coats it s a minor preference but it would help,Maintenance,Low,complaint_triage,4,1
+auto rickshaw parking fuel meter,Transport,Low,synth_highacc,5,1
+print volume queue shelf fine,Library,High,synth_highacc,8,2
+conductor accident behaviour rickshaw indicator,Transport,Medium,synth_highacc,5,0
+headlight fare dim clutch meter,Transport,High,synth_highacc,5,2
+lunch lunch sauce breakfast canteen,Canteen,Medium,synth_highacc,9,0
+software motherboard crashing download keyboard,IT Support,High,synth_highacc,0,2
+the window handles in the seminar hall are a bit dusty it looks like they were missed during the last cleaning round a quick wipe down with a damp cloth is all they need to look new again,Maintenance,Low,complaint_triage,4,1
+drink juice cheap juice queue,Canteen,High,synth_highacc,9,2
+spoon egg sabzi fork expensive,Canteen,Low,synth_highacc,9,1
+invoice fee duplicate due statement,Fees / Finance,High,synth_highacc,3,2
+software shutdown bluetooth update error,IT Support,High,synth_highacc,0,2
+heater fan element almirah dirty,Hostels,Medium,synth_highacc,1,0
+suggestion for a water dispenser on the 3rd floor currently we have to go down to the ground floor every time we need to refill our bottles having one on each floor would be much more convenient for the residents,Hostels,Low,complaint_triage,1,1
+fan locker speed detergent balcony,Hostels,Medium,synth_highacc,1,0
+meter charges tampered horn windscreen,Transport,Medium,synth_highacc,5,0
+print publisher black audiobook ebook,Library,High,synth_highacc,8,2
+witness prohibited statement trespass harrass,Security / Discipline,High,synth_highacc,6,2
+construction paint noise tile peeling,Maintenance,High,synth_highacc,4,2
+seat bicycle broken van van,Transport,Medium,synth_highacc,5,0
+install configure configure connectivity bug,IT Support,Low,synth_highacc,0,1
+floor paint slippery drain cleaning,Maintenance,Low,synth_highacc,4,1
+laundry bed machine inverter mug,Hostels,Low,synth_highacc,1,1
+database aisle access absent audiobook,Library,Low,synth_highacc,8,1
+server connectivity down ssd ethernet,IT Support,High,synth_highacc,0,2
+driver taillight rash license helmet,Transport,High,synth_highacc,5,2
+counter cheap staff chapati egg,Canteen,Medium,synth_highacc,9,0
+fee payable waiver cashier transaction,Fees / Finance,Low,synth_highacc,3,1
+drink rate salad juice worth,Canteen,High,synth_highacc,9,2
+reboot shutdown restart monitor connect,IT Support,High,synth_highacc,0,2
+lunch cook delayed cheap oil,Canteen,High,synth_highacc,9,2
+a student is being held against their will in a car in the south parking lot i saw them struggling and shouting for help as the car drove off the plate started with xyz please help,Security / Discipline,High,complaint_triage,6,2
+degree quiz placement diploma answer,Academics,Medium,synth_highacc,2,0
+coffee expensive bitter lunch sauce,Canteen,Low,synth_highacc,9,1
+fight interrogate broke thief smoke,Security / Discipline,High,synth_highacc,6,2
+valve screwdriver damaged crack sparking,Maintenance,Low,synth_highacc,4,1
+bill fee incorrect netbanking interest,Fees / Finance,Medium,synth_highacc,3,0
+credit lecture transfer paper syllabus,Academics,Medium,synth_highacc,2,0
+vehicle pickup shuttle parking diesel,Transport,Medium,synth_highacc,5,0
+email firewall sending mac ram,IT Support,Low,synth_highacc,0,1
+roommate slow noisy staircase door,Hostels,High,synth_highacc,1,2
+slipper geyser toilet bed window,Hostels,Medium,synth_highacc,1,0
+cement brick cleaning brick urgent,Maintenance,Low,synth_highacc,4,1
+coffee lunch bitter overcharge overcharge,Canteen,Low,synth_highacc,9,1
+the forgot password link on the student portal isn t sending any emails i ve checked my spam and my alternate email i m locked out of my homework assignments,Administration,Medium,complaint_triage,7,0
+citation card format index print,Library,Medium,synth_highacc,8,0
+shampoo blanket finished roommate noisy,Hostels,Medium,synth_highacc,1,0
+photocopy author charges volume rack,Library,Medium,synth_highacc,8,0
+inverter dirty backup geyser mosquito,Hostels,Medium,synth_highacc,1,0
+table inverter wobbling locker chair,Hostels,High,synth_highacc,1,2
+pipeline ceiling maintenance fixture fused,Maintenance,High,synth_highacc,4,2
+bucket almirah cracked hanger service,Hostels,High,synth_highacc,1,2
+electrician mopping renovation repair pane,Maintenance,High,synth_highacc,4,2
+evidence drugs collected threaten abusing,Security / Discipline,Medium,synth_highacc,6,0
+pipeline sweeping leakage fused hinge,Maintenance,Low,synth_highacc,4,1
+fee upi waiver arrear fee,Fees / Finance,Medium,synth_highacc,3,0
+registration certificate deadline guideline stamp,Administration,High,synth_highacc,7,2
+scan fiction fiction librarian newspaper,Library,Medium,synth_highacc,8,0
+penalty print charged newspaper edition,Library,High,synth_highacc,8,2
+weapon bullied seized senior stolen,Security / Discipline,High,synth_highacc,6,2
+authentication configure software slow,IT Support,High,synth_highacc,0,2
+authentication firmware invalid fail crash,IT Support,High,synth_highacc,0,2
+magazine absent torn zone database,Library,Low,synth_highacc,8,1
+the bus driver was being very aggressive with his horn and yelling at other drivers in traffic it was very embarrassing and made the university look bad,Transport,Medium,complaint_triage,5,0
+deadline submission clerk scholarship download,Administration,High,synth_highacc,7,2
+cup oil hygiene glass mess,Canteen,High,synth_highacc,9,2
+shampoo mattress finished table sink,Hostels,Medium,synth_highacc,1,0
+bus indicator cleaning brake ticket,Transport,Low,synth_highacc,5,1
+bucket cupboard cracked cupboard service,Hostels,Low,synth_highacc,1,1
+software bluetooth ram update login,IT Support,High,synth_highacc,0,2
+theft stranger reported stranger witness,Security / Discipline,High,synth_highacc,6,2
+drainage washroom overflowing noisy service,Hostels,Medium,synth_highacc,1,0
+internship timetable opportunity marks marks,Academics,Medium,synth_highacc,2,0
+water fan supply water bunk,Hostels,Medium,synth_highacc,1,0
+printer antivirus connectivity not computer,IT Support,Medium,synth_highacc,0,0
+waiver credit rejected account fee,Fees / Finance,Low,synth_highacc,3,1
+clerk notary submit admission verification,Administration,Medium,synth_highacc,7,0
+membership stack renewal database photocopy,Library,High,synth_highacc,8,2
+payment interest failed balance interest,Fees / Finance,High,synth_highacc,3,2
+projector not detected via hdmi in seminar room cable works on a different laptop my device mirrors briefly then disconnects any recommended adapter or driver weekly seminars depend on this,IT Support,Low,complaint_triage,0,1
+bus mirror cleaning windscreen windscreen,Transport,High,synth_highacc,5,2
+lunch drink counter breakfast canteen,Canteen,High,synth_highacc,9,2
+notice certificate board missing guideline,Administration,Medium,synth_highacc,7,0
+rice pickle counter chapati queue,Canteen,Low,synth_highacc,9,1
+browser modem cache restart install,IT Support,Low,synth_highacc,0,1
+examination letterhead form issue scholarship,Administration,Low,synth_highacc,7,1
+suggestion to add a common abbreviations sheet to the project management course there are a lot of acronyms used in the lectures and a quick reference guide would be helpful for the new students,Academics,Low,complaint_triage,2,1
+stipend delayed fee grant transaction,Fees / Finance,Medium,synth_highacc,3,0
+signature regulation attestation status seal,Administration,Low,synth_highacc,7,1
+cleaning maintenance repair sweeping carpenter,Maintenance,Low,synth_highacc,4,1
+driver login storage patch update,IT Support,High,synth_highacc,0,2
+finance treasury fee arrear refund,Fees / Finance,High,synth_highacc,3,2
+withdrawal invoice online tuition due,Fees / Finance,Low,synth_highacc,3,1
+mess rate quality plate quality,Canteen,Low,synth_highacc,9,1
+detergent geyser over expensive bunk,Hostels,Low,synth_highacc,1,1
+floor paint mopping sparking drain,Maintenance,High,synth_highacc,4,2
+electrician hole wiring gutter cracked,Maintenance,Medium,synth_highacc,4,0
+maintenance plaster needed exposed plaster,Maintenance,High,synth_highacc,4,2
+vpn email disconnecting install vpn,IT Support,Medium,synth_highacc,0,0
+rotten egg cheap spoil cup,Canteen,High,synth_highacc,9,2
+traffic driver jam tyre headlight,Transport,Medium,synth_highacc,5,0
+hostel sink gate mattress hanger,Hostels,High,synth_highacc,1,2
+the ac in the bus is so cold that i have to bring a jacket even when it s hot outside can the temperature be set to something more reasonable,Transport,Low,complaint_triage,5,1
+taste fresh bad fresh cook,Canteen,High,synth_highacc,9,2
+fare overcrowded increased fare van,Transport,Medium,synth_highacc,5,0
+the bank branch inside the campus is understaffed during the fee payment week the queues are so long that students are missing 2 3 lectures just to get a challan stamped can the finance office request the bank to open an extra counter during peak hours,Fees / Finance,Medium,complaint_triage,3,0
+schedule shuttle delayed fare schedule,Transport,Medium,synth_highacc,5,0
+shampoo soap finished towel tap,Hostels,Low,synth_highacc,1,1
+degree seminar score diploma paper,Academics,Low,synth_highacc,2,1
+question cancel paper workshop overdue,Academics,Medium,synth_highacc,2,0
+wire switch maintenance ladder dust,Maintenance,Medium,synth_highacc,4,0
+my scholarship amount was credited but it s 2 000 less than the sanctioned amount is there a processing fee or a tax deduction that i wasn t aware of i need an itemized statement of the disbursement for my personal records,Fees / Finance,Medium,complaint_triage,3,0
+book fine damaged periodical section,Library,Medium,synth_highacc,8,0
+fee processed pending remit bank,Fees / Finance,High,synth_highacc,3,2
+guard stalking sleeping thief victim,Security / Discipline,Low,synth_highacc,6,1
+edition nonfiction outdated penalty overdue,Library,Medium,synth_highacc,8,0
+vehicle petrol accident parking brake,Transport,Medium,synth_highacc,5,0
+ventilator bunk exhaust locker bathroom,Hostels,Medium,synth_highacc,1,0
+thesis result approval delayed overdue,Academics,Medium,synth_highacc,2,0
+desk silent staff citation search,Library,Low,synth_highacc,8,1
+fan heating speed heater warden,Hostels,Medium,synth_highacc,1,0
+towel soap rough locker roommate,Hostels,Low,synth_highacc,1,1
+cycle battery stolen taillight cycle,Transport,Low,synth_highacc,5,1
+scan edition document rack index,Library,Medium,synth_highacc,8,0
+bullied abused harassed teasing caught,Security / Discipline,Low,synth_highacc,6,1
+stop accident unsafe battery battery,Transport,Low,synth_highacc,5,1
+suggestion for a mirror in the elevator it s a small addition but most modern lifts have one and it makes the space feel a bit larger and less cramped when there are many people inside,Hostels,Low,complaint_triage,1,1
+curtain roommate flush geyser water,Hostels,Medium,synth_highacc,1,0
+washroom toilet service towel cotton,Hostels,High,synth_highacc,1,2
+trespass interrogate prohibited harrash haras,Security / Discipline,High,synth_highacc,6,2
+membership periodical renewal book catalogue,Library,Low,synth_highacc,8,1
+scan database document thesis borrow,Library,Medium,synth_highacc,8,0
+chapter report workshop textbook cancel,Academics,High,synth_highacc,2,2
+grade curriculum calculation marks midterm,Academics,Medium,synth_highacc,2,0
+socket fuse screwdriver plaster cracked,Maintenance,Medium,synth_highacc,4,0
+dust wire pipeline drill switch,Maintenance,Medium,synth_highacc,4,0
+crack cleaning wall drill door,Maintenance,Medium,synth_highacc,4,0
+router modem processor password cache,IT Support,Medium,synth_highacc,0,0
+dust brick accumulation bulb fuse,Maintenance,Low,synth_highacc,4,1
+rice mess stale chapati salad,Canteen,Medium,synth_highacc,9,0
+renew research research fine photocopy,Library,High,synth_highacc,8,2
+return photocopy reminder section counter,Library,High,synth_highacc,8,2
+dust leak accumulation mopping drill,Maintenance,Medium,synth_highacc,4,0
+modem protocol signal password fail,IT Support,High,synth_highacc,0,2
+carpenter hole furniture repairman drain,Maintenance,Low,synth_highacc,4,1
+the ceiling fan in the common room is a bit dusty it s blowing a lot of dust around when it s turned on it just needs a quick wipe down by the cleaning staff during their next round,Hostels,Low,complaint_triage,1,1
+water tank overflow is flooding the stairwell of block e the float valve has failed and hundreds of gallons of water are cascading down the stairs making them extremely slippery this is wasting a massive amount of water and creating a fall hazard for everyone in the building,Maintenance,High,complaint_triage,4,2
+window pillow shutter tap detergent,Hostels,High,synth_highacc,1,2
+antivirus cloud blocking storage rebooting,IT Support,Medium,synth_highacc,0,0
+i was charged a convenience fee for an offline cash deposit at the bank i thought these charges were only for online transactions can the finance branch clarify if this is a new policy for the current academic year,Fees / Finance,Medium,complaint_triage,3,0
+librarian article help reading fiction,Library,Medium,synth_highacc,8,0
+syllabus final revision chapter overdue,Academics,Medium,synth_highacc,2,0
+quiz submission result assignment notebook,Academics,Medium,synth_highacc,2,0
+gst stipend charges refund transaction,Fees / Finance,High,synth_highacc,3,2
+tile leak cracked hinge repairman,Maintenance,Low,synth_highacc,4,1
+soap sink missing roommate towel,Hostels,High,synth_highacc,1,2
+netbanking fee upi cashier pending,Fees / Finance,Low,synth_highacc,3,1
+exam midterm timetable cancel notebook,Academics,Low,synth_highacc,2,1
+result marks published marks delayed,Academics,High,synth_highacc,2,2
+the dean s list certificates were mailed to my old address even though i updated my current one on the portal months ago now my documents are lost in the mail,Administration,Low,complaint_triage,7,1
+syllabus topic revision project delay,Academics,Medium,synth_highacc,2,0
+finance balance office processed pending,Fees / Finance,Low,synth_highacc,3,1
+penalty penalty late tuition reimbursement,Fees / Finance,Medium,synth_highacc,3,0
+download antivirus speed laptop slow working,IT Support,Medium,synth_highacc,0,0
+bank transfer transfer budget grant,Fees / Finance,Medium,synth_highacc,3,0
+headlight indicator dim taxi parking,Transport,Low,synth_highacc,5,1
+washroom toilet bucket drainage laundry,Hostels,Low,synth_highacc,1,1
+index author page journal ebook,Library,Medium,synth_highacc,8,0
+printer cache jam keyboard backup,IT Support,High,synth_highacc,0,2
+weapon prohibited found bullied insulting,Security / Discipline,Low,synth_highacc,6,1
+indicator diesel broken taillight numberplate,Transport,Low,synth_highacc,5,1
+vpn offline routing speed slow,IT Support,Low,synth_highacc,0,1
+towel blanket rough bunk expensive,Hostels,Low,synth_highacc,1,1
+workshop credit registration deadline grading,Academics,High,synth_highacc,2,2
+balance deposit enquiry fund deduction,Fees / Finance,Medium,synth_highacc,3,0
+exam scholar postponement paper mentor,Academics,High,synth_highacc,2,2
+pillow table flat shampoo tap,Hostels,Low,synth_highacc,1,1
+counter desk almanac expired database,Library,Low,synth_highacc,8,1
+chapter lesson assignment textbook question,Academics,Low,synth_highacc,2,1
+chair laundry broken inverter mosquito,Hostels,High,synth_highacc,1,2
+raped sexually assaulted senior rape,Security / Discipline,High,synth_highacc,6,2
+official verification document delay dean,Administration,Low,synth_highacc,7,1
+fee cashier pending bill cashier,Fees / Finance,Low,synth_highacc,3,1
+fir attack weapon complaint kidnap,Security / Discipline,Medium,synth_highacc,6,0
+tea milk expensive coffee expensive,Canteen,High,synth_highacc,9,2
+counter reading staff magazine index,Library,High,synth_highacc,8,2
+there is a lot of background noise in the pre recorded lectures for software engineering we can hear construction sounds and other people talking which makes it very hard to follow the instructor could the audio be cleaned up or the videos re recorded,Academics,Medium,complaint_triage,2,0
+registration submit completed bonafide clerk,Administration,Low,synth_highacc,7,1
+official affidavit document awaiting stamp,Administration,High,synth_highacc,7,2
+auto shuttle overcharge cycle headlight,Transport,Medium,synth_highacc,5,0
+bus cycle late headlight traffic,Transport,High,synth_highacc,5,2
+need an explanation for the insurance premium deduction i noticed a 500 rupee charge for student insurance but i never received any policy documents or details on what it covers can the accounts office send us the digital policy copy,Fees / Finance,Medium,complaint_triage,3,0
+research shelf paper volume database,Library,High,synth_highacc,8,2
+procedure official transfer policy stamp,Administration,Low,synth_highacc,7,1
+fir molested lodged ragging offence,Security / Discipline,Low,synth_highacc,6,1
+the microphone in lt 2 is constantly buzzing during the advanced algorithms class we can barely hear the professor s explanations from the back rows this has been an issue for two weeks and the technician hasn t fixed it despite several verbal complaints it s affecting our understanding of complex topics,Academics,Medium,complaint_triage,2,0
+spoon spoil meal fork mess,Canteen,Medium,synth_highacc,9,0
+the whiteboards in the study hall are getting stained and hard to erase can we get some proper whiteboard cleaner or a fresh set of markers and erasers for the residents to use,Hostels,Low,complaint_triage,1,1
+the blinds in the computer lab have a small cord that is fraying they still work fine for now but the cord might snap in a few months it would be good to replace it before it becomes a real problem,Maintenance,Low,complaint_triage,4,1
+fee reimbursement structure installment tuition,Fees / Finance,Low,synth_highacc,3,1
+the digital notice board in the entrance hall has a few dead pixels it s not affecting the readability yet but it s a bit distracting when watching the departmental news scrolls,Academics,Low,complaint_triage,2,1
+install configure wlan display battery,IT Support,Medium,synth_highacc,0,0
+software protocol license ethernet backup,IT Support,Medium,synth_highacc,0,0
+construction screwdriver noise switch brick,Maintenance,High,synth_highacc,4,2
+sabzi juice daal pickle drink,Canteen,Low,synth_highacc,9,1
+theft harassment reported smuggling assault,Security / Discipline,Low,synth_highacc,6,1
+modem mouse signal ssd adapter,IT Support,High,synth_highacc,0,2
+statement treasury account installment due,Fees / Finance,Medium,synth_highacc,3,0
+snack overcharge items chicken menu,Canteen,High,synth_highacc,9,2
+electrician burst pipe repair peeling,Maintenance,High,synth_highacc,4,2
+charger display adapter hardware portal,IT Support,High,synth_highacc,0,2
+ceiling repair repair door hinge,Maintenance,Medium,synth_highacc,4,0
+dinner menu served meal worth,Canteen,Low,synth_highacc,9,1
+book nonfiction overdue available volume,Library,Medium,synth_highacc,8,0
+examination deadline form clerk bonafide,Administration,Low,synth_highacc,7,1
+ebook volume audiobook citation absent,Library,High,synth_highacc,8,2
+vehicle traffic indicator parking windscreen,Transport,Low,synth_highacc,5,1
+stop petrol unsafe ticket shuttle,Transport,Low,synth_highacc,5,1
+balance tax enquiry credited payable,Fees / Finance,High,synth_highacc,3,2
+witness harassed statement patrol stalk,Security / Discipline,High,synth_highacc,6,2
+application letterhead fee status requested,Administration,Medium,synth_highacc,7,0
+lost my physical answer script for the internal test the teacher says she doesn t have it but i signed the attendance sheet in the exam hall i refuse to take a zero for a mistake made by the department we need to find the paper or allow me a retest with full marks potential,Academics,High,complaint_triage,2,2
+hygiene menu poor food sabzi,Canteen,Low,synth_highacc,9,1
+concession fund applied grant pending,Fees / Finance,Low,synth_highacc,3,1
+registration delay deadline rejected deadline,Administration,Low,synth_highacc,7,1
+hostel water door almirah,Hostels,Medium,synth_highacc,1,0
+return nonfiction reminder desk available,Library,Low,synth_highacc,8,1
+fuel rickshaw shortage seat meter,Transport,Low,synth_highacc,5,1
+stop horn missing diesel helmet,Transport,Medium,synth_highacc,5,0
+receipt credit lost pending arrear,Fees / Finance,Medium,synth_highacc,3,0
+oil chapati kitchen plate menu,Canteen,High,synth_highacc,9,2
+plaster sweeping falling dust replace,Maintenance,Low,synth_highacc,4,1
+examination migration form attestation pending,Administration,Medium,synth_highacc,7,0
+fine counter waived edition zone,Library,High,synth_highacc,8,2
+reboot shutdown latency usb ram,IT Support,Low,synth_highacc,0,1
+book bibliography damaged membership bibliography,Library,Medium,synth_highacc,8,0
+major discrepancy in my end term marks for data structures the portal shows i have failed the course but i calculated my internals and they were well above the passing threshold i suspect my paper was swapped or there was a massive data entry error at the controller s office i need to see my evaluated script immediately before the re registration window closes tomorrow,Academics,High,complaint_triage,2,2
+submission document late scholarship missing,Administration,High,synth_highacc,7,2
+abuse culprit verbal fraud assaulted,Security / Discipline,High,synth_highacc,6,2
+mess stale quality taste spoil,Canteen,Medium,synth_highacc,9,0
+alcohol insulting consumption steals fought,Security / Discipline,Medium,synth_highacc,6,0
+printer wifi offline restart firmware,IT Support,Medium,synth_highacc,0,0
+coffee spoon bitter spoon hygiene,Canteen,Low,synth_highacc,9,1
+driver mandatory absent license brake,Transport,Low,synth_highacc,5,1
+photocopy fiction charges citation reference,Library,High,synth_highacc,8,2
+mosquito heating laundry bathroom corridor,Hostels,Low,synth_highacc,1,1
+stop petrol skipped petrol indicator,Transport,Medium,synth_highacc,5,0
+mosquito exhaust net slow slow,Hostels,High,synth_highacc,1,2
+volume bibliography missing aisle section,Library,Low,synth_highacc,8,1
+steal abuse smoke thief assault,Security / Discipline,Low,synth_highacc,6,1
+hostel garden area is overgrown and attracting snakes the grass hasn t been cut in weeks and it s becoming a bit scary to walk near the hedges at night we ve seen a few large lizards and are worried about snakes please send the gardener,Hostels,Medium,complaint_triage,1,0
+interrogate accused suspect accused hostel,Security / Discipline,Medium,synth_highacc,6,0
+computer battery configure laptop rebooting,IT Support,High,synth_highacc,0,2
+card catalogue renewal catalogue volume,Library,High,synth_highacc,8,2
+mac crash filter vpn log,IT Support,Low,synth_highacc,0,1
+procedure examination lengthy rejected document,Administration,Medium,synth_highacc,7,0
+outstanding payment amount account treasury,Fees / Finance,Low,synth_highacc,3,1
+suspicious hostel teasing stranger danger,Security / Discipline,High,synth_highacc,6,2
+fee processed structure application bill,Fees / Finance,Medium,synth_highacc,3,0
+traffic rickshaw van accident bus,Transport,Medium,synth_highacc,5,0
+pickup petrol missed cab horn,Transport,High,synth_highacc,5,2
+fiction overdue available penalty counter,Library,High,synth_highacc,8,2
+charges withdrawal receipt outstanding finance,Fees / Finance,Low,synth_highacc,3,1
+rice vegetable undercook curry snack,Canteen,Low,synth_highacc,9,1
+conductor vehicle behaviour mirror headlight,Transport,High,synth_highacc,5,2
+download scanner stuck configure processor,IT Support,Medium,synth_highacc,0,0
+electrician grill wiring sparking crack,Maintenance,High,synth_highacc,4,2
+theft danger murder witness,Security / Discipline,Low,synth_highacc,6,1
+add me to lab equipment booking calendar can u add me to the spectrometer booking calendar i can see it but it wont let me add my name to a slot,IT Support,Low,complaint_triage,0,1
+electrician grill leaking repair exposed,Maintenance,Low,synth_highacc,4,1
+seat seat broken helmet meter,Transport,Medium,synth_highacc,5,0
+update monitor failing shutdown email,IT Support,High,synth_highacc,0,2
+fare taxi refund rickshaw bicycle,Transport,High,synth_highacc,5,2
+price breakfast meal expensive price,Canteen,High,synth_highacc,9,2
+cable shutdown loose configure download,IT Support,High,synth_highacc,0,2
+publisher volume details ebook overdue,Library,Medium,synth_highacc,8,0
+stop overcrowded unsafe diesel accident,Transport,Low,synth_highacc,5,1
+taste egg curry hygiene queue,Canteen,Medium,synth_highacc,9,0
+wrench ladder repair peeling worn,Maintenance,Medium,synth_highacc,4,0
+tile pipe burst tube lock,Maintenance,High,synth_highacc,4,2
+repair bulb urgent brick worn,Maintenance,High,synth_highacc,4,2
+stamp seal guideline registration guideline,Administration,Medium,synth_highacc,7,0
+persistent ant infestation in room 442 i have complained twice to the floor supervisor about the ants coming from the wall cracks i have kept my food sealed but they are everywhere now this needs a proper professional pest control treatment not just a spray,Hostels,Medium,complaint_triage,1,0
+drainage cotton overflowing detergent inverter,Hostels,High,synth_highacc,1,2
+vpn wlan disconnecting ram email,IT Support,Low,synth_highacc,0,1
+citation aisle format silent available,Library,Low,synth_highacc,8,1
+patrol accused vehicle harassment harassment,Security / Discipline,Medium,synth_highacc,6,0
+chapter group summary topic midterm,Academics,Medium,synth_highacc,2,0
+seminar postpone certificate curriculum seminar,Academics,High,synth_highacc,2,2
+application notarized fee stamp fee,Administration,Low,synth_highacc,7,1
+my transcript shows an f for a class i dropped during the add drop period i have the confirmation number from the day i dropped it this is going to ruin my grad school applications,Administration,High,complaint_triage,7,2
+assignment credit deadline answer textbook,Academics,High,synth_highacc,2,2
+loan balance application balance upi,Fees / Finance,High,synth_highacc,3,2
+carpenter pane peeling leak repairman,Maintenance,Medium,synth_highacc,4,0
+bus bus late conductor conductor,Transport,Low,synth_highacc,5,1
+exam professor timetable training credit,Academics,Low,synth_highacc,2,1
+accident stop reported meter brake,Transport,Medium,synth_highacc,5,0
+concession reimbursement remit reimbursement late,Fees / Finance,High,synth_highacc,3,2
+thesis lecture approval score homework,Academics,High,synth_highacc,2,2
+curriculum quiz outdated topic teacher,Academics,High,synth_highacc,2,2
+card catalogue thesis desk renew,Library,Low,synth_highacc,8,1
+dust door wrench drill ladder,Maintenance,Medium,synth_highacc,4,0
+fiction nonfiction almanac silent database,Library,High,synth_highacc,8,2
+drill repair noise lock hole,Maintenance,Low,synth_highacc,4,1
+vegetable cup counter chicken vegetable,Canteen,High,synth_highacc,9,2

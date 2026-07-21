@@ -2,10 +2,10 @@
 {% block title %}Complaint Report — Admin{% endblock %}
 {% block content %}
 <aside class="fixed left-0 h-full w-64 bg-[#0a1628] text-white shadow-xl flex flex-col py-6 hidden md:flex z-50">
-<div class="px-6 mb-8 flex items-center gap-3">
+<a href="{{ url_for('admin_dashboard') }}" class="px-6 mb-8 flex items-center gap-3 hover:opacity-80">
 <span class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-white">admin_panel_settings</span></span>
-<span class="text-xl font-bold text-white tracking-tight">Admin Panel</span>
-</div>
+<span class="text-xl font-bold text-white tracking-tight">Complainify</span>
+</a>
 <div class="px-4 mb-6 flex items-center gap-3 border-b border-white/10 pb-4 mx-2">
 <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex items-center justify-center text-white font-bold text-sm shadow-md">{{ admin_name[:2]|upper }}</div>
 <div><p class="text-sm text-white font-medium truncate">{{ admin_name }}</p><p class="text-[10px] text-red-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-400 inline-block"></span> Administrator</p></div>

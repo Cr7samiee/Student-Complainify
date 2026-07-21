@@ -748,6 +748,14 @@ def api_predict():
         'tier': result['tier']
     })
 
+@app.route('/dashboard-redirect')
+def dashboard_redirect():
+    if session.get('role') == 'admin':
+        return redirect(url_for('admin_dashboard'))
+    elif session.get('role') == 'student':
+        return redirect(url_for('student_dashboard'))
+    return redirect(url_for('index'))
+
 @app.route('/logout')
 def logout():
     session.clear()

@@ -1,9 +1,12 @@
 import csv, re, json, os, math
 from collections import Counter, defaultdict
 
-CONFIDENCE_THRESHOLD = 0.50
+CONFIDENCE_THRESHOLD = 0.35
+AUTO_THRESHOLD = 0.90
+SUGGEST_THRESHOLD = 0.60
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_PATH = os.path.join(BASE, 'TrainDataset', 'processed_dataset_4500.csv')
+DATA_PATH = os.path.join(BASE, 'TrainDataset', 'train_dataset.csv')
+TEST_PATH = os.path.join(BASE, 'TrainDataset', 'test_dataset.csv')
 ENC_PATH = os.path.join(BASE, 'TrainDataset', 'encoders', 'category_decoder.json')
 
 with open(ENC_PATH) as f:
@@ -13,20 +16,45 @@ STOPWORDS = set('a an the is are was were be been being have has had do does did
 
 def stem(w):
     if len(w) < 5: return w
+    if w.endswith('ingly'): return w[:-5]
+    if w.endswith('edly'): return w[:-4]
+    if w.endswith('ying'): return w[:-4] + 'y'
+    if w.endswith('ation'): return w[:-5]
+    if w.endswith('ment'): return w[:-4]
+    if w.endswith('able'): return w[:-4]
+    if w.endswith('ible'): return w[:-4]
+    if w.endswith('ness'): return w[:-4]
+    if w.endswith('less'): return w[:-4]
+    if w.endswith('ally'): return w[:-4]
+    if w.endswith('sion'): return w[:-3] + 's'
+    if w.endswith('tion'): return w[:-3] + 't'
+    if w.endswith('ical'): return w[:-4]
     if w.endswith('ied'): return w[:-3] + 'y'
     if w.endswith('ies'): return w[:-3] + 'y'
-    if w.endswith('ying'): return w[:-4] + 'y'
     if w.endswith('ing'): return w[:-3]
+    if w.endswith('ive'): return w[:-3]
+    if w.endswith('ful'): return w[:-3]
+    if w.endswith('ous'): return w[:-3]
+    if w.endswith('ise'): return w[:-3]
+    if w.endswith('ize'): return w[:-3]
+    if w.endswith('ate'): return w[:-3]
+    if w.endswith('ify'): return w[:-3]
     if w.endswith('ed'): return w[:-2]
-    if w.endswith('es'): return w[:-2]
+    if w.endswith('er'): return w[:-2]
+    if w.endswith('or'): return w[:-2]
+    if w.endswith('ly'): return w[:-2]
+    if w.endswith('al'): return w[:-2]
+    if w.endswith('en'): return w[:-2]
     if w.endswith('s') and not w.endswith('ss'): return w[:-1]
     return w
 
-def clean_and_tokenize(text):
+def clean_and_tokenize(text, add_bigrams=True):
     text = text.lower()
     text = re.sub(r'[^a-z0-9\s]', '', text)
-    tokens = text.split()
-    return [stem(t) for t in tokens if t not in STOPWORDS and len(t) > 2]
+    tokens = [stem(t) for t in text.split() if t not in STOPWORDS and len(t) > 2]
+    if add_bigrams and len(tokens) > 1:
+        tokens += ['_'.join(tokens[i:i+2]) for i in range(len(tokens)-1)]
+    return tokens
 
 class MultinomialNB:
     def __init__(self, alpha=1.0, min_df=3):
@@ -82,6 +110,32 @@ CATEGORY_NORMALIZE = {
     'Administration': 'Administrative',
 }
 
+RULE_BASED_CATEGORIES = [
+    {
+        'category': 'Administrative',
+        'confidence': 0.95,
+        'topic_terms': {
+            'hackathon', 'hackthon', 'hackaton', 'event', 'competition',
+            'seminar', 'workshop', 'fest', 'festival', 'orientation',
+            'program', 'ceremony', 'club', 'conference'
+        },
+        'issue_terms': {
+            'manage', 'management', 'mismanag', 'organize', 'organization',
+            'arrange', 'arrangement', 'coordination', 'coordinat', 'schedule',
+            'registration', 'venue', 'bad', 'poor', 'worst'
+        },
+    },
+]
+
+def rule_based_categorize(text):
+    tokens = set(clean_and_tokenize(text, add_bigrams=False))
+    raw_words = set(re.findall(r'[a-z0-9]+', text.lower()))
+    words = tokens | raw_words
+    for rule in RULE_BASED_CATEGORIES:
+        if words & rule['topic_terms'] and words & rule['issue_terms']:
+            return rule['category'], rule['confidence']
+    return None
+
 def get_model():
     global _model
     if _model is None:
@@ -93,11 +147,35 @@ def get_model():
         _model.fit(texts, labels)
     return _model
 
-def auto_categorize(text):
+def categorize(text):
+    rule_match = rule_based_categorize(text)
+    if rule_match:
+        cat, conf = rule_match
+        return {
+            'category': cat,
+            'confidence': conf,
+            'tier': 'auto' if conf >= AUTO_THRESHOLD else 'suggest'
+        }
+
     model = get_model()
     pred, probs = model.predict_with_proba(text)
     conf = probs[pred]
+
     if conf < CONFIDENCE_THRESHOLD:
-        return 'Other', conf
+        return {'category': 'Other', 'confidence': conf, 'tier': 'unknown'}
+
     cat = CAT_DECODER[pred]
-    return CATEGORY_NORMALIZE.get(cat, cat), conf
+    cat = CATEGORY_NORMALIZE.get(cat, cat)
+
+    if conf >= AUTO_THRESHOLD:
+        tier = 'auto'
+    elif conf >= SUGGEST_THRESHOLD:
+        tier = 'suggest'
+    else:
+        tier = 'unknown'
+
+    return {'category': cat, 'confidence': conf, 'tier': tier}
+
+def auto_categorize(text):
+    result = categorize(text)
+    return result['category'], result['confidence']
