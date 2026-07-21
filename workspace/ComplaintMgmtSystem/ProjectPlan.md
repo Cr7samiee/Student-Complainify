@@ -99,6 +99,8 @@
 - [x] **Priority filter on admin complaints page** — Filter by High/Medium/Low
 - [x] **Pagination** — Add pagination to admin complaints list (20/page, Prev/Next + page numbers)
 - [x] **Category/sentiment filter on dashboard charts** — Click chart segment to filter complaints
+- [x] **Admin resolution message** — Admin notes shown prominently to student (green box for Resolved)
+- [x] **File upload** — Admin can attach PDF/SVG/Excel etc., student can download from detail page
 - [ ] **Data augmentation** — Generate more training samples for low-represented categories
 - [ ] **Model persistence** — Save trained model parameters to JSON (avoid retrain on every restart)
 - [ ] **File upload** — Allow students to attach images/docs to complaints
