@@ -471,23 +471,40 @@ def admin_complaints():
     conn = get_db(); cur = conn.cursor()
     status_filter = request.args.get('status', '')
     category_filter = request.args.get('category', '')
-    query = """SELECT ticket_id,fullname student,category,priority,status,subject,sentiment,
-        date_format(created_at,'%%d %%b %%Y') date, assigned_to, validated
-        FROM complaints WHERE 1=1"""
+    priority_filter = request.args.get('priority', '')
+    sentiment_filter = request.args.get('sentiment', '')
+    page = int(request.args.get('page', 1))
+    per_page = 20
+    offset = (page - 1) * per_page
+    base_query = "FROM complaints WHERE 1=1"
     params = []
     if status_filter:
-        query += " AND status=%s"
+        base_query += " AND status=%s"
         params.append(status_filter)
     if category_filter:
-        query += " AND category=%s"
+        base_query += " AND category=%s"
         params.append(category_filter)
-    query += " ORDER BY created_at DESC"
-    cur.execute(query, params)
+    if priority_filter:
+        base_query += " AND priority=%s"
+        params.append(priority_filter)
+    if sentiment_filter:
+        base_query += " AND sentiment=%s"
+        params.append(sentiment_filter)
+    cur.execute(f"SELECT COUNT(*) cnt {base_query}", params)
+    total_row = cur.fetchone()
+    total_count = total_row['cnt'] if total_row else 0
+    total_pages = max(1, (total_count + per_page - 1) // per_page)
+    query = f"""SELECT ticket_id,fullname student,category,priority,status,subject,sentiment,
+        date_format(created_at,'%%d %%b %%Y') date, assigned_to, validated
+        {base_query} ORDER BY created_at DESC LIMIT %s OFFSET %s"""
+    cur.execute(query, params + [per_page, offset])
     complaints = cur.fetchall()
     cur.close(); conn.close()
     return render_template('admin/complaints_list.html', complaints=complaints,
         admin_name=session.get('fullname', 'Admin'),
         status_filter=status_filter, category_filter=category_filter,
+        priority_filter=priority_filter, sentiment_filter=sentiment_filter,
+        page=page, total_pages=total_pages, total_count=total_count,
         categories=[c for c in CATEGORIES if c != 'Other'])
 
 @app.route('/admin/complaint/<ticket_id>')

@@ -38,14 +38,26 @@
 <option value="In Progress" {% if status_filter == 'In Progress' %}selected{% endif %}>In Progress</option>
 <option value="Resolved" {% if status_filter == 'Resolved' %}selected{% endif %}>Resolved</option>
 </select>
+<select name="priority" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:ring-2 focus:ring-[#d32f2f] outline-none">
+<option value="">All Priority</option>
+<option value="High" {% if priority_filter == 'High' %}selected{% endif %}>High</option>
+<option value="Medium" {% if priority_filter == 'Medium' %}selected{% endif %}>Medium</option>
+<option value="Low" {% if priority_filter == 'Low' %}selected{% endif %}>Low</option>
+</select>
 <select name="category" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:ring-2 focus:ring-[#d32f2f] outline-none">
 <option value="">All Categories</option>
 {% for cat in categories %}
 <option value="{{ cat }}" {% if category_filter == cat %}selected{% endif %}>{{ cat }}</option>
 {% endfor %}
 </select>
+<select name="sentiment" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:ring-2 focus:ring-[#d32f2f] outline-none">
+<option value="">All Sentiment</option>
+<option value="Positive" {% if sentiment_filter == 'Positive' %}selected{% endif %}>Positive</option>
+<option value="Neutral" {% if sentiment_filter == 'Neutral' %}selected{% endif %}>Neutral</option>
+<option value="Negative" {% if sentiment_filter == 'Negative' %}selected{% endif %}>Negative</option>
+</select>
 <button type="submit" class="px-4 py-1.5 bg-[#0a1628] text-white text-xs font-semibold rounded-lg hover:bg-[#1a2a3a] transition-colors">Filter</button>
-{% if status_filter or category_filter %}
+{% if status_filter or category_filter or priority_filter or sentiment_filter %}
 <a href="{{ url_for('admin_complaints') }}" class="px-3 py-1.5 text-xs text-gray-500 hover:text-[#d32f2f]">Clear</a>
 {% endif %}
 </form>
@@ -71,6 +83,26 @@
 </tbody>
 </table>
 </div>
+{% if total_pages > 1 %}
+<div class="px-5 py-3 border-t border-gray-100 flex items-center justify-between bg-gray-50/50">
+<p class="text-xs text-gray-500">{{ total_count }} total complaints</p>
+<div class="flex gap-1">
+{% if page > 1 %}
+<a href="{{ url_for('admin_complaints', status=status_filter, category=category_filter, priority=priority_filter, sentiment=sentiment_filter, page=page-1) }}" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-100">Prev</a>
+{% endif %}
+{% for p in range(1, total_pages + 1) %}
+{% if p == page %}
+<span class="px-3 py-1.5 text-xs bg-[#0a1628] text-white rounded-lg">{{ p }}</span>
+{% elif p <= page + 2 and p >= page - 2 %}
+<a href="{{ url_for('admin_complaints', status=status_filter, category=category_filter, priority=priority_filter, sentiment=sentiment_filter, page=p) }}" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-100">{{ p }}</a>
+{% endif %}
+{% endfor %}
+{% if page < total_pages %}
+<a href="{{ url_for('admin_complaints', status=status_filter, category=category_filter, priority=priority_filter, sentiment=sentiment_filter, page=page+1) }}" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-100">Next</a>
+{% endif %}
+</div>
+</div>
+{% endif %}
 {% else %}
 <div class="p-10 text-center"><span class="material-symbols-outlined text-3xl text-gray-300 mb-2">inbox</span><p class="text-sm font-semibold text-gray-600">No complaints match your filters</p></div>
 {% endif %}
