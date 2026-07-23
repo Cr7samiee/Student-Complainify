@@ -1,69 +1,69 @@
 {
-  "last_trained": "2026-07-23 18:55:05",
+  "last_trained": "2026-07-23 18:58:13",
   "train_samples": 5916,
   "test_samples": 1480,
-  "accuracy": 97.09,
-  "macro_f1": 0.9709,
+  "accuracy": 96.35,
+  "macro_f1": 0.963,
   "per_class": [
     {
       "category": "IT Support",
-      "precision": 0.9699,
-      "recall": 0.9699,
-      "f1": 0.9699
+      "precision": 0.961,
+      "recall": 0.9801,
+      "f1": 0.9705
     },
     {
       "category": "Hostels",
-      "precision": 0.9862,
-      "recall": 0.9286,
-      "f1": 0.9565
+      "precision": 0.9535,
+      "recall": 0.9248,
+      "f1": 0.9389
     },
     {
       "category": "Academics",
-      "precision": 0.9539,
-      "recall": 0.9539,
-      "f1": 0.9539
+      "precision": 0.9618,
+      "recall": 0.9437,
+      "f1": 0.9527
     },
     {
       "category": "Fees / Finance",
-      "precision": 0.9762,
-      "recall": 0.9762,
-      "f1": 0.9762
+      "precision": 0.939,
+      "recall": 0.9872,
+      "f1": 0.9625
     },
     {
       "category": "Maintenance",
-      "precision": 0.9281,
-      "recall": 0.9861,
-      "f1": 0.9562
+      "precision": 0.8974,
+      "recall": 0.9524,
+      "f1": 0.9241
     },
     {
       "category": "Transport",
-      "precision": 0.9673,
-      "recall": 0.9801,
-      "f1": 0.9737
+      "precision": 0.9712,
+      "recall": 0.9783,
+      "f1": 0.9747
     },
     {
       "category": "Security / Discipline",
-      "precision": 0.9858,
-      "recall": 0.9789,
-      "f1": 0.9823
+      "precision": 0.9852,
+      "recall": 0.95,
+      "f1": 0.9673
     },
     {
       "category": "Administration",
-      "precision": 0.95,
-      "recall": 0.9366,
-      "f1": 0.9433
+      "precision": 0.9776,
+      "recall": 0.9097,
+      "f1": 0.9424
     },
     {
       "category": "Library",
-      "precision": 0.9932,
-      "recall": 1.0,
-      "f1": 0.9966
-    },
-    {
-      "category": "Canteen",
       "precision": 1.0,
       "recall": 1.0,
       "f1": 1.0
+    },
+    {
+      "category": "Canteen",
+      "precision": 0.9939,
+      "recall": 1.0,
+      "f1": 0.997
     }
   ],
   "history": [
@@ -86,6 +86,10 @@
     {
       "date": "2026-07-23 18:55",
       "accuracy": 97.1
+    },
+    {
+      "date": "2026-07-23 18:58",
+      "accuracy": 96.4
     }
   ]
 }
