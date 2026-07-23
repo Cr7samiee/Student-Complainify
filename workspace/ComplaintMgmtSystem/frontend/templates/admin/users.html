@@ -30,14 +30,14 @@
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
 <div class="px-5 py-3 border-b border-gray-100 bg-gray-50/50">
 <form method="GET" class="flex flex-wrap gap-3 items-center">
-<input type="text" name="search" placeholder="Search name, email, phone..." value="{{ search }}" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:ring-2 focus:ring-[#d32f2f] outline-none w-52">
-<select name="role" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:ring-2 focus:ring-[#d32f2f] outline-none">
+<input type="text" name="search" placeholder="Search name, email, phone..." value="{{ search }}" class="px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none w-60">
+<select name="role" class="px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none min-w-[140px]">
 <option value="">All Roles</option>
 <option value="student" {% if role_filter == 'student' %}selected{% endif %}>Student</option>
 <option value="admin" {% if role_filter == 'admin' %}selected{% endif %}>Admin</option>
 </select>
-<button type="submit" class="px-4 py-1.5 bg-[#0a1628] text-white text-xs font-semibold rounded-lg hover:bg-[#1a2a3a] transition-colors">Search</button>
-{% if search or role_filter %}<a href="{{ url_for('admin_users') }}" class="px-3 py-1.5 text-xs text-gray-500 hover:text-[#d32f2f]">Clear</a>{% endif %}
+<button type="submit" class="px-5 py-2.5 bg-[#0a1628] text-white text-sm font-semibold rounded-lg hover:bg-[#1a2a3a] transition-colors">Search</button>
+{% if search or role_filter %}<a href="{{ url_for('admin_users') }}" class="px-4 py-2 text-sm text-gray-500 hover:text-[#d32f2f]">Clear</a>{% endif %}
 </form>
 </div>
 {% if users %}
