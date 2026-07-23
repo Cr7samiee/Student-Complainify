@@ -1302,13 +1302,12 @@ def admin_retrain():
     if not login_required('admin'):
         return redirect(url_for('admin_login'))
     import subprocess, sys as sys_mod
-    try:
-        result = subprocess.run([sys_mod.executable, '-c', """
+    base_dir = os.path.dirname(os.path.dirname(__file__))
+    script = """
 import sys, os, json, csv, math, random
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'train'))
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'train'))
+BASE = sys.argv[1]
+sys.path.insert(0, os.path.join(BASE, 'train'))
 
-BASE = os.path.dirname(os.path.abspath(__file__))
 TRAIN_PATH = os.path.join(BASE, 'TrainDataset', 'train_dataset.csv')
 NEW_PATH = os.path.join(BASE, 'TrainDataset', 'new_complaints.csv')
 TEST_PATH = os.path.join(BASE, 'TrainDataset', 'test_dataset.csv')
@@ -1398,7 +1397,9 @@ new_log = {
 
 with open(LOG_PATH, 'w') as f: json.dump(new_log, f, indent=2)
 print(json.dumps(new_log))
-"""], capture_output=True, text=True, timeout=120, cwd=os.path.dirname(os.path.dirname(__file__)))
+"""
+    try:
+        result = subprocess.run([sys_mod.executable, '-c', script, base_dir], capture_output=True, text=True, timeout=120, cwd=base_dir)
         if result.returncode == 0:
             log_data = json.loads(result.stdout.strip())
             import train.classifier as clf
