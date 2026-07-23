@@ -1351,19 +1351,21 @@ model.save(os.path.join(BASE, 'TrainDataset', 'model_params.json'))
 
 correct = 0
 per_class = {}
+for cat_id, cat_name in cat_decoder.items():
+    per_class[cat_name] = {'tp': 0, 'fp': 0, 'fn': 0}
 for i, text in enumerate(test_texts):
     pred, probs = model.predict_with_proba(text)
     true_label = test_labels[i]
     if pred == true_label: correct += 1
-    cat_name = cat_decoder.get(pred, 'Unknown')
-    true_cat = cat_decoder.get(true_label, 'Unknown')
-    if cat_name not in per_class:
-        per_class[cat_name] = {'tp': 0, 'fp': 0, 'fn': 0}
+    cat_name = cat_decoder.get(pred, 'Other')
+    true_cat_name = cat_decoder.get(true_label, 'Other')
     if pred == true_label:
         per_class[cat_name]['tp'] += 1
     else:
         per_class[cat_name]['fp'] += 1
-        per_class[cat_name.replace(cat_name, true_cat) if False else 'Unknown']  # Simplified
+        if true_cat_name not in per_class:
+            per_class[true_cat_name] = {'tp': 0, 'fp': 0, 'fn': 0}
+        per_class[true_cat_name]['fn'] += 1
 
 # Compute per-class metrics
 class_metrics = []
