@@ -412,15 +412,16 @@ checkNotif();
 <script>
 {% if student_cat_labels %}
 new Chart(document.getElementById('studentCatChart'), {
-  type:'doughnut',
+  type:'bar',
   data:{
     labels:{{ student_cat_labels|tojson }},
     datasets:[{
       data:{{ student_cat_values|tojson }},
-      backgroundColor:['#022448','#0058be','#2170e4','#10b981','#F59E0B','#EF4444','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16']
+      backgroundColor:['#022448','#0058be','#2170e4','#10b981','#F59E0B','#EF4444','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16'],
+      borderRadius:6, barThickness:32
     }]
   },
-  options:{ plugins:{ legend:{ display:false } }, responsive:true }
+  options:{ plugins:{ legend:{ display:false } }, responsive:true, scales:{ x:{ grid:{ display:false } }, y:{ beginAtZero:true, ticks:{ stepSize:1 } } } }
 });
 {% endif %}
 {% if trend_labels %}
