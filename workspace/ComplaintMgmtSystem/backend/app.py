@@ -1341,7 +1341,7 @@ def admin_retrain():
         result = subprocess.run([sys_mod.executable, script_path], capture_output=True, text=True, timeout=120)
         if result.returncode == 0:
             log_data = json.loads(result.stdout.strip())
-            import train.classifier as clf
+            import classifier as clf
             clf._model = None
             flash(f'Retrain complete! Accuracy: {log_data["accuracy"]}%, F1: {log_data["macro_f1"]}', 'success')
         else:
