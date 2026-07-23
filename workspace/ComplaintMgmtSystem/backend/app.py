@@ -564,12 +564,12 @@ def admin_dashboard():
     in_progress = sum(1 for c in complaints if c['status'] == 'In Progress')
     pending = total - resolved - in_progress
 
-    cur.execute("SELECT COUNT(*) cnt FROM complaints WHERE status='Resolved' AND resolved_at IS NOT NULL AND TIMESTAMPDIFF(HOUR, created_at, resolved_at) IS NOT NULL")
+    cur.execute("SELECT COUNT(*) cnt FROM complaints WHERE status='Resolved' AND resolved_at IS NOT NULL AND TIMESTAMPDIFF(MINUTE, created_at, resolved_at) IS NOT NULL")
     resolved_cnt_row = cur.fetchone()
     resolved_cnt = resolved_cnt_row['cnt'] if resolved_cnt_row else 0
-    cur.execute("SELECT COALESCE(AVG(TIMESTAMPDIFF(HOUR, created_at, resolved_at)), 0) avg_hrs FROM complaints WHERE status='Resolved' AND resolved_at IS NOT NULL")
+    cur.execute("SELECT COALESCE(AVG(TIMESTAMPDIFF(MINUTE, created_at, resolved_at) / 60.0), 0) avg_hrs FROM complaints WHERE status='Resolved' AND resolved_at IS NOT NULL")
     avg_row = cur.fetchone()
-    avg_resolution = round(float(avg_row['avg_hrs'])) if avg_row else 0
+    avg_resolution = round(float(avg_row['avg_hrs']), 1) if avg_row else 0
 
     cur.execute("SELECT COUNT(*) cnt FROM complaints WHERE priority='High' AND status!='Resolved'")
     critical_row = cur.fetchone()
@@ -1047,7 +1047,7 @@ def admin_export_pdf():
         val = stats[key] if stats[key] is not None else 0
         pdf.cell(60, 8, f'{label}: {val}', ln=1)
 
-    response = make_response(pdf.output())
+    response = make_response(bytes(pdf.output()))
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'attachment; filename=complainify_report.pdf'
     return response
