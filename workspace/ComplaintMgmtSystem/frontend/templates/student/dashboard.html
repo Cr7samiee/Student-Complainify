@@ -89,20 +89,20 @@ checkNotif();
 <div class="grid grid-cols-2 gap-4">
               <div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-4">
                 <h4 class="text-xs font-bold text-primary mb-3 flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">pie_chart</span>By Category</h4>
-                <canvas id="studentCatChart" height="120"></canvas>
+                <canvas id="studentCatChart" height="100" style="max-height:130px"></canvas>
               </div>
               <div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-4">
                 <h4 class="text-xs font-bold text-primary mb-3 flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">trending_up</span>Monthly Trend</h4>
-                <canvas id="studentTrendChart" height="120"></canvas>
+                <canvas id="studentTrendChart" height="100" style="max-height:130px"></canvas>
               </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script>
 {% if student_cat_labels %}
-new Chart(document.getElementById('studentCatChart'), {type:'doughnut', data:{labels:{{ student_cat_labels|tojson }}, datasets:[{data:{{ student_cat_values|tojson }}, backgroundColor:['#022448','#0058be','#2170e4','#10b981','#F59E0B','#EF4444','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16']}]}, options:{plugins:{legend:{display:false}}, responsive:true, maintainAspectRatio:false}});
+new Chart(document.getElementById('studentCatChart'), {type:'doughnut', data:{labels:{{ student_cat_labels|tojson }}, datasets:[{data:{{ student_cat_values|tojson }}, backgroundColor:['#022448','#0058be','#2170e4','#10b981','#F59E0B','#EF4444','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16']}]}, options:{plugins:{legend:{display:false}}, responsive:true}});
 {% endif %}
 {% if trend_labels %}
-new Chart(document.getElementById('studentTrendChart'), {type:'line', data:{labels:{{ trend_labels|tojson }}, datasets:[{label:'Complaints', data:{{ trend_values|tojson }}, borderColor:'#0058be', backgroundColor:'rgba(0,88,190,0.1)', fill:true, tension:0.3}]}, options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, ticks:{stepSize:1}}}, responsive:true, maintainAspectRatio:false}});
+new Chart(document.getElementById('studentTrendChart'), {type:'line', data:{labels:{{ trend_labels|tojson }}, datasets:[{label:'Complaints', data:{{ trend_values|tojson }}, borderColor:'#0058be', backgroundColor:'rgba(0,88,190,0.1)', fill:true, tension:0.3}]}, options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, ticks:{stepSize:1}}}, responsive:true}});
 {% endif %}
 </script>
 <section id="complaints">
