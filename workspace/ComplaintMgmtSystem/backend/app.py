@@ -436,8 +436,8 @@ def student_complaint_detail(ticket_id):
         date_format(resolved_at,'%%d %%b %%Y %%h:%%i %%p') resolved_date
         FROM complaints WHERE ticket_id=%s AND user_id=%s""", (ticket_id, session['user_id']))
     complaint = cur.fetchone()
-    cur.close(); conn.close()
     if not complaint:
+        cur.close(); conn.close()
         flash('Complaint not found.', 'error')
         return redirect(url_for('student_dashboard'))
     cur.execute("""SELECT complaint_comments.*, users.fullname, users.role FROM complaint_comments
