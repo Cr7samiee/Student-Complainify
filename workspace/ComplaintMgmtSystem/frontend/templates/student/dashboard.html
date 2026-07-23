@@ -1,175 +1,442 @@
 {% extends "base.html" %}
+{% block head %}
+<style>
+:root {
+  --primary: #022448;
+  --secondary: #0058be;
+  --surface-white: #ffffff;
+  --on-surface: #1e293b;
+  --on-surface-variant: #64748b;
+  --outline-variant: #e2e8f0;
+  --surface-container: #f1f5f9;
+  --warning-amber: #d97706;
+  --on-primary: #ffffff;
+  --on-primary-container: #cbd5e1;
+  --primary-fixed-dim: #94a3b8;
+  --on-tertiary-container: #059669;
+  --slate-bg: #f8fafc;
+  --secondary-container: #1d4ed8;
+  --on-secondary-container: #ffffff;
+  --on-primary-fixed-variant: #334155;
+  --error-crimson: #dc2626;
+  --blue-200: #bfdbfe;
+  --blue-300: #93c5fd;
+  --yellow-300: #fcd34d;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--slate-bg); color: var(--on-surface); min-height: 100vh; }
+.dashboard-wrapper { display: flex; min-height: 100vh; }
+.sidebar { position:fixed; left:0; top:0; width:256px; height:100%; background:var(--primary); color:var(--on-primary); display:flex; flex-direction:column; padding:1.5rem 0; box-shadow:4px 0 12px rgba(0,0,0,0.08); z-index:50; }
+.sidebar-logo { padding:0 1.5rem; margin-bottom:2rem; display:flex; align-items:center; gap:0.75rem; text-decoration:none; color:var(--on-primary); }
+.sidebar-logo:hover { opacity:0.8; }
+.logo-icon { width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg,var(--secondary),var(--secondary-container)); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+.logo-icon span { color:white; font-size:20px; }
+.logo-text { font-size:1.25rem; font-weight:700; letter-spacing:-0.025em; }
+.sidebar-user { padding:0 1rem; margin:0 0.5rem 1.5rem 0.5rem; display:flex; align-items:center; gap:0.75rem; border-bottom:1px solid var(--on-primary-fixed-variant); padding-bottom:1rem; }
+.avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--secondary),#a78bfa); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:0.875rem; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.user-name { font-size:0.875rem; color:white; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.user-role { font-size:0.625rem; color:var(--blue-300); display:flex; align-items:center; gap:0.25rem; }
+.user-dot { width:6px; height:6px; border-radius:50%; background:#4ade80; display:inline-block; }
+.sidebar-nav { flex:1; padding:0 0.5rem; }
+.sidebar-nav a { display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1rem; border-radius:12px; font-size:0.875rem; font-weight:500; text-decoration:none; transition:all 0.2s; }
+.sidebar-nav a.active { background:var(--secondary-container); color:var(--on-secondary-container); box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.sidebar-nav a.inactive { color:var(--on-primary-container); }
+.sidebar-nav a.inactive:hover { background:rgba(255,255,255,0.08); }
+.sidebar-nav a span { font-size:0.875rem; }
+.sidebar-footer { padding:0 0.5rem; border-top:1px solid var(--on-primary-fixed-variant); padding-top:0.75rem; margin:0.5rem 0.5rem 0; }
+.sidebar-footer a { display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1rem; border-radius:12px; font-size:0.875rem; text-decoration:none; color:var(--on-primary-container); transition:all 0.2s; }
+.sidebar-footer a:hover { background:rgba(255,255,255,0.08); }
+.sidebar-footer a span { font-size:0.875rem; }
+.main-content { margin-left:256px; flex:1; display:flex; flex-direction:column; min-height:100vh; }
+.header { background:var(--surface-white); padding:1rem 1.5rem; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:40; box-shadow:0 1px 3px rgba(0,0,0,0.05); border-bottom:1px solid var(--outline-variant); }
+.header-left h1 { font-size:1.5rem; font-weight:700; color:var(--primary); display:flex; align-items:center; gap:0.5rem; }
+.header-left h1 span { color:var(--secondary); }
+.header-left p { font-size:0.75rem; color:var(--on-surface-variant); margin-left:2rem; }
+.header-right { display:flex; align-items:center; gap:0.75rem; }
+.notif-btn { padding:0.5rem; border-radius:9999px; border:none; background:transparent; cursor:pointer; position:relative; color:var(--on-surface-variant); transition:background 0.2s; }
+.notif-btn:hover { background:var(--surface-container); }
+.notif-badge { position:absolute; top:6px; right:6px; width:8px; height:8px; border-radius:50%; background:var(--error-crimson); display:none; }
+.notif-dropdown { display:none; position:absolute; right:0; top:40px; width:320px; background:var(--surface-white); border-radius:12px; border:1px solid var(--outline-variant); box-shadow:0 12px 40px rgba(0,0,0,0.12); z-index:50; max-height:384px; overflow-y:auto; }
+.notif-dropdown.show { display:block; }
+.notif-header { padding:0.75rem 1rem; border-bottom:1px solid var(--outline-variant); display:flex; justify-content:space-between; align-items:center; }
+.notif-header span { font-size:0.875rem; font-weight:700; color:var(--primary); }
+.notif-header button { font-size:0.75rem; color:var(--secondary); background:none; border:none; cursor:pointer; }
+.notif-header button:hover { text-decoration:underline; }
+.notif-item { display:block; padding:0.75rem 1rem; text-decoration:none; transition:background 0.2s; border-bottom:1px solid rgba(226,232,240,0.5); }
+.notif-item:last-child { border-bottom:none; }
+.notif-item:hover { background:var(--slate-bg); }
+.notif-item.unread { background:rgba(239,246,255,0.5); }
+.notif-item p:first-child { font-size:0.875rem; color:var(--on-surface); }
+.notif-item p:last-child { font-size:0.625rem; color:var(--on-surface-variant); margin-top:0.25rem; }
+.new-complaint-btn { background:linear-gradient(135deg,var(--primary),var(--secondary)); color:var(--on-primary); padding:0.5rem 1.25rem; border-radius:12px; border:none; font-size:0.875rem; font-weight:600; cursor:pointer; transition:opacity 0.2s; display:flex; align-items:center; gap:0.375rem; box-shadow:0 2px 8px rgba(0,0,0,0.1); text-decoration:none; }
+.new-complaint-btn:hover { opacity:0.9; }
+.content { padding:1.5rem; flex:1; background:linear-gradient(180deg,var(--slate-bg),var(--surface-white)); }
+.stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; margin-bottom:2rem; }
+.stat-card { background:var(--surface-white); padding:1.25rem; border-radius:16px; border:1px solid var(--outline-variant); box-shadow:0 1px 4px rgba(0,0,0,0.04); transition:all 0.2s; cursor:default; display:flex; flex-direction:column; justify-content:space-between; min-height:130px; }
+.stat-card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.08); transform:translateY(-2px); }
+.stat-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; }
+.stat-label { font-size:0.75rem; color:var(--on-surface-variant); font-weight:500; text-transform:uppercase; letter-spacing:0.05em; }
+.stat-icon-wrap { width:36px; height:36px; border-radius:12px; display:flex; align-items:center; justify-content:center; }
+.stat-icon-wrap.primary { background:var(--surface-container); }
+.stat-icon-wrap.amber { background:#fffbeb; }
+.stat-icon-wrap.blue { background:#eff6ff; }
+.stat-icon-wrap.green { background:#f0fdf4; }
+.stat-icon { font-size:0.875rem; }
+.stat-icon.primary { color:var(--primary); }
+.stat-icon.secondary { color:var(--secondary); }
+.stat-icon.amber { color:var(--warning-amber); }
+.stat-icon.green { color:var(--on-tertiary-container); }
+.stat-number { font-size:1.875rem; font-weight:700; color:var(--primary); }
+.stat-footer { font-size:0.6875rem; display:flex; align-items:center; gap:0.25rem; margin-top:auto; }
+.stat-footer.gray { color:var(--on-tertiary-container); }
+.stat-footer.amber { color:var(--warning-amber); }
+.stat-footer.blue { color:var(--secondary); }
+.stat-footer span { font-size:0.75rem; }
+.main-grid { display:grid; grid-template-columns:2fr 1fr; gap:1.5rem; }
+.chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-bottom:1.5rem; }
+.chart-card { background:var(--surface-white); border-radius:16px; border:1px solid var(--outline-variant); box-shadow:0 1px 4px rgba(0,0,0,0.04); padding:1.25rem; display:flex; flex-direction:column; }
+.chart-title { font-size:0.75rem; font-weight:700; color:var(--primary); margin-bottom:0.75rem; display:flex; align-items:center; gap:0.25rem; }
+.chart-title span { color:var(--secondary); }
+.complaints-card { background:var(--surface-white); border-radius:16px; border:1px solid var(--outline-variant); box-shadow:0 1px 4px rgba(0,0,0,0.04); overflow:hidden; }
+.complaints-header { padding:1rem 1.5rem; border-bottom:1px solid var(--outline-variant); display:flex; justify-content:space-between; align-items:center; background:#f1f5f9; }
+.complaints-header h2 { font-size:1.125rem; font-weight:700; color:var(--primary); display:flex; align-items:center; gap:0.5rem; }
+.complaints-header h2 span { color:var(--secondary); }
+.complaints-header a { font-size:0.75rem; color:var(--secondary); font-weight:600; text-decoration:none; }
+.complaints-header a:hover { text-decoration:underline; }
+.complaints-table { width:100%; border-collapse:collapse; }
+.complaints-table th { font-size:0.6875rem; color:var(--on-surface-variant); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; padding:1rem 1.5rem; background:#f1f5f9; text-align:left; }
+.complaints-table td { padding:1rem 1.5rem; font-size:0.875rem; }
+.complaints-table tr { border-bottom:1px solid rgba(226,232,240,0.5); transition:background 0.2s; }
+.complaints-table tr:hover { background:var(--slate-bg); }
+.complaints-table tr:last-child { border-bottom:none; }
+.ticket-id { font-weight:700; color:var(--primary); }
+.ticket-category { color:var(--on-surface); }
+.badge { display:inline-block; padding:0.25rem 0.75rem; border-radius:9999px; font-size:0.6875rem; font-weight:700; }
+.badge-green { background:#f0fdf4; color:#15803d; }
+.badge-blue { background:#eff6ff; color:#1d4ed8; }
+.badge-amber { background:#fffbeb; color:#b45309; }
+.badge-red { background:#fef2f2; color:#dc2626; }
+.badge-gray { background:#f9fafb; color:#6b7280; }
+.ticket-date { font-size:0.75rem; color:var(--on-surface-variant); }
+.ticket-action { font-size:0.75rem; color:var(--secondary); font-weight:600; text-decoration:none; }
+.ticket-action:hover { text-decoration:underline; }
+.empty-state { padding:3rem; text-align:center; }
+.empty-state span:first-child { font-size:2.25rem; color:rgba(100,116,139,0.3); margin-bottom:0.75rem; display:block; }
+.empty-state p:first-of-type { font-size:0.875rem; font-weight:600; color:#111827; }
+.empty-state p:last-of-type { font-size:0.75rem; color:var(--on-surface-variant); margin-top:0.25rem; }
+.empty-btn { display:inline-flex; align-items:center; gap:0.25rem; margin-top:1.25rem; padding:0.625rem 1.25rem; background:var(--primary); color:var(--on-primary); font-size:0.875rem; font-weight:600; border-radius:12px; border:none; cursor:pointer; text-decoration:none; transition:opacity 0.2s; }
+.empty-btn:hover { opacity:0.9; }
+.right-sidebar { display:flex; flex-direction:column; gap:1.25rem; }
+.ai-card { background:linear-gradient(135deg,var(--primary),var(--primary),var(--secondary)); padding:1.25rem; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,0.12); position:relative; overflow:hidden; flex:1; display:flex; flex-direction:column; }
+.ai-circle { position:absolute; top:-40px; right:-40px; width:160px; height:160px; background:rgba(255,255,255,0.05); border-radius:50%; transition:transform 0.7s; }
+.ai-card:hover .ai-circle { transform:scale(1.5); }
+.ai-content { position:relative; z-index:10; flex:1; display:flex; flex-direction:column; }
+.ai-header { display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; }
+.ai-icon-wrap { width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; }
+.ai-icon-wrap span { font-size:0.875rem; color:white; }
+.ai-header span:last-child { font-size:0.75rem; color:var(--blue-200); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; }
+.ai-text { font-size:0.875rem; color:rgba(255,255,255,0.9); line-height:1.6; margin-bottom:0.75rem; }
+.ai-text .highlight { font-weight:700; color:var(--yellow-300); }
+.ai-progress-wrap { margin-top:auto; margin-bottom:1rem; }
+.ai-bar { height:6px; background:rgba(255,255,255,0.2); border-radius:9999px; overflow:hidden; }
+.ai-bar-fill { height:100%; width:75%; background:var(--yellow-300); border-radius:9999px; }
+.ai-bar-label { font-size:0.6875rem; color:var(--blue-200); margin-top:0.5rem; font-style:italic; }
+.quick-links { background:var(--surface-white); padding:1.25rem; border-radius:16px; border:1px solid var(--outline-variant); box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+.quick-links h4 { font-size:0.875rem; font-weight:700; color:var(--primary); margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem; }
+.quick-links h4 span { color:var(--secondary); }
+.quick-links ul { list-style:none; }
+.quick-links li a { display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; font-size:0.875rem; color:var(--on-surface); text-decoration:none; border-radius:8px; transition:all 0.2s; }
+.quick-links li a:hover { background:var(--slate-bg); color:var(--secondary); }
+.quick-links li a span:last-child { font-size:0.875rem; transition:transform 0.2s; }
+.quick-links li a:hover span:last-child { transform:translateX(4px); }
+.footer { background:var(--primary); color:var(--on-primary); padding:0.75rem 1.5rem; border-top:1px solid var(--on-primary-fixed-variant); margin-top:auto; }
+.footer-inner { max-width:1280px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap; }
+.footer-brand { font-size:0.875rem; font-weight:700; }
+.footer-brand span { font-size:0.75rem; color:var(--blue-300); font-weight:400; }
+.footer-copy { font-size:0.6875rem; color:var(--primary-fixed-dim); }
+.mobile-nav { display:none; position:fixed; bottom:0; left:0; width:100%; background:var(--primary); justify-content:space-around; align-items:center; padding:0.625rem 0; z-index:50; border-top:1px solid var(--on-primary-fixed-variant); }
+.mobile-nav a { display:flex; flex-direction:column; align-items:center; gap:0.125rem; text-decoration:none; font-size:0.5625rem; color:var(--on-primary-container); }
+.mobile-nav a.active-nav { color:var(--on-secondary-container); }
+.mobile-nav a span:first-child { font-size:0.875rem; }
+@media (max-width:1023px) { .sidebar { display:none; } .main-content { margin-left:0; } .mobile-nav { display:flex; } .main-grid { grid-template-columns:1fr; } .stat-grid { grid-template-columns:repeat(2,1fr); } .chart-grid { grid-template-columns:1fr; } }
+@media (max-width:639px) { .stat-grid { grid-template-columns:repeat(2,1fr); gap:0.75rem; } .content { padding:1rem; } .stat-card { min-height:110px; padding:1rem; } .stat-number { font-size:1.5rem; } }
+</style>
+{% endblock %}
 {% block title %}My Dashboard — Complainify{% endblock %}
 {% block content %}
-<aside class="fixed left-0 h-full w-64 bg-primary text-on-primary shadow-md flex flex-col py-6 hidden md:flex z-50">
-<a href="{{ url_for('student_dashboard') }}" class="px-6 mb-8 flex items-center gap-3 hover:opacity-80">
-<span class="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-container flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-white">school</span></span>
-<span class="text-xl font-bold text-white tracking-tight">Complainify</span>
-</a>
-<div class="px-4 mb-6 flex items-center gap-3 border-b border-on-primary-fixed-variant pb-4 mx-2">
-<div class="w-10 h-10 rounded-full bg-gradient-to-br from-secondary to-purple-400 flex items-center justify-center text-white font-bold text-sm shadow-md">{{ student_name[:2]|upper }}</div>
-<div><p class="text-sm text-white font-medium truncate">{{ student_name }}</p><p class="text-[10px] text-blue-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span> Student</p></div>
-</div>
-<nav class="flex-1 px-2 space-y-0.5">
-<a href="{{ url_for('student_dashboard') }}" class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-xl px-4 py-3 text-sm font-medium transition-all shadow-sm"><span class="material-symbols-outlined text-sm">dashboard</span>Overview</a>
-<a href="{{ url_for('student_dashboard') }}#complaints" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">description</span>My Complaints</a>
-<a href="{{ url_for('submit_complaint') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">add_circle</span>New Complaint</a>
-<a href="{{ url_for('track_complaint') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">track_changes</span>Track Status</a>
-</nav>
-<div class="px-2 space-y-0.5 border-t border-on-primary-fixed-variant pt-3 mt-2 mx-2">
-<a href="{{ url_for('index') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">arrow_back</span>Back to Home</a>
-<a href="{{ url_for('student_settings') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">settings</span>Settings</a>
-<a href="{{ url_for('logout') }}" class="flex items-center gap-3 text-on-primary-container hover:bg-primary-container rounded-xl px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">logout</span>Sign Out</a>
-</div>
+
+<div class="dashboard-wrapper">
+
+<aside class="sidebar">
+  <a href="{{ url_for('student_dashboard') }}" class="sidebar-logo">
+    <div class="logo-icon"><span class="material-symbols-outlined">school</span></div>
+    <span class="logo-text">Complainify</span>
+  </a>
+  <div class="sidebar-user">
+    <div class="avatar">{{ student_name[:2]|upper }}</div>
+    <div>
+      <p class="user-name">{{ student_name }}</p>
+      <p class="user-role"><span class="user-dot"></span> Student</p>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="{{ url_for('student_dashboard') }}" class="active"><span class="material-symbols-outlined">dashboard</span>Overview</a>
+    <a href="{{ url_for('student_dashboard') }}#complaints" class="inactive"><span class="material-symbols-outlined">description</span>My Complaints</a>
+    <a href="{{ url_for('submit_complaint') }}" class="inactive"><span class="material-symbols-outlined">add_circle</span>New Complaint</a>
+    <a href="{{ url_for('track_complaint') }}" class="inactive"><span class="material-symbols-outlined">track_changes</span>Track Status</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="{{ url_for('index') }}"><span class="material-symbols-outlined">arrow_back</span>Back to Home</a>
+    <a href="{{ url_for('student_settings') }}"><span class="material-symbols-outlined">settings</span>Settings</a>
+    <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined">logout</span>Sign Out</a>
+  </div>
 </aside>
-<main class="md:ml-64 min-h-screen flex flex-col">
-<header class="bg-surface-white px-6 py-4 flex justify-between items-center sticky top-0 z-40 shadow-sm border-b border-outline-variant">
-<div><h1 class="text-2xl font-bold text-primary flex items-center gap-2"><span class="material-symbols-outlined text-secondary">dashboard</span>My Overview</h1><p class="text-xs text-on-surface-variant ml-8">Hey {{ student_name }}, here's your complaint status.</p></div>
-<div class="flex items-center gap-3">
-<div class="relative" id="notifContainer">
-<button onclick="toggleNotif()" class="p-2 rounded-full hover:bg-surface-container transition-colors relative"><span class="material-symbols-outlined text-on-surface-variant">notifications</span><span id="notifBadge" class="absolute top-1.5 right-1.5 w-2 h-2 bg-error-crimson rounded-full hidden"></span></button>
-<div id="notifDropdown" class="hidden absolute right-0 top-10 w-80 bg-surface-white rounded-xl border border-outline-variant shadow-xl z-50 max-h-96 overflow-y-auto">
-<div class="p-3 border-b border-outline-variant flex justify-between items-center"><span class="text-sm font-bold text-primary">Notifications</span><button onclick="markAllRead()" class="text-xs text-secondary hover:underline">Mark all read</button></div>
-<div id="notifList" class="divide-y divide-outline-variant/50"><p class="text-sm text-on-surface-variant text-center py-6">Loading...</p></div>
-</div>
-</div>
-<a href="{{ url_for('submit_complaint') }}" class="bg-gradient-to-r from-primary to-secondary text-on-primary px-5 py-2 rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-sm flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">add</span>New Complaint</a>
-</div>
+
+<main class="main-content">
+
+<header class="header">
+  <div class="header-left">
+    <h1><span class="material-symbols-outlined">dashboard</span>My Overview</h1>
+    <p>Hey {{ student_name }}, here's your complaint status.</p>
+  </div>
+  <div class="header-right">
+    <div style="position:relative">
+      <button onclick="toggleNotif()" class="notif-btn">
+        <span class="material-symbols-outlined">notifications</span>
+        <span id="notifBadge" class="notif-badge"></span>
+      </button>
+      <div id="notifDropdown" class="notif-dropdown">
+        <div class="notif-header"><span>Notifications</span><button onclick="markAllRead()">Mark all read</button></div>
+        <div id="notifList" class="notif-list"><p style="text-align:center;padding:1.5rem 0;font-size:0.875rem;color:var(--on-surface-variant)">Loading...</p></div>
+      </div>
+    </div>
+    <a href="{{ url_for('submit_complaint') }}" class="new-complaint-btn"><span class="material-symbols-outlined" style="font-size:0.875rem">add</span>New Complaint</a>
+  </div>
 </header>
+
+<div class="content">
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-top">
+      <span class="stat-label">Total</span>
+      <div class="stat-icon-wrap primary"><span class="stat-icon primary material-symbols-outlined">assignment</span></div>
+    </div>
+    <p class="stat-number">{{ total }}</p>
+    <p class="stat-footer gray"><span class="material-symbols-outlined">trending_up</span>All complaints</p>
+  </div>
+  <div class="stat-card">
+    <div class="stat-top">
+      <span class="stat-label">Under Review</span>
+      <div class="stat-icon-wrap amber"><span class="stat-icon amber material-symbols-outlined">visibility</span></div>
+    </div>
+    <p class="stat-number">{{ pending }}</p>
+    <p class="stat-footer amber"><span class="material-symbols-outlined">schedule</span>Awaiting response</p>
+  </div>
+  <div class="stat-card">
+    <div class="stat-top">
+      <span class="stat-label">In Progress</span>
+      <div class="stat-icon-wrap blue"><span class="stat-icon secondary material-symbols-outlined">pending_actions</span></div>
+    </div>
+    <p class="stat-number">{{ in_progress }}</p>
+    <p class="stat-footer blue"><span class="material-symbols-outlined">sync</span>Being resolved</p>
+  </div>
+  <div class="stat-card">
+    <div class="stat-top">
+      <span class="stat-label">Resolved</span>
+      <div class="stat-icon-wrap green"><span class="stat-icon green material-symbols-outlined">check_circle</span></div>
+    </div>
+    <p class="stat-number">{{ resolved }}</p>
+    <p class="stat-footer gray"><span class="material-symbols-outlined">verified</span>{{ (resolved/total*100)|int if total > 0 else 0 }}% resolved</p>
+  </div>
+</div>
+
+<div class="main-grid">
+
+<div class="left-column">
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h4 class="chart-title"><span class="material-symbols-outlined">pie_chart</span>By Category</h4>
+      <canvas id="studentCatChart" height="100" style="max-height:130px" class="mt-auto"></canvas>
+    </div>
+    <div class="chart-card">
+      <h4 class="chart-title"><span class="material-symbols-outlined">trending_up</span>Monthly Trend</h4>
+      <canvas id="studentTrendChart" height="100" style="max-height:130px"></canvas>
+    </div>
+  </div>
+
+  <section id="complaints">
+    <div class="complaints-card">
+      <div class="complaints-header">
+        <h2><span class="material-symbols-outlined">list_alt</span>Recent Complaints</h2>
+        <a href="{{ url_for('submit_complaint') }}">New Complaint</a>
+      </div>
+      {% if complaints %}
+      <div style="overflow-x:auto">
+        <table class="complaints-table">
+          <thead>
+            <tr>
+              <th>Ticket</th><th>Category</th><th>Sentiment</th><th>Status</th><th>Priority</th><th>Date</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in complaints %}
+            <tr>
+              <td class="ticket-id">#{{ c.ticket_id }}</td>
+              <td class="ticket-category">{{ c.category }}</td>
+              <td>
+                <span class="badge {% if c.sentiment == 'Positive' %}badge-green{% elif c.sentiment == 'Negative' %}badge-red{% else %}badge-gray{% endif %}">
+                  {{ c.sentiment or 'Neutral' }}
+                </span>
+              </td>
+              <td>
+                <span class="badge {% if c.status == 'Resolved' %}badge-green{% elif c.status == 'In Progress' %}badge-blue{% else %}badge-amber{% endif %}">
+                  {{ c.status }}
+                </span>
+              </td>
+              <td>
+                <span class="badge {% if c.priority == 'High' %}badge-red{% elif c.priority == 'Medium' %}badge-amber{% else %}badge-gray{% endif %}">
+                  {{ c.priority }}
+                </span>
+              </td>
+              <td class="ticket-date">{{ c.date }}</td>
+              <td><a href="{{ url_for('student_complaint_detail', ticket_id=c.ticket_id) }}" class="ticket-action">View{% if c.status == 'Resolved' %} →{% endif %}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <span class="material-symbols-outlined">inbox</span>
+        <p>No complaints yet</p>
+        <p>Submit your first complaint to get started.</p>
+        <a href="{{ url_for('submit_complaint') }}" class="empty-btn"><span class="material-symbols-outlined" style="font-size:0.875rem">add</span>Submit Complaint</a>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+</div>
+
+<div class="right-sidebar">
+  <div class="ai-card">
+    <div class="ai-circle"></div>
+    <div class="ai-content">
+      <div class="ai-header">
+        <div class="ai-icon-wrap"><span class="material-symbols-outlined">auto_awesome</span></div>
+        <span>AI Insight</span>
+      </div>
+      <p class="ai-text">
+        Your <span class="highlight">complaints</span> are typically resolved within
+        <span class="highlight">48 hours</span> — faster than the campus average.
+      </p>
+      <div class="ai-progress-wrap">
+        <div class="ai-bar"><div class="ai-bar-fill"></div></div>
+        <p class="ai-bar-label">Resolution probability: 92%</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="quick-links">
+    <h4><span class="material-symbols-outlined">link</span>Quick Links</h4>
+    <ul>
+      <li><a href="#">Student Handbook<span class="material-symbols-outlined">arrow_forward</span></a></li>
+      <li><a href="#">Grievance Policy<span class="material-symbols-outlined">arrow_forward</span></a></li>
+      <li><a href="#">Contact Support<span class="material-symbols-outlined">arrow_forward</span></a></li>
+    </ul>
+  </div>
+</div>
+
+</div>{# /main-grid #}
+
+</div>{# /content #}
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="footer-brand">Complainify <span>Student Portal</span></span>
+    <p class="footer-copy">&copy; 2024 Complainify. Student experience reimagined.</p>
+  </div>
+</footer>
+
+</main>
+
+<nav class="mobile-nav">
+  <a href="#" style="color:var(--on-secondary-container)">
+    <span class="material-symbols-outlined">dashboard</span>Home
+  </a>
+  <a href="{{ url_for('student_dashboard') }}#complaints" style="color:var(--on-primary-container)">
+    <span class="material-symbols-outlined">description</span>Complaints
+  </a>
+  <a href="{{ url_for('submit_complaint') }}" style="color:var(--on-primary-container)">
+    <span class="material-symbols-outlined">add_circle</span>New
+  </a>
+  <a href="{{ url_for('logout') }}" style="color:var(--on-primary-container)">
+    <span class="material-symbols-outlined">logout</span>Sign Out
+  </a>
+</nav>
+
+</div>{# /dashboard-wrapper #}
+
 <script>
 function toggleNotif() {
-const dd = document.getElementById('notifDropdown');
-dd.classList.toggle('hidden');
-if (!dd.classList.contains('hidden')) loadNotif();
+  const dd = document.getElementById('notifDropdown');
+  dd.classList.toggle('show');
+  if (dd.classList.contains('show')) loadNotif();
 }
 function loadNotif() {
-fetch('/notifications').then(r=>r.json()).then(data => {
-const list = document.getElementById('notifList');
-if (!data.notifications.length) { list.innerHTML = '<p class="text-sm text-on-surface-variant text-center py-6">No notifications</p>'; return; }
-list.innerHTML = data.notifications.map(n => `<a href="${n.link || '#'}" class="block px-4 py-3 hover:bg-slate-bg transition-colors ${n.is_read ? '' : 'bg-blue-50/50'}"><p class="text-sm text-on-surface">${n.message}</p><p class="text-[10px] text-on-surface-variant mt-1">${n.created_at}</p></a>`).join('');
-}).catch(() => {});
+  fetch('/notifications').then(r=>r.json()).then(data => {
+    const list = document.getElementById('notifList');
+    if (!data.notifications.length) { list.innerHTML = '<p style="text-align:center;padding:1.5rem 0;font-size:0.875rem;color:var(--on-surface-variant)">No notifications</p>'; return; }
+    list.innerHTML = data.notifications.map(n =>
+      '<a href="' + (n.link || '#') + '" class="notif-item ' + (n.is_read ? '' : 'unread') + '">' +
+        '<p>' + n.message + '</p>' +
+        '<p>' + n.created_at + '</p>' +
+      '</a>'
+    ).join('');
+  }).catch(() => {});
 }
 function markAllRead() {
-fetch('/notifications/mark-all-read').then(() => { document.getElementById('notifBadge').classList.add('hidden'); loadNotif(); });
+  fetch('/notifications/mark-all-read').then(() => { document.getElementById('notifBadge').style.display = 'none'; loadNotif(); });
 }
 function checkNotif() {
-fetch('/notifications/count').then(r=>r.json()).then(d => {
-const badge = document.getElementById('notifBadge');
-if (d.count > 0) { badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
-});
+  fetch('/notifications/count').then(r=>r.json()).then(d => {
+    const badge = document.getElementById('notifBadge');
+    badge.style.display = d.count > 0 ? 'block' : 'none';
+  });
 }
 setInterval(checkNotif, 10000);
 checkNotif();
 </script>
-<div class="p-6 flex-1 bg-gradient-to-b from-slate-bg to-surface">
-<section class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-<div class="bg-surface-white p-5 rounded-2xl border border-outline-variant shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between min-h-[130px]">
-<div class="flex items-center justify-between mb-2"><span class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">Total</span><span class="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center"><span class="material-symbols-outlined text-primary text-sm">assignment</span></span></div>
-<p class="text-3xl font-bold text-primary">{{ total }}</p>
-<p class="text-[11px] text-on-tertiary-container mt-auto flex items-center gap-1"><span class="material-symbols-outlined text-xs">trending_up</span>All complaints</p>
-</div>
-<div class="bg-surface-white p-5 rounded-2xl border border-outline-variant shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between min-h-[130px]">
-<div class="flex items-center justify-between mb-2"><span class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">Under Review</span><span class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center"><span class="material-symbols-outlined text-warning-amber text-sm">visibility</span></span></div>
-<p class="text-3xl font-bold text-primary">{{ pending }}</p>
-<p class="text-[11px] text-warning-amber mt-auto flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span>Awaiting response</p>
-</div>
-<div class="bg-surface-white p-5 rounded-2xl border border-outline-variant shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between min-h-[130px]">
-<div class="flex items-center justify-between mb-2"><span class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">In Progress</span><span class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center"><span class="material-symbols-outlined text-secondary text-sm">pending_actions</span></span></div>
-<p class="text-3xl font-bold text-primary">{{ in_progress }}</p>
-<p class="text-[11px] text-secondary mt-auto flex items-center gap-1"><span class="material-symbols-outlined text-xs">sync</span>Being resolved</p>
-</div>
-<div class="bg-surface-white p-5 rounded-2xl border border-outline-variant shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between min-h-[130px]">
-<div class="flex items-center justify-between mb-2"><span class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">Resolved</span><span class="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center"><span class="material-symbols-outlined text-on-tertiary-container text-sm">check_circle</span></span></div>
-<p class="text-3xl font-bold text-primary">{{ resolved }}</p>
-<p class="text-[11px] text-on-tertiary-container mt-auto flex items-center gap-1"><span class="material-symbols-outlined text-xs">verified</span>{{ (resolved/total*100)|int if total > 0 else 0 }}% resolved</p>
-</div>
-</section>
-<div class="grid lg:grid-cols-3 gap-6">
-<section class="lg:col-span-2 space-y-6">
-<div class="grid grid-cols-2 gap-5">
-              <div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-5 flex flex-col h-full">
-                <h4 class="text-xs font-bold text-primary mb-3 flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">pie_chart</span>By Category</h4>
-                <canvas id="studentCatChart" height="100" style="max-height:130px" class="mt-auto"></canvas>
-              </div>
-              <div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-5 flex flex-col h-full">
-                <h4 class="text-xs font-bold text-primary mb-3 flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">trending_up</span>Monthly Trend</h4>
-                <canvas id="studentTrendChart" height="100" style="max-height:130px" class="mt-auto"></canvas>
-              </div>
-</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script>
 {% if student_cat_labels %}
-new Chart(document.getElementById('studentCatChart'), {type:'doughnut', data:{labels:{{ student_cat_labels|tojson }}, datasets:[{data:{{ student_cat_values|tojson }}, backgroundColor:['#022448','#0058be','#2170e4','#10b981','#F59E0B','#EF4444','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16']}]}, options:{plugins:{legend:{display:false}}, responsive:true}});
+new Chart(document.getElementById('studentCatChart'), {
+  type:'doughnut',
+  data:{
+    labels:{{ student_cat_labels|tojson }},
+    datasets:[{
+      data:{{ student_cat_values|tojson }},
+      backgroundColor:['#022448','#0058be','#2170e4','#10b981','#F59E0B','#EF4444','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16']
+    }]
+  },
+  options:{ plugins:{ legend:{ display:false } }, responsive:true }
+});
 {% endif %}
 {% if trend_labels %}
-new Chart(document.getElementById('studentTrendChart'), {type:'line', data:{labels:{{ trend_labels|tojson }}, datasets:[{label:'Complaints', data:{{ trend_values|tojson }}, borderColor:'#0058be', backgroundColor:'rgba(0,88,190,0.1)', fill:true, tension:0.3}]}, options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, ticks:{stepSize:1}}}, responsive:true}});
+new Chart(document.getElementById('studentTrendChart'), {
+  type:'line',
+  data:{
+    labels:{{ trend_labels|tojson }},
+    datasets:[{
+      label:'Complaints', data:{{ trend_values|tojson }},
+      borderColor:'#0058be', backgroundColor:'rgba(0,88,190,0.1)', fill:true, tension:0.3
+    }]
+  },
+  options:{ plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true, ticks:{ stepSize:1 } } }, responsive:true }
+});
 {% endif %}
 </script>
-<section id="complaints">
-<div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm overflow-hidden">
-<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
-<h2 class="text-lg font-bold text-primary flex items-center gap-2"><span class="material-symbols-outlined text-secondary">list_alt</span>Recent Complaints</h2>
-<a href="{{ url_for('submit_complaint') }}" class="text-xs text-secondary font-semibold hover:underline">New Complaint</a>
-</div>
-{% if complaints %}
-<div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead><tr class="text-[11px] text-on-surface-variant font-semibold uppercase tracking-wider"><th class="px-6 py-4 bg-surface-container-low">Ticket</th><th class="px-6 py-4 bg-surface-container-low">Category</th><th class="px-6 py-4 bg-surface-container-low">Sentiment</th><th class="px-6 py-4 bg-surface-container-low">Status</th><th class="px-6 py-4 bg-surface-container-low">Priority</th><th class="px-6 py-4 bg-surface-container-low">Date</th><th class="px-6 py-4 bg-surface-container-low">Action</th></tr></thead>
-<tbody class="divide-y divide-outline-variant/50">
-{% for c in complaints %}
-<tr class="hover:bg-slate-bg transition-colors">
-<td class="px-6 py-4 text-sm font-bold text-primary">#{{ c.ticket_id }}</td>
-<td class="px-6 py-4 text-sm text-on-surface">{{ c.category }}</td>
-<td class="px-6 py-4"><span class="px-2 py-1 rounded-full text-[11px] font-bold {% if c.sentiment == 'Positive' %}bg-green-50 text-green-700{% elif c.sentiment == 'Negative' %}bg-red-50 text-red-600{% else %}bg-gray-50 text-gray-500{% endif %}">{{ c.sentiment or 'Neutral' }}</span></td>
-<td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-[11px] font-bold {% if c.status == 'Resolved' %}bg-green-50 text-green-700{% elif c.status == 'In Progress' %}bg-blue-50 text-blue-700{% else %}bg-amber-50 text-amber-700{% endif %}">{{ c.status }}</span></td>
-<td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-[11px] font-bold {% if c.priority == 'High' %}bg-red-50 text-red-600{% elif c.priority == 'Medium' %}bg-amber-50 text-amber-600{% else %}bg-gray-50 text-gray-500{% endif %}">{{ c.priority }}</span></td>
-<td class="px-6 py-4 text-xs text-on-surface-variant">{{ c.date }}</td>
-<td class="px-6 py-4"><a href="{{ url_for('student_complaint_detail', ticket_id=c.ticket_id) }}" class="text-xs text-secondary font-semibold hover:underline">View{% if c.status == 'Resolved' %} →{% endif %}</a></td>
-</tr>
-{% endfor %}
-</tbody>
-</table>
-</div>
-{% else %}
-<div class="p-12 text-center"><span class="material-symbols-outlined text-4xl text-on-surface-variant/30 mb-3">inbox</span><p class="text-sm font-semibold text-gray-900">No complaints yet</p><p class="text-xs text-on-surface-variant mt-1">Submit your first complaint to get started.</p><a href="{{ url_for('submit_complaint') }}" class="inline-flex items-center gap-1 mt-5 px-5 py-2.5 bg-primary text-on-primary text-sm font-semibold rounded-xl hover:opacity-90 transition-all shadow-sm"><span class="material-symbols-outlined text-sm">add</span>Submit Complaint</a></div>
-{% endif %}
-</div>
-</section>
-<section class="flex flex-col h-full gap-5">
-<div class="bg-gradient-to-br from-primary via-primary to-secondary p-5 rounded-2xl shadow-lg relative overflow-hidden group flex-1">
-<div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
-<div class="relative z-10 h-full flex flex-col">
-<div class="flex items-center gap-2 mb-4"><span class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center"><span class="material-symbols-outlined text-sm text-white">auto_awesome</span></span><span class="text-xs text-blue-200 font-semibold uppercase tracking-wider">AI Insight</span></div>
-<p class="text-sm text-white/90 mb-3 leading-relaxed">Your <span class="font-bold text-yellow-300">complaints</span> are typically resolved within <span class="font-bold text-yellow-300">48 hours</span> — faster than the campus average.</p>
-<div class="mt-auto mb-4">
-<div class="h-1.5 bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-yellow-300 w-3/4 rounded-full"></div></div>
-<p class="text-[11px] text-blue-200 mt-2 italic">Resolution probability: 92%</p>
-</div>
-</div>
-</div>
-<div class="bg-surface-white p-5 rounded-2xl border border-outline-variant shadow-sm">
-<h4 class="text-sm font-bold text-primary mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-secondary">link</span>Quick Links</h4>
-<ul class="space-y-2">
-<li><a href="#" class="flex items-center justify-between text-sm text-on-surface hover:text-secondary transition-colors group px-3 py-2 rounded-lg hover:bg-slate-bg"><span>Student Handbook</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span></a></li>
-<li><a href="#" class="flex items-center justify-between text-sm text-on-surface hover:text-secondary transition-colors group px-3 py-2 rounded-lg hover:bg-slate-bg"><span>Grievance Policy</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span></a></li>
-<li><a href="#" class="flex items-center justify-between text-sm text-on-surface hover:text-secondary transition-colors group px-3 py-2 rounded-lg hover:bg-slate-bg"><span>Contact Support</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span></a></li>
-</ul>
-</div>
-</section>
-</div>
-</div>
-<footer class="w-full mt-auto bg-primary text-on-primary py-3 px-6 border-t border-on-primary-fixed-variant">
-<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
-<span class="text-sm font-bold text-on-primary">Complainify <span class="text-xs text-blue-300 font-normal">Student Portal</span></span>
-<p class="text-[11px] text-primary-fixed-dim">&copy; 2024 Complainify. Student experience reimagined.</p>
-</div>
-</footer>
-</main>
-<nav class="fixed bottom-0 left-0 w-full bg-primary flex justify-around items-center py-2.5 md:hidden z-50 border-t border-on-primary-fixed-variant">
-<a href="#" class="flex flex-col items-center gap-0.5 text-on-secondary-container"><span class="material-symbols-outlined text-sm">dashboard</span><span class="text-[9px]">Home</span></a>
-<a href="{{ url_for('student_dashboard') }}#complaints" class="flex flex-col items-center gap-0.5 text-on-primary-container"><span class="material-symbols-outlined text-sm">description</span><span class="text-[9px]">Complaints</span></a>
-<a href="{{ url_for('submit_complaint') }}" class="flex flex-col items-center gap-0.5 text-on-primary-container"><span class="material-symbols-outlined text-sm">add_circle</span><span class="text-[9px]">New</span></a>
-<a href="{{ url_for('logout') }}" class="flex flex-col items-center gap-0.5 text-on-primary-container"><span class="material-symbols-outlined text-sm">logout</span><span class="text-[9px]">Sign Out</span></a>
-</nav>
+
 {% endblock %}
 {% block footer %}{% endblock %}
