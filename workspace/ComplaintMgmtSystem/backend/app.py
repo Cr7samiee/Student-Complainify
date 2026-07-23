@@ -28,6 +28,29 @@ SMTP_CONFIG = dict(
     password=os.environ.get('SMTP_PASS', 'vksq mrdy qnqd zbut')
 )
 
+DEPARTMENT_EMAILS_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'department_emails.json')
+
+DEPARTMENT_EMAILS = {
+    'IT Support': os.environ.get('EMAIL_IT', 'brooskings661@gmail.com'),
+    'Library': os.environ.get('EMAIL_LIBRARY', 'brooskings661@gmail.com'),
+    'Hostels': os.environ.get('EMAIL_HOSTELS', 'brooskings661@gmail.com'),
+    'Academics': os.environ.get('EMAIL_ACADEMICS', 'brooskings661@gmail.com'),
+    'Canteen': os.environ.get('EMAIL_CANTEEN', 'brooskings661@gmail.com'),
+    'Maintenance': os.environ.get('EMAIL_MAINTENANCE', 'brooskings661@gmail.com'),
+    'Security': os.environ.get('EMAIL_SECURITY', 'brooskings661@gmail.com'),
+    'Transport': os.environ.get('EMAIL_TRANSPORT', 'brooskings661@gmail.com'),
+    'Financial Services': os.environ.get('EMAIL_FINANCE', 'brooskings661@gmail.com'),
+    'Administrative': os.environ.get('EMAIL_ADMIN', 'brooskings661@gmail.com'),
+    'Other': os.environ.get('EMAIL_OTHER', 'brooskings661@gmail.com'),
+}
+
+if os.path.isfile(DEPARTMENT_EMAILS_PATH):
+    try:
+        with open(DEPARTMENT_EMAILS_PATH) as f:
+            saved = json.load(f)
+            DEPARTMENT_EMAILS.update(saved)
+    except: pass
+
 DB_CONFIG = dict(
     host=os.environ.get('DB_HOST', '127.0.0.1'),
     port=int(os.environ.get('DB_PORT', 3306)),
@@ -196,6 +219,24 @@ Complainify Team"""
                         f'Complaint Received: {tid}', body)
                     cur.execute("UPDATE complaints SET email_sent=1 WHERE ticket_id=%s", (tid,))
                     conn.commit()
+
+            dept_email = DEPARTMENT_EMAILS.get(category)
+            if SMTP_CONFIG['user'] and dept_email:
+                dept_body = f"""Dear Department,
+
+A new complaint has been filed that falls under your department.
+
+Ticket: {tid}
+Category: {category}
+Subject: {subject}
+Priority: {priority}
+Description: {description[:500]}
+
+Please review and take necessary action.
+
+Regards,
+Complainify System"""
+                send_email_notification(dept_email, f'New Complaint #{tid} — {category}', dept_body)
 
             if anon:
                 flash(f'Anonymous complaint submitted! Your tracking ID: {tid} — save this to check status.', 'success')
@@ -798,11 +839,32 @@ def admin_settings():
                     (hash_pw(new_pw), new_pw, session['user_id']))
                 conn.commit()
                 flash('Password changed!', 'success')
+        elif action == 'department_emails':
+            dept_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'department_emails.json')
+            depts = {}
+            for key in request.form:
+                if key.startswith('dept_'):
+                    cat = key[5:]
+                    val = request.form.get(key, '').strip()
+                    if val:
+                        depts[cat] = val
+            with open(dept_file, 'w') as f:
+                json.dump(depts, f, indent=2)
+            flash('Department emails updated!', 'success')
     cur.execute("SELECT fullname,email,phone FROM users WHERE id=%s", (session['user_id'],))
     user = cur.fetchone()
     cur.close(); conn.close()
+    dept_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'department_emails.json')
+    dept_emails = {}
+    if os.path.isfile(dept_file):
+        try:
+            with open(dept_file) as f:
+                dept_emails = json.load(f)
+        except: pass
+    for cat in DEPARTMENT_EMAILS:
+        dept_emails.setdefault(cat, DEPARTMENT_EMAILS[cat])
     return render_template('admin/settings.html', user=user,
-        admin_name=session.get('fullname', 'Admin'))
+        admin_name=session.get('fullname', 'Admin'), dept_emails=dept_emails)
 
 # ── REPORT & CSV EXPORT ──
 

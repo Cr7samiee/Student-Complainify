@@ -13,12 +13,15 @@
 <nav class="flex-1 px-2 space-y-0.5">
 <a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">dashboard</span>Dashboard</a>
 <a href="{{ url_for('admin_complaints') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">assignment</span>All Complaints</a>
-<a href="{{ url_for('track_complaint') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">search</span>Track Status</a>
+<a href="{{ url_for('admin_audit_logs') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">history</span>Audit Logs</a>
+<a href="{{ url_for('admin_users') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">people</span>Users</a>
+<a href="{{ url_for('admin_training_logs') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">model_training</span>Training</a>
+<a href="{{ url_for('admin_import_csv') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">upload_file</span>Import CSV</a>
+<a href="{{ url_for('admin_report') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">bar_chart</span>Reports</a>
+<a href="{{ url_for('admin_settings') }}" class="flex items-center gap-3 bg-[#d32f2f]/20 text-white rounded-lg px-4 py-3 text-sm font-medium border-l-2 border-[#d32f2f]"><span class="material-symbols-outlined text-sm">settings</span>Settings</a>
 </nav>
 <div class="px-2 space-y-0.5 border-t border-white/10 pt-3 mt-2 mx-2">
-<a href="{{ url_for('index') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">arrow_back</span>Back to Home</a>
-<a href="{{ url_for('admin_settings') }}" class="flex items-center gap-3 bg-[#d32f2f]/20 text-white rounded-lg px-4 py-3 text-sm font-medium border-l-2 border-[#d32f2f]"><span class="material-symbols-outlined text-sm">settings</span>Settings</a>
-<a href="{{ url_for('logout') }}" class="flex items-center gap-3 text-red-300 hover:text-red-200 hover:bg-red-500/10 rounded-lg px-4 py-3 text-sm transition-all mt-1"><span class="material-symbols-outlined text-sm">logout</span>Sign Out</a>
+<a href="{{ url_for('logout') }}" class="flex items-center gap-3 text-red-300 hover:text-red-200 hover:bg-red-500/10 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">logout</span>Sign Out</a>
 </div>
 </aside>
 <main class="ml-64 min-h-screen flex flex-col bg-[#f0f2f5]">
@@ -44,6 +47,20 @@
 <div class="space-y-1.5"><label class="block text-xs font-medium text-gray-500">New Password</label><input type="password" name="new_password" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] focus:border-[#d32f2f] outline-none"></div>
 <div class="space-y-1.5"><label class="block text-xs font-medium text-gray-500">Confirm New Password</label><input type="password" name="confirm_password" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] focus:border-[#d32f2f] outline-none"></div>
 <button type="submit" class="bg-[#d32f2f] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-[#b71c1c] transition-colors">Change Password</button>
+</form>
+</div>
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+<h2 class="text-sm font-bold text-[#0a1628] mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">mail</span>Department Email Routing</h2>
+<p class="text-xs text-gray-500 mb-4">When a complaint is submitted, an email notification is sent to the respective department.</p>
+<form method="POST" class="space-y-3">
+<input type="hidden" name="action" value="department_emails">
+{% for cat in ['Academics','Hostels','IT Support','Infrastructure','Financial Services','Administrative','Security','Maintenance','Transport','Library','Canteen','Other'] %}
+<div class="flex items-center gap-3">
+<label class="text-sm font-medium text-gray-600 w-36 text-right">{{ cat }}</label>
+<input type="email" name="dept_{{ cat }}" value="{{ dept_emails.get(cat, '') }}" placeholder="dept@university.edu" class="flex-1 px-4 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] focus:border-[#d32f2f] outline-none">
+</div>
+{% endfor %}
+<button type="submit" class="bg-[#d32f2f] text-white text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-[#b71c1c] transition-colors mt-2">Save Department Emails</button>
 </form>
 </div>
 </div>
