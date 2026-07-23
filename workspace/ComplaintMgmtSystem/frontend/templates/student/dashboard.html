@@ -87,14 +87,14 @@ checkNotif();
 <div class="grid lg:grid-cols-3 gap-6">
 <section class="lg:col-span-2 space-y-6">
 <div class="grid grid-cols-2 gap-4">
-<div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-4">
-<h4 class="text-xs font-bold text-primary mb-3 flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">pie_chart</span>By Category</h4>
-<canvas id="studentCatChart" height="120"></canvas>
-</div>
-<div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-4">
-<h4 class="text-xs font-bold text-primary mb-3 flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">trending_up</span>Monthly Trend</h4>
-<canvas id="studentTrendChart" height="120"></canvas>
-</div>
+              <div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-3">
+                <h4 class="text-[11px] font-bold text-primary mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">pie_chart</span>By Category</h4>
+                <canvas id="studentCatChart" height="80" class="max-h-[100px]"></canvas>
+              </div>
+              <div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-3">
+                <h4 class="text-[11px] font-bold text-primary mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">trending_up</span>Monthly Trend</h4>
+                <canvas id="studentTrendChart" height="80" class="max-h-[100px]"></canvas>
+              </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script>
