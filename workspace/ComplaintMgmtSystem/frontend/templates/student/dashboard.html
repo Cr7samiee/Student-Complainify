@@ -135,14 +135,16 @@ new Chart(document.getElementById('studentTrendChart'), {type:'line', data:{labe
 {% endif %}
 </div>
 </section>
-<section class="space-y-5">
-<div class="bg-gradient-to-br from-primary via-primary to-secondary p-5 rounded-2xl shadow-lg relative overflow-hidden group">
+<section class="flex flex-col h-full gap-5">
+<div class="bg-gradient-to-br from-primary via-primary to-secondary p-5 rounded-2xl shadow-lg relative overflow-hidden group flex-1">
 <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
-<div class="relative z-10">
+<div class="relative z-10 h-full flex flex-col">
 <div class="flex items-center gap-2 mb-4"><span class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center"><span class="material-symbols-outlined text-sm text-white">auto_awesome</span></span><span class="text-xs text-blue-200 font-semibold uppercase tracking-wider">AI Insight</span></div>
 <p class="text-sm text-white/90 mb-3 leading-relaxed">Your <span class="font-bold text-yellow-300">complaints</span> are typically resolved within <span class="font-bold text-yellow-300">48 hours</span> — faster than the campus average.</p>
+<div class="mt-auto mb-4">
 <div class="h-1.5 bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-yellow-300 w-3/4 rounded-full"></div></div>
 <p class="text-[11px] text-blue-200 mt-2 italic">Resolution probability: 92%</p>
+</div>
 </div>
 </div>
 <div class="bg-surface-white p-5 rounded-2xl border border-outline-variant shadow-sm">
