@@ -1335,106 +1335,10 @@ def admin_retrain():
     if not login_required('admin'):
         return redirect(url_for('admin_login'))
     import subprocess, sys as sys_mod
-    base_dir = os.path.dirname(os.path.dirname(__file__))
-    script = """
-import sys, os, json, csv, math, random
-BASE = sys.argv[1]
-sys.path.insert(0, os.path.join(BASE, 'train'))
-
-TRAIN_PATH = os.path.join(BASE, 'TrainDataset', 'train_dataset.csv')
-NEW_PATH = os.path.join(BASE, 'TrainDataset', 'new_complaints.csv')
-TEST_PATH = os.path.join(BASE, 'TrainDataset', 'test_dataset.csv')
-ENC_PATH = os.path.join(BASE, 'TrainDataset', 'encoders', 'category_decoder.json')
-LOG_PATH = os.path.join(BASE, 'train', 'training_log.json')
-
-from classifier import MultinomialNB
-
-# Load encoders
-from collections import Counter, defaultdict
-import re
-
-enc_path = os.path.join(BASE, 'TrainDataset', 'encoders', 'category_encoder.json')
-with open(enc_path) as f: cat_encoder = json.load(f)
-with open(ENC_PATH) as f: cat_decoder = {int(k): v for k, v in json.load(f).items()}
-
-all_rows = []
-with open(TRAIN_PATH, encoding='utf-8') as f:
-    all_rows += list(csv.DictReader(f))
-if os.path.isfile(NEW_PATH):
-    with open(NEW_PATH, encoding='utf-8') as f:
-        new_rows = list(csv.DictReader(f))
-        for r in new_rows:
-            if r['category'] in cat_encoder:
-                r['category_encoded'] = cat_encoder[r['category']]
-                all_rows.append(r)
-
-random.shuffle(all_rows)
-split = int(len(all_rows) * 0.8)
-train_rows = all_rows[:split]
-test_rows = all_rows[split:]
-
-train_texts = [r['text'] for r in train_rows]
-train_labels = [int(r['category_encoded']) for r in train_rows]
-test_texts = [r['text'] for r in test_rows]
-test_labels = [int(r['category_encoded']) for r in test_rows]
-
-model = MultinomialNB()
-model.fit(train_texts, train_labels)
-model.save(os.path.join(BASE, 'TrainDataset', 'model_params.json'))
-
-correct = 0
-per_class = {}
-for cat_id, cat_name in cat_decoder.items():
-    per_class[cat_name] = {'tp': 0, 'fp': 0, 'fn': 0}
-for i, text in enumerate(test_texts):
-    pred, probs = model.predict_with_proba(text)
-    true_label = test_labels[i]
-    if pred == true_label: correct += 1
-    cat_name = cat_decoder.get(pred, 'Other')
-    true_cat_name = cat_decoder.get(true_label, 'Other')
-    if pred == true_label:
-        per_class[cat_name]['tp'] += 1
-    else:
-        per_class[cat_name]['fp'] += 1
-        if true_cat_name not in per_class:
-            per_class[true_cat_name] = {'tp': 0, 'fp': 0, 'fn': 0}
-        per_class[true_cat_name]['fn'] += 1
-
-# Compute per-class metrics
-class_metrics = []
-for cat, counts in per_class.items():
-    p = counts['tp'] / max(counts['tp'] + counts['fp'], 1)
-    r = counts['tp'] / max(counts['tp'] + counts['fn'], 1)
-    f1 = 2 * p * r / max(p + r, 1)
-    class_metrics.append({'category': cat, 'precision': round(p, 4), 'recall': round(r, 4), 'f1': round(f1, 4)})
-
-p_vals = [m['precision'] for m in class_metrics]
-r_vals = [m['recall'] for m in class_metrics]
-macro_f1 = round(sum(m['f1'] for m in class_metrics) / max(len(class_metrics), 1), 4)
-
-# Load previous log
-log_data = {}
-if os.path.isfile(LOG_PATH):
-    with open(LOG_PATH) as f: log_data = json.load(f)
-
-history = log_data.get('history', [])
-history.append({'date': __import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M'), 'accuracy': round(correct/len(test_texts)*100, 1)})
-
-new_log = {
-    'last_trained': __import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-    'train_samples': len(train_texts),
-    'test_samples': len(test_texts),
-    'accuracy': round(correct / len(test_texts) * 100, 2),
-    'macro_f1': macro_f1,
-    'per_class': class_metrics,
-    'history': history[-20:]
-}
-
-with open(LOG_PATH, 'w') as f: json.dump(new_log, f, indent=2)
-print(json.dumps(new_log))
-"""
+    train_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'train')
+    script_path = os.path.join(train_dir, 'retrain.py')
     try:
-        result = subprocess.run([sys_mod.executable, '-c', script, base_dir], capture_output=True, text=True, timeout=120, cwd=base_dir)
+        result = subprocess.run([sys_mod.executable, script_path], capture_output=True, text=True, timeout=120)
         if result.returncode == 0:
             log_data = json.loads(result.stdout.strip())
             import train.classifier as clf

@@ -1,0 +1,91 @@
+{
+  "last_trained": "2026-07-23 18:55:05",
+  "train_samples": 5916,
+  "test_samples": 1480,
+  "accuracy": 97.09,
+  "macro_f1": 0.9709,
+  "per_class": [
+    {
+      "category": "IT Support",
+      "precision": 0.9699,
+      "recall": 0.9699,
+      "f1": 0.9699
+    },
+    {
+      "category": "Hostels",
+      "precision": 0.9862,
+      "recall": 0.9286,
+      "f1": 0.9565
+    },
+    {
+      "category": "Academics",
+      "precision": 0.9539,
+      "recall": 0.9539,
+      "f1": 0.9539
+    },
+    {
+      "category": "Fees / Finance",
+      "precision": 0.9762,
+      "recall": 0.9762,
+      "f1": 0.9762
+    },
+    {
+      "category": "Maintenance",
+      "precision": 0.9281,
+      "recall": 0.9861,
+      "f1": 0.9562
+    },
+    {
+      "category": "Transport",
+      "precision": 0.9673,
+      "recall": 0.9801,
+      "f1": 0.9737
+    },
+    {
+      "category": "Security / Discipline",
+      "precision": 0.9858,
+      "recall": 0.9789,
+      "f1": 0.9823
+    },
+    {
+      "category": "Administration",
+      "precision": 0.95,
+      "recall": 0.9366,
+      "f1": 0.9433
+    },
+    {
+      "category": "Library",
+      "precision": 0.9932,
+      "recall": 1.0,
+      "f1": 0.9966
+    },
+    {
+      "category": "Canteen",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  ],
+  "history": [
+    {
+      "date": "2026-07-23 18:51",
+      "accuracy": 96.6
+    },
+    {
+      "date": "2026-07-23 18:54",
+      "accuracy": 96.2
+    },
+    {
+      "date": "2026-07-23 18:54",
+      "accuracy": 96.6
+    },
+    {
+      "date": "2026-07-23 18:54",
+      "accuracy": 97.2
+    },
+    {
+      "date": "2026-07-23 18:55",
+      "accuracy": 97.1
+    }
+  ]
+}

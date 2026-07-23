@@ -25,8 +25,8 @@
 <main class="ml-64 min-h-screen flex flex-col bg-[#f0f2f5]">
 <header class="bg-white px-6 py-3 flex justify-between items-center sticky top-0 z-40 shadow-sm border-b border-gray-200">
 <div><h1 class="text-lg font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-[#d32f2f]">model_training</span>Model Training</h1><p class="text-xs text-gray-500 ml-8">Naive Bayes classifier training logs & retraining</p></div>
-<form method="POST" action="{{ url_for('admin_retrain') }}" onsubmit="return confirm('Retrain model with latest data? This may take a moment.')">
-<button type="submit" class="bg-[#d32f2f] text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-[#b71c1c] transition-colors flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">refresh</span>Retrain Model</button>
+              <form method="POST" action="{{ url_for('admin_retrain') }}" onsubmit="var btn=this.querySelector('button[type=submit]');btn.disabled=true;btn.innerHTML='<span class=\'material-symbols-outlined text-sm animate-spin\'>refresh</span> Training...';return confirm('Retrain model with latest data? This may take a moment.')">
+                <button type="submit" class="bg-[#d32f2f] text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-[#b71c1c] transition-colors flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">refresh</span>Retrain Model</button>
 </form>
 </header>
 <div class="p-6 max-w-7xl mx-auto space-y-6">
