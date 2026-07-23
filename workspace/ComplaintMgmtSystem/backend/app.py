@@ -403,7 +403,6 @@ def student_dashboard():
         assigned_to,validated
         FROM complaints WHERE user_id=%s ORDER BY created_at DESC""", (session['user_id'],))
     complaints = cur.fetchall()
-    cur.close(); conn.close()
     total = len(complaints)
     resolved = sum(1 for c in complaints if c['status'] == 'Resolved')
     in_progress = sum(1 for c in complaints if c['status'] == 'In Progress')
@@ -418,6 +417,7 @@ def student_dashboard():
     trend_rows = cur.fetchall()
     trend_labels = [r['month'] for r in trend_rows]
     trend_values = [r['cnt'] for r in trend_rows]
+    cur.close(); conn.close()
 
     return render_template('student/dashboard.html',
         student_name=session.get('fullname', 'Student'),
