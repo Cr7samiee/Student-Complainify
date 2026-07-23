@@ -214,7 +214,7 @@ Complainify was created to solve a simple problem: students face too many barrie
 <h3 class="text-xl font-bold text-[#0a1628] mb-2">File a Complaint</h3>
 <p class="text-sm text-gray-500 mb-6">Would you like to submit anonymously or log in to track your complaint?</p>
 <div class="space-y-3">
-<a href="{{ url_for('submit_complaint') }}" class="flex items-center justify-center gap-2 w-full bg-primary text-white px-6 py-3.5 rounded-xl text-sm font-semibold hover:brightness-110 active:scale-[0.98] transition-all"><span class="material-symbols-outlined text-sm">incognito</span>Submit Anonymously</a>
+<a href="{{ url_for('submit_complaint', anonymous=1) }}" class="flex items-center justify-center gap-2 w-full bg-primary text-white px-6 py-3.5 rounded-xl text-sm font-semibold hover:brightness-110 active:scale-[0.98] transition-all"><span class="material-symbols-outlined text-sm">incognito</span>Submit Anonymously</a>
 <a href="{{ url_for('student_login') }}" class="flex items-center justify-center gap-2 w-full border-2 border-primary text-primary px-6 py-3.5 rounded-xl text-sm font-semibold hover:bg-primary/5 active:scale-[0.98] transition-all"><span class="material-symbols-outlined text-sm">login</span>Log In to Submit</a>
 </div>
 <button onclick="document.getElementById('complainModal').classList.add('hidden')" class="mt-5 text-xs text-gray-400 hover:text-gray-600 transition-colors">Cancel</button>

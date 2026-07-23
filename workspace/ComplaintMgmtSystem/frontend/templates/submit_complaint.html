@@ -27,6 +27,12 @@
 </div>
  <form method="POST" class="space-y-5" id="complaintForm" enctype="multipart/form-data">
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+{% if request.args.get('anonymous') %}
+<div class="sm:col-span-2 bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-yellow-600">incognito</span>
+<div><p class="text-sm font-semibold text-yellow-800">Filing Anonymously</p><p class="text-xs text-yellow-600">You will receive a tracking ID to check your complaint status.</p></div>
+</div>
+{% else %}
 <div class="space-y-1.5">
 <label class="block text-sm font-medium text-on-surface" for="fullname">Full Name</label>
 <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm" id="fullname" name="fullname" placeholder="Your name" type="text" value="{{ session.get('fullname', '') }}">
@@ -35,6 +41,7 @@
 <label class="block text-sm font-medium text-on-surface" for="email">Email</label>
 <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm" id="email" name="email" placeholder="your@email.com" type="text" value="{{ session.get('email', '') }}">
 </div>
+{% endif %}
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <div class="space-y-1.5">

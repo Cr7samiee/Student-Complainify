@@ -100,6 +100,14 @@ def submit_complaint():
         try:
             tid = gen_ticket()
             uid = session.get('user_id')
+            anon = request.args.get('anonymous') == '1'
+            if anon and not uid:
+                anon_id = 'ANON-' + hashlib.md5((str(random.random()) + str(datetime.now())).encode()).hexdigest()[:8].upper()
+                fullname = anon_id
+                email = anon_id.lower() + '@anonymous.complainify'
+            else:
+                fullname = request.form.get('fullname', session.get('fullname', 'Anonymous'))
+                email = request.form.get('email', session.get('email', ''))
             description = request.form.get('description', '')
             subject = request.form.get('subject', '')
             full_text = subject + ' ' + description
@@ -148,7 +156,7 @@ def submit_complaint():
             cur.execute("""INSERT INTO complaints
                 (ticket_id,user_id,fullname,email,category,priority,subject,description,sentiment,sentiment_score,student_attachment)
                 VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-                (tid, uid, request.form.get('fullname'), request.form.get('email'),
+                (tid, uid, fullname, email,
                  category, priority, subject, description, sentiment, sentiment_score, student_attachment_name))
             conn.commit()
 
@@ -169,8 +177,8 @@ def submit_complaint():
                     writer.writerow([subject + ' ' + description, category])
             except: pass
 
-            if SMTP_CONFIG['user']:
-                student_email = request.form.get('email')
+            if SMTP_CONFIG['user'] and not anon:
+                student_email = email
                 if student_email:
                     body = f"""Dear Student,
 
@@ -189,7 +197,10 @@ Complainify Team"""
                     cur.execute("UPDATE complaints SET email_sent=1 WHERE ticket_id=%s", (tid,))
                     conn.commit()
 
-            flash(f'Complaint submitted! Ticket: {tid} | Category: {category}', 'success')
+            if anon:
+                flash(f'Anonymous complaint submitted! Your tracking ID: {tid} — save this to check status.', 'success')
+            else:
+                flash(f'Complaint submitted! Ticket: {tid} | Category: {category}', 'success')
         finally:
             cur.close(); conn.close()
         return redirect(url_for('track_complaint'))
