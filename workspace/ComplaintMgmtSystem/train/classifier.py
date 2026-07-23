@@ -82,6 +82,31 @@ class MultinomialNB:
         self.vocab_size = len(self.vocab)
         self._trained = True
 
+    def save(self, path):
+        data = {
+            'alpha': self.alpha, 'min_df': self.min_df,
+            'classes': self.classes, 'priors': self.priors,
+            'vocab': list(self.vocab), 'vocab_size': self.vocab_size,
+            'class_total_words': self.class_total_words,
+            'word_counts': {str(c): dict(wc) for c, wc in self.word_counts.items()}
+        }
+        with open(path, 'w') as f:
+            json.dump(data, f, indent=2)
+
+    @classmethod
+    def load(cls, path):
+        with open(path) as f:
+            data = json.load(f)
+        m = cls(alpha=data['alpha'], min_df=data['min_df'])
+        m.classes = data['classes']
+        m.priors = {int(k) if k.isdigit() else k: v for k, v in data['priors'].items()}
+        m.vocab = set(data['vocab'])
+        m.vocab_size = data['vocab_size']
+        m.class_total_words = {int(k): v for k, v in data['class_total_words'].items()}
+        m.word_counts = {int(c): defaultdict(int, {tok: cnt for tok, cnt in wc.items()}) for c, wc in data['word_counts'].items()}
+        m._trained = True
+        return m
+
     def predict_with_proba(self, text):
         if not self._trained:
             raise RuntimeError("Model not trained")
@@ -136,16 +161,36 @@ def rule_based_categorize(text):
             return rule['category'], rule['confidence']
     return None
 
+MODEL_PARAMS_PATH = os.path.join(BASE, 'TrainDataset', 'model_params.json')
+
 def get_model():
     global _model
     if _model is None:
+        if os.path.isfile(MODEL_PARAMS_PATH):
+            try:
+                _model = MultinomialNB.load(MODEL_PARAMS_PATH)
+                return _model
+            except: pass
         with open(DATA_PATH, encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
         texts = [r['text'] for r in rows]
         labels = [int(r['category_encoded']) for r in rows]
         _model = MultinomialNB()
         _model.fit(texts, labels)
+        try:
+            _model.save(MODEL_PARAMS_PATH)
+        except: pass
     return _model
+
+def predict_top3(text):
+    model = get_model()
+    pred, probs = model.predict_with_proba(text)
+    sorted_cats = sorted(probs.items(), key=lambda x: x[1], reverse=True)
+    result = []
+    for enc_cat, prob in sorted_cats[:3]:
+        cat_name = CATEGORY_NORMALIZE.get(CAT_DECODER[enc_cat], CAT_DECODER[enc_cat])
+        result.append({'category': cat_name, 'confidence': round(prob, 4)})
+    return result
 
 def categorize(text):
     rule_match = rule_based_categorize(text)
@@ -179,3 +224,31 @@ def categorize(text):
 def auto_categorize(text):
     result = categorize(text)
     return result['category'], result['confidence']
+
+def detect_anomaly(text):
+    model = get_model()
+    tokens = clean_and_tokenize(text)
+    token_set = set(tokens)
+    unknown_tokens = [t for t in token_set if t not in model.vocab]
+    known_ratio = len(token_set - set(unknown_tokens)) / max(len(token_set), 1)
+
+    pred, probs = model.predict_with_proba(text)
+    max_prob = max(probs.values())
+
+    flags = []
+    if len(tokens) < 5:
+        flags.append('too_short')
+    if known_ratio < 0.3:
+        flags.append('many_unknown_words')
+    if max_prob < 0.30:
+        flags.append('low_category_confidence')
+    if len(unknown_tokens) > max(3, len(token_set) * 0.5):
+        flags.append('high_unusual_vocabulary')
+
+    return {
+        'is_anomaly': len(flags) >= 2,
+        'flags': flags,
+        'known_token_ratio': round(known_ratio, 2),
+        'max_category_confidence': round(max_prob, 2),
+        'unknown_tokens': unknown_tokens[:10]
+    }
