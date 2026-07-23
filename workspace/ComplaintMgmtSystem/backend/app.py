@@ -874,9 +874,11 @@ def admin_report():
         return redirect(url_for('admin_login'))
     conn = get_db(); cur = conn.cursor()
     cur.execute("""SELECT ticket_id,fullname student,category,priority,status,subject,
-        date_format(created_at,'%%d %%b %%Y') date, assigned_to, validated
+        created_at, assigned_to, validated
         FROM complaints ORDER BY created_at DESC""")
     complaints = cur.fetchall()
+    for c in complaints:
+        c['date'] = c['created_at'].strftime('%d %b %Y') if c['created_at'] else '-'
     total = len(complaints)
     resolved = sum(1 for c in complaints if c['status'] == 'Resolved')
     in_progress = sum(1 for c in complaints if c['status'] == 'In Progress')
@@ -887,11 +889,38 @@ def admin_report():
         cat_counts[c['category']] = cat_counts.get(c['category'], 0) + 1
     cat_labels = list(cat_counts.keys())
     cat_values = list(cat_counts.values())
+
+    # Date-based analysis
+    from collections import defaultdict
+    daily_counts = defaultdict(int)
+    monthly_counts = defaultdict(int)
+    for c in complaints:
+        if c['created_at']:
+            day_key = c['created_at'].strftime('%Y-%m-%d')
+            month_key = c['created_at'].strftime('%b %Y')
+            daily_counts[day_key] += 1
+            monthly_counts[month_key] += 1
+    daily_labels = sorted(daily_counts.keys())[-30:]
+    daily_data = [daily_counts[d] for d in daily_labels]
+    month_labels = list(monthly_counts.keys())
+    month_data = [monthly_counts[m] for m in month_labels]
+
+    # Resolution time stats
+    cur.execute("""SELECT TIMESTAMPDIFF(HOUR, created_at, resolved_at) hrs
+        FROM complaints WHERE status='Resolved' AND resolved_at IS NOT NULL""")
+    res_times = [r['hrs'] for r in cur.fetchall()]
+    avg_res = round(sum(res_times)/len(res_times), 1) if res_times else 0
+    max_res = max(res_times) if res_times else 0
+    min_res = min(res_times) if res_times else 0
+
+    # Sentiment breakdown
+    cur.execute("""SELECT sentiment, COUNT(*) cnt FROM complaints
+        WHERE sentiment IN ('Positive','Neutral','Negative') GROUP BY sentiment""")
+    sent_data = {r['sentiment']: r['cnt'] for r in cur.fetchall()}
     cur.close(); conn.close()
 
     # Training dataset analysis
     train_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'TrainDataset', 'processed_dataset_4500.csv')
-    enc_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'TrainDataset', 'encoders', 'category_decoder.json')
     train_cats = {}
     train_total = 0
     train_lens = []
@@ -919,6 +948,10 @@ def admin_report():
     return render_template('admin/report.html', complaints=complaints,
         total=total, resolved=resolved, in_progress=in_progress, pending=pending, validated=validated,
         cat_labels=cat_labels, cat_values=cat_values,
+        daily_labels=daily_labels, daily_data=daily_data,
+        month_labels=month_labels, month_data=month_data,
+        avg_res=avg_res, max_res=max_res, min_res=min_res,
+        sent_data=sent_data,
         train_total=train_total, train_unique=train_unique,
         train_avg_len=train_avg_len, train_min_len=train_min_len,
         train_max_len=train_max_len, train_median_len=train_median_len,
