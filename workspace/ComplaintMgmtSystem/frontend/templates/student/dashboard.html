@@ -26,10 +26,41 @@
 <header class="bg-surface-white px-6 py-4 flex justify-between items-center sticky top-0 z-40 shadow-sm border-b border-outline-variant">
 <div><h1 class="text-2xl font-bold text-primary flex items-center gap-2"><span class="material-symbols-outlined text-secondary">dashboard</span>My Overview</h1><p class="text-xs text-on-surface-variant ml-8">Hey {{ student_name }}, here's your complaint status.</p></div>
 <div class="flex items-center gap-3">
-<button class="p-2 rounded-full hover:bg-surface-container transition-colors relative"><span class="material-symbols-outlined text-on-surface-variant">notifications</span><span class="absolute top-2 right-2 w-2 h-2 bg-error-crimson rounded-full"></span></button>
+<div class="relative" id="notifContainer">
+<button onclick="toggleNotif()" class="p-2 rounded-full hover:bg-surface-container transition-colors relative"><span class="material-symbols-outlined text-on-surface-variant">notifications</span><span id="notifBadge" class="absolute top-1.5 right-1.5 w-2 h-2 bg-error-crimson rounded-full hidden"></span></button>
+<div id="notifDropdown" class="hidden absolute right-0 top-10 w-80 bg-surface-white rounded-xl border border-outline-variant shadow-xl z-50 max-h-96 overflow-y-auto">
+<div class="p-3 border-b border-outline-variant flex justify-between items-center"><span class="text-sm font-bold text-primary">Notifications</span><button onclick="markAllRead()" class="text-xs text-secondary hover:underline">Mark all read</button></div>
+<div id="notifList" class="divide-y divide-outline-variant/50"><p class="text-sm text-on-surface-variant text-center py-6">Loading...</p></div>
+</div>
+</div>
 <a href="{{ url_for('submit_complaint') }}" class="bg-gradient-to-r from-primary to-secondary text-on-primary px-5 py-2 rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-sm flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">add</span>New Complaint</a>
 </div>
 </header>
+<script>
+function toggleNotif() {
+const dd = document.getElementById('notifDropdown');
+dd.classList.toggle('hidden');
+if (!dd.classList.contains('hidden')) loadNotif();
+}
+function loadNotif() {
+fetch('/notifications').then(r=>r.json()).then(data => {
+const list = document.getElementById('notifList');
+if (!data.notifications.length) { list.innerHTML = '<p class="text-sm text-on-surface-variant text-center py-6">No notifications</p>'; return; }
+list.innerHTML = data.notifications.map(n => `<a href="${n.link || '#'}" class="block px-4 py-3 hover:bg-slate-bg transition-colors ${n.is_read ? '' : 'bg-blue-50/50'}"><p class="text-sm text-on-surface">${n.message}</p><p class="text-[10px] text-on-surface-variant mt-1">${n.created_at}</p></a>`).join('');
+}).catch(() => {});
+}
+function markAllRead() {
+fetch('/notifications/mark-all-read').then(() => { document.getElementById('notifBadge').classList.add('hidden'); loadNotif(); });
+}
+function checkNotif() {
+fetch('/notifications/count').then(r=>r.json()).then(d => {
+const badge = document.getElementById('notifBadge');
+if (d.count > 0) { badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
+});
+}
+setInterval(checkNotif, 10000);
+checkNotif();
+</script>
 <div class="p-6 flex-1 bg-gradient-to-b from-slate-bg to-surface">
 <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
 <div class="bg-surface-white p-5 rounded-2xl border border-outline-variant shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
@@ -54,7 +85,27 @@
 </div>
 </section>
 <div class="grid lg:grid-cols-3 gap-6">
-<section class="lg:col-span-2" id="complaints">
+<section class="lg:col-span-2 space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-4">
+<h4 class="text-xs font-bold text-primary mb-3 flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">pie_chart</span>By Category</h4>
+<canvas id="studentCatChart" height="120"></canvas>
+</div>
+<div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm p-4">
+<h4 class="text-xs font-bold text-primary mb-3 flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">trending_up</span>Monthly Trend</h4>
+<canvas id="studentTrendChart" height="120"></canvas>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script>
+{% if student_cat_labels %}
+new Chart(document.getElementById('studentCatChart'), {type:'doughnut', data:{labels:{{ student_cat_labels|tojson }}, datasets:[{data:{{ student_cat_values|tojson }}, backgroundColor:['#022448','#0058be','#2170e4','#10b981','#F59E0B','#EF4444','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16']}]}, options:{plugins:{legend:{display:false}}, responsive:true, maintainAspectRatio:false}});
+{% endif %}
+{% if trend_labels %}
+new Chart(document.getElementById('studentTrendChart'), {type:'line', data:{labels:{{ trend_labels|tojson }}, datasets:[{label:'Complaints', data:{{ trend_values|tojson }}, borderColor:'#0058be', backgroundColor:'rgba(0,88,190,0.1)', fill:true, tension:0.3}]}, options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, ticks:{stepSize:1}}}, responsive:true, maintainAspectRatio:false}});
+{% endif %}
+</script>
+<section id="complaints">
 <div class="bg-surface-white rounded-2xl border border-outline-variant shadow-sm overflow-hidden">
 <div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
 <h2 class="text-lg font-bold text-primary flex items-center gap-2"><span class="material-symbols-outlined text-secondary">list_alt</span>Recent Complaints</h2>

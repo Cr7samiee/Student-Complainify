@@ -14,10 +14,11 @@
 <a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-3 bg-[#d32f2f]/20 text-white rounded-lg px-4 py-3 text-sm font-medium border-l-2 border-[#d32f2f]"><span class="material-symbols-outlined text-sm">dashboard</span>Dashboard</a>
 <a href="{{ url_for('admin_complaints') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">assignment</span>All Complaints</a>
 <a href="{{ url_for('track_complaint') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">search</span>Track Status</a>
+<a href="{{ url_for('admin_audit_logs') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">history</span>Audit Logs</a>
+<a href="{{ url_for('admin_users') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">people</span>Users</a>
 <a href="{{ url_for('admin_report') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">bar_chart</span>Reports</a>
 </nav>
 <div class="px-2 space-y-0.5 border-t border-white/10 pt-3 mt-2 mx-2">
-<a href="{{ url_for('index') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">arrow_back</span>Back to Home</a>
 <a href="{{ url_for('admin_settings') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">settings</span>Settings</a>
 <a href="{{ url_for('logout') }}" class="flex items-center gap-3 text-red-300 hover:text-red-200 hover:bg-red-500/10 rounded-lg px-4 py-3 text-sm transition-all mt-1"><span class="material-symbols-outlined text-sm">logout</span>Sign Out</a>
 </div>
@@ -26,7 +27,13 @@
 <header class="bg-white px-6 py-3 flex justify-between items-center sticky top-0 z-40 shadow-sm border-b border-gray-200">
 <div><h1 class="text-lg font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-[#d32f2f]">analytics</span>Analytics Dashboard</h1><p class="text-xs text-gray-500 ml-8">System-wide complaint resolution overview</p></div>
 <div class="flex items-center gap-4">
-<button class="relative p-2 hover:bg-gray-100 rounded-lg"><span class="material-symbols-outlined text-gray-500">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span></button>
+<div class="relative" id="notifContainer">
+<button onclick="toggleNotif()" class="relative p-2 hover:bg-gray-100 rounded-lg"><span class="material-symbols-outlined text-gray-500">notifications</span><span id="notifBadge" class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full hidden"></span></button>
+<div id="notifDropdown" class="hidden absolute right-0 top-10 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-50 max-h-96 overflow-y-auto">
+<div class="p-3 border-b border-gray-100 flex justify-between items-center"><span class="text-sm font-bold text-[#0a1628]">Notifications</span><button onclick="markAllRead()" class="text-xs text-blue-600 hover:underline">Mark all read</button></div>
+<div id="notifList" class="divide-y divide-gray-50"><p class="text-sm text-gray-500 text-center py-6">Loading...</p></div>
+</div>
+</div>
 <a href="{{ url_for('admin_report') }}" class="bg-[#0a1628] text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-[#1a2a3a] transition-colors flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">assessment</span>View Report</a>
 </div>
 </header>
@@ -137,6 +144,31 @@
 </div>
 </section>
 </div>
+<script>
+function toggleNotif() {
+const dd = document.getElementById('notifDropdown');
+dd.classList.toggle('hidden');
+if (!dd.classList.contains('hidden')) loadNotif();
+}
+function loadNotif() {
+fetch('/notifications').then(r=>r.json()).then(data => {
+const list = document.getElementById('notifList');
+if (!data.notifications.length) { list.innerHTML = '<p class="text-sm text-gray-500 text-center py-6">No notifications</p>'; return; }
+list.innerHTML = data.notifications.map(n => `<a href="${n.link || '#'}" class="block px-4 py-3 hover:bg-gray-50 transition-colors ${n.is_read ? '' : 'bg-blue-50'}"><p class="text-sm text-gray-800">${n.message}</p><p class="text-[10px] text-gray-400 mt-1">${n.created_at}</p></a>`).join('');
+}).catch(() => {});
+}
+function markAllRead() {
+fetch('/notifications/mark-all-read').then(() => { document.getElementById('notifBadge').classList.add('hidden'); loadNotif(); });
+}
+function checkNotif() {
+fetch('/notifications/count').then(r=>r.json()).then(d => {
+const badge = document.getElementById('notifBadge');
+if (d.count > 0) { badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
+});
+}
+setInterval(checkNotif, 10000);
+checkNotif();
+</script>
 <footer class="bg-[#0a1628] w-full mt-auto">
 <div class="max-w-7xl mx-auto px-6 py-3 flex flex-col md:flex-row justify-between items-center border-t border-white/5 gap-2">
 <div class="flex items-center gap-2"><span class="text-sm font-bold text-white">Complainify</span><span class="text-[10px] text-gray-500">v4.2.0-Admin</span></div>

@@ -1,6 +1,8 @@
 -- Complainify Database Setup
 -- Run: mysql -u root < complainify.sql
--- Migration: ALTER TABLE complaints ADD COLUMN attachment VARCHAR(255) DEFAULT NULL;
+-- Migrations:
+--   ALTER TABLE complaints ADD COLUMN attachment VARCHAR(255) DEFAULT NULL;
+--   ALTER TABLE complaints ADD COLUMN student_attachment VARCHAR(255) DEFAULT NULL;
 
 CREATE DATABASE IF NOT EXISTS complainify CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE complainify;
@@ -38,6 +40,7 @@ CREATE TABLE IF NOT EXISTS complaints (
     validated TINYINT(1) DEFAULT 0,
     email_sent TINYINT(1) DEFAULT 0,
     attachment VARCHAR(255) DEFAULT NULL,
+    student_attachment VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
@@ -59,6 +62,41 @@ ALTER TABLE complaints ADD COLUMN IF NOT EXISTS resolved_at DATETIME DEFAULT NUL
 ALTER TABLE complaints ADD COLUMN IF NOT EXISTS admin_notes TEXT DEFAULT NULL AFTER resolved_at;
 ALTER TABLE complaints ADD COLUMN IF NOT EXISTS validated TINYINT(1) DEFAULT 0 AFTER admin_notes;
 ALTER TABLE complaints ADD COLUMN IF NOT EXISTS email_sent TINYINT(1) DEFAULT 0 AFTER validated;
+ALTER TABLE complaints ADD COLUMN IF NOT EXISTS student_attachment VARCHAR(255) DEFAULT NULL AFTER attachment;
+
+-- Notifications table
+CREATE TABLE IF NOT EXISTS notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    message TEXT NOT NULL,
+    link VARCHAR(255) DEFAULT NULL,
+    is_read TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Complaint comments table
+CREATE TABLE IF NOT EXISTS complaint_comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    complaint_id INT NOT NULL,
+    user_id INT NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (complaint_id) REFERENCES complaints(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Audit logs table
+CREATE TABLE IF NOT EXISTS audit_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT DEFAULT NULL,
+    action VARCHAR(100) NOT NULL,
+    target_type VARCHAR(50) DEFAULT NULL,
+    target_id VARCHAR(50) DEFAULT NULL,
+    details TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
 
 -- Sample users
 INSERT IGNORE INTO users (id, fullname, email, phone, plain_password, password, role) VALUES

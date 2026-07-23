@@ -25,7 +25,7 @@
 <h2 class="text-2xl font-semibold text-primary mb-2">Submit a Complaint</h2>
 <p class="text-base text-on-surface-variant">Describe your issue and we'll route it to the right department.</p>
 </div>
-<form method="POST" class="space-y-5" id="complaintForm">
+ <form method="POST" class="space-y-5" id="complaintForm" enctype="multipart/form-data">
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <div class="space-y-1.5">
 <label class="block text-sm font-medium text-on-surface" for="fullname">Full Name</label>
@@ -74,14 +74,45 @@
 <textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm min-h-[120px]" id="description" name="description" placeholder="Provide detailed information about your complaint..." oninput="previewCategory(this.value)"></textarea>
 <div id="aiPreview" class="hidden mt-2 p-3 rounded-lg text-xs"></div>
 </div>
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface">Upload Handwritten Complaint (OCR)</label>
+<div class="flex items-center gap-3">
+<input type="file" id="ocrInput" accept="image/*" class="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:brightness-110" onchange="runOCR(this)">
+<button type="button" onclick="document.getElementById('ocrInput').click()" class="px-4 py-2 bg-secondary text-white text-sm rounded-lg hover:brightness-110 flex items-center gap-1"><span class="material-symbols-outlined text-sm">image_search</span>Scan</button>
+</div>
+<div id="ocrStatus" class="text-xs text-on-surface-variant mt-1"></div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="student_attachment">Attach File (optional)</label>
+<input type="file" name="student_attachment" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" class="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:brightness-110">
+</div>
 <button class="w-full bg-primary text-on-primary text-sm font-semibold py-3.5 rounded-lg active:scale-95 transition-all shadow-sm hover:brightness-110" type="submit">Submit Complaint</button>
 </form>
 </div>
 </div>
 </main>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
 let debounceTimer;
+function runOCR(input) {
+const file = input.files[0];
+if (!file) return;
+const status = document.getElementById('ocrStatus');
+status.innerHTML = '<span class="text-blue-600">Processing handwritten text...</span>';
+Tesseract.recognize(file, 'eng', { logger: m => {
+if (m.status === 'recognizing text') status.innerHTML = `<span class="text-blue-600">Recognizing... ${Math.round(m.progress * 100)}%</span>`;
+}}).then(({ data: { text } }) => {
+if (text.trim()) {
+document.getElementById('description').value += '\n\n[OCR]: ' + text.trim();
+status.innerHTML = '<span class="text-green-600">Text extracted successfully!</span>';
+} else {
+status.innerHTML = '<span class="text-red-600">No text found in image. Try a clearer photo.</span>';
+}
+}).catch(() => {
+status.innerHTML = '<span class="text-red-600">OCR failed. Try a different image.</span>';
+});
+}
 function previewCategory(text) {
 clearTimeout(debounceTimer);
 const preview = document.getElementById('aiPreview');

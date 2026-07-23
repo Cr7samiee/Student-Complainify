@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Audit Logs — Admin{% endblock %}
+{% block content %}
+<aside class="fixed left-0 h-full w-64 bg-[#0a1628] text-white shadow-xl flex flex-col py-6 hidden md:flex z-50">
+<a href="{{ url_for('admin_dashboard') }}" class="px-6 mb-8 flex items-center gap-3 hover:opacity-80">
+<span class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-white">admin_panel_settings</span></span>
+<span class="text-xl font-bold text-white tracking-tight">Complainify</span>
+</a>
+<div class="px-4 mb-6 flex items-center gap-3 border-b border-white/10 pb-4 mx-2">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex items-center justify-center text-white font-bold text-sm shadow-md">{{ admin_name[:2]|upper }}</div>
+<div><p class="text-sm text-white font-medium truncate">{{ admin_name }}</p><p class="text-[10px] text-red-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-400 inline-block"></span> Administrator</p></div>
+</div>
+<nav class="flex-1 px-2 space-y-0.5">
+<a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">dashboard</span>Dashboard</a>
+<a href="{{ url_for('admin_complaints') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">assignment</span>All Complaints</a>
+<a href="{{ url_for('admin_audit_logs') }}" class="flex items-center gap-3 bg-[#d32f2f]/20 text-white rounded-lg px-4 py-3 text-sm font-medium border-l-2 border-[#d32f2f]"><span class="material-symbols-outlined text-sm">history</span>Audit Logs</a>
+<a href="{{ url_for('admin_users') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">people</span>Users</a>
+<a href="{{ url_for('admin_report') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">bar_chart</span>Reports</a>
+</nav>
+<div class="px-2 space-y-0.5 border-t border-white/10 pt-3 mt-2 mx-2">
+<a href="{{ url_for('logout') }}" class="flex items-center gap-3 text-red-300 hover:text-red-200 hover:bg-red-500/10 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">logout</span>Sign Out</a>
+</div>
+</aside>
+<main class="ml-64 min-h-screen flex flex-col bg-[#f0f2f5]">
+<header class="bg-white px-6 py-3 flex justify-between items-center sticky top-0 z-40 shadow-sm border-b border-gray-200">
+<div><h1 class="text-lg font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-[#d32f2f]">history</span>Audit Logs</h1><p class="text-xs text-gray-500 ml-8">System-wide activity tracking</p></div>
+</header>
+<div class="p-6 max-w-7xl mx-auto">
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+<div class="px-5 py-3 border-b border-gray-100 bg-gray-50/50">
+<form method="GET" class="flex flex-wrap gap-3 items-center">
+<select name="action" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:ring-2 focus:ring-[#d32f2f] outline-none">
+<option value="">All Actions</option>
+{% for a in actions %}
+<option value="{{ a }}" {% if action_filter == a %}selected{% endif %}>{{ a }}</option>
+{% endfor %}
+</select>
+<button type="submit" class="px-4 py-1.5 bg-[#0a1628] text-white text-xs font-semibold rounded-lg hover:bg-[#1a2a3a] transition-colors">Filter</button>
+{% if action_filter %}<a href="{{ url_for('admin_audit_logs') }}" class="px-3 py-1.5 text-xs text-gray-500 hover:text-[#d32f2f]">Clear</a>{% endif %}
+</form>
+</div>
+{% if logs %}
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead><tr class="text-[11px] text-gray-500 font-semibold uppercase tracking-wider bg-gray-50/50"><th class="px-5 py-3">User</th><th class="px-5 py-3">Action</th><th class="px-5 py-3">Target</th><th class="px-5 py-3">Details</th><th class="px-5 py-3">Date</th></tr></thead>
+<tbody class="divide-y divide-gray-50">
+{% for log in logs %}
+<tr class="hover:bg-gray-50 transition-colors">
+<td class="px-5 py-3.5 text-sm font-semibold text-[#0a1628]">{{ log.fullname or 'System' }}</td>
+<td class="px-5 py-3.5"><span class="px-2 py-1 rounded-full text-[10px] font-bold {% if log.action == 'login' %}bg-blue-100 text-blue-700{% elif 'delete' in log.action %}bg-red-100 text-red-600{% else %}bg-gray-100 text-gray-600{% endif %}">{{ log.action }}</span></td>
+<td class="px-5 py-3.5 text-sm text-gray-600">{{ log.target_type }} {{ log.target_id or '' }}</td>
+<td class="px-5 py-3.5 text-sm text-gray-500 max-w-xs truncate">{{ log.details or '-' }}</td>
+<td class="px-5 py-3.5 text-xs text-gray-400">{{ log.created_at.strftime('%d %b %Y %I:%M %p') if log.created_at else '' }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% if total_pages > 1 %}
+<div class="px-5 py-3 border-t border-gray-100 flex items-center justify-between bg-gray-50/50">
+<p class="text-xs text-gray-500">{{ total }} total logs</p>
+<div class="flex gap-1">
+{% if page > 1 %}<a href="{{ url_for('admin_audit_logs', action=action_filter, page=page-1) }}" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-100">Prev</a>{% endif %}
+{% for p in range(1, total_pages + 1) %}
+{% if p >= page - 2 and p <= page + 2 %}{% if p == page %}<span class="px-3 py-1.5 text-xs bg-[#0a1628] text-white rounded-lg">{{ p }}</span>{% else %}<a href="{{ url_for('admin_audit_logs', action=action_filter, page=p) }}" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-100">{{ p }}</a>{% endif %}{% endif %}
+{% endfor %}
+{% if page < total_pages %}<a href="{{ url_for('admin_audit_logs', action=action_filter, page=page+1) }}" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-100">Next</a>{% endif %}
+</div>
+</div>
+{% endif %}
+{% else %}
+<div class="p-10 text-center"><span class="material-symbols-outlined text-3xl text-gray-300 mb-2">history</span><p class="text-sm font-semibold text-gray-600">No logs found</p></div>
+{% endif %}
+</div>
+</div>
+</main>
+{% endblock %}
+{% block footer %}{% endblock %}

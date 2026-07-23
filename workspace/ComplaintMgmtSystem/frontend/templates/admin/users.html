@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}User Management — Admin{% endblock %}
+{% block content %}
+<aside class="fixed left-0 h-full w-64 bg-[#0a1628] text-white shadow-xl flex flex-col py-6 hidden md:flex z-50">
+<a href="{{ url_for('admin_dashboard') }}" class="px-6 mb-8 flex items-center gap-3 hover:opacity-80">
+<span class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-white">admin_panel_settings</span></span>
+<span class="text-xl font-bold text-white tracking-tight">Complainify</span>
+</a>
+<div class="px-4 mb-6 flex items-center gap-3 border-b border-white/10 pb-4 mx-2">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex items-center justify-center text-white font-bold text-sm shadow-md">{{ admin_name[:2]|upper }}</div>
+<div><p class="text-sm text-white font-medium truncate">{{ admin_name }}</p><p class="text-[10px] text-red-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-400 inline-block"></span> Administrator</p></div>
+</div>
+<nav class="flex-1 px-2 space-y-0.5">
+<a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">dashboard</span>Dashboard</a>
+<a href="{{ url_for('admin_complaints') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">assignment</span>All Complaints</a>
+<a href="{{ url_for('admin_audit_logs') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">history</span>Audit Logs</a>
+<a href="{{ url_for('admin_users') }}" class="flex items-center gap-3 bg-[#d32f2f]/20 text-white rounded-lg px-4 py-3 text-sm font-medium border-l-2 border-[#d32f2f]"><span class="material-symbols-outlined text-sm">people</span>Users</a>
+<a href="{{ url_for('admin_report') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">bar_chart</span>Reports</a>
+</nav>
+<div class="px-2 space-y-0.5 border-t border-white/10 pt-3 mt-2 mx-2">
+<a href="{{ url_for('logout') }}" class="flex items-center gap-3 text-red-300 hover:text-red-200 hover:bg-red-500/10 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">logout</span>Sign Out</a>
+</div>
+</aside>
+<main class="ml-64 min-h-screen flex flex-col bg-[#f0f2f5]">
+<header class="bg-white px-6 py-3 flex justify-between items-center sticky top-0 z-40 shadow-sm border-b border-gray-200">
+<div><h1 class="text-lg font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-[#d32f2f]">people</span>User Management</h1><p class="text-xs text-gray-500 ml-8">Manage all student and admin accounts</p></div>
+</header>
+<div class="p-6 max-w-7xl mx-auto">
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+<div class="px-5 py-3 border-b border-gray-100 bg-gray-50/50">
+<form method="GET" class="flex flex-wrap gap-3 items-center">
+<input type="text" name="search" placeholder="Search name, email, phone..." value="{{ search }}" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:ring-2 focus:ring-[#d32f2f] outline-none w-52">
+<select name="role" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:ring-2 focus:ring-[#d32f2f] outline-none">
+<option value="">All Roles</option>
+<option value="student" {% if role_filter == 'student' %}selected{% endif %}>Student</option>
+<option value="admin" {% if role_filter == 'admin' %}selected{% endif %}>Admin</option>
+</select>
+<button type="submit" class="px-4 py-1.5 bg-[#0a1628] text-white text-xs font-semibold rounded-lg hover:bg-[#1a2a3a] transition-colors">Search</button>
+{% if search or role_filter %}<a href="{{ url_for('admin_users') }}" class="px-3 py-1.5 text-xs text-gray-500 hover:text-[#d32f2f]">Clear</a>{% endif %}
+</form>
+</div>
+{% if users %}
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead><tr class="text-[11px] text-gray-500 font-semibold uppercase tracking-wider bg-gray-50/50"><th class="px-5 py-3">Name</th><th class="px-5 py-3">Email</th><th class="px-5 py-3">Phone</th><th class="px-5 py-3">Role</th><th class="px-5 py-3">Complaints</th><th class="px-5 py-3">Joined</th><th class="px-5 py-3">Actions</th></tr></thead>
+<tbody class="divide-y divide-gray-50">
+{% for u in users %}
+<tr class="hover:bg-gray-50 transition-colors">
+<td class="px-5 py-3.5 text-sm font-semibold text-[#0a1628]">{{ u.fullname }}</td>
+<td class="px-5 py-3.5 text-sm text-gray-600">{{ u.email }}</td>
+<td class="px-5 py-3.5 text-sm text-gray-600">{{ u.phone or '-' }}</td>
+<td class="px-5 py-3.5"><span class="px-2 py-1 rounded-full text-[10px] font-bold {% if u.role == 'admin' %}bg-purple-100 text-purple-700{% else %}bg-blue-100 text-blue-700{% endif %}">{{ u.role }}</span></td>
+<td class="px-5 py-3.5 text-sm text-gray-600">{{ u.complaint_count }}</td>
+<td class="px-5 py-3.5 text-xs text-gray-400">{{ u.created_at.strftime('%d %b %Y') if u.created_at else '' }}</td>
+<td class="px-5 py-3.5">
+<div class="flex gap-2">
+<button onclick="document.getElementById('resetPw{{ u.id }}').classList.toggle('hidden')" class="text-xs text-blue-600 font-semibold hover:underline">Reset PW</button>
+{% if u.id != session.user_id %}
+<form method="POST" action="{{ url_for('admin_delete_user', uid=u.id) }}" onsubmit="return confirm('Delete user {{ u.fullname }}? This cannot be undone.')">
+<button type="submit" class="text-xs text-red-600 font-semibold hover:underline">Delete</button>
+</form>
+{% endif %}
+</div>
+<form id="resetPw{{ u.id }}" method="POST" action="{{ url_for('admin_reset_user_password', uid=u.id) }}" class="hidden mt-2 flex gap-2">
+<input type="password" name="new_password" placeholder="New password" required minlength="6" class="px-2 py-1 text-xs border border-gray-200 rounded-lg w-28">
+<button type="submit" class="px-2 py-1 text-xs bg-blue-600 text-white rounded-lg">Set</button>
+</form>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% else %}
+<div class="p-10 text-center"><span class="material-symbols-outlined text-3xl text-gray-300 mb-2">people</span><p class="text-sm font-semibold text-gray-600">No users found</p></div>
+{% endif %}
+</div>
+</div>
+</main>
+{% endblock %}
+{% block footer %}{% endblock %}

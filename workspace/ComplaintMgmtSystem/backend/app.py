@@ -20,8 +20,8 @@ app.permanent_session_lifetime = timedelta(days=1)
 SMTP_CONFIG = dict(
     host=os.environ.get('SMTP_HOST', 'smtp.gmail.com'),
     port=int(os.environ.get('SMTP_PORT', 587)),
-    user=os.environ.get('SMTP_USER', ''),
-    password=os.environ.get('SMTP_PASS', '')
+    user=os.environ.get('SMTP_USER', 'brooskings661@gmail.com'),
+    password=os.environ.get('SMTP_PASS', 'vksq mrdy qnqd zbut')
 )
 
 DB_CONFIG = dict(host='127.0.0.1', user='root', password='', database='complainify', port=3306, charset='utf8mb4')
@@ -40,6 +40,23 @@ def gen_ticket():
 
 CATEGORIES = ['Academics', 'Hostels', 'IT Support', 'Infrastructure', 'Financial Services',
               'Administrative', 'Security', 'Maintenance', 'Transport', 'Canteen', 'Library', 'Other']
+
+def create_notification(user_id, message, link=None):
+    try:
+        conn = get_db(); cur = conn.cursor()
+        cur.execute("INSERT INTO notifications (user_id, message, link) VALUES (%s, %s, %s)", (user_id, message, link))
+        conn.commit()
+        cur.close(); conn.close()
+    except: pass
+
+def log_action(user_id, action, target_type=None, target_id=None, details=None):
+    try:
+        conn = get_db(); cur = conn.cursor()
+        cur.execute("INSERT INTO audit_logs (user_id, action, target_type, target_id, details) VALUES (%s, %s, %s, %s, %s)",
+            (user_id, action, target_type, target_id, details))
+        conn.commit()
+        cur.close(); conn.close()
+    except: pass
 
 def send_email_notification(to_email, subject, body):
     if not SMTP_CONFIG['user'] or not SMTP_CONFIG['password']:
@@ -104,12 +121,28 @@ def submit_complaint():
                 flash(f'Priority auto-boosted from {priority} to {boosted} due to {sentiment_result["sub_label"]} tone', 'warning')
                 priority = boosted
 
+            student_attachment = request.files.get('student_attachment')
+            student_attachment_name = None
+            if student_attachment and student_attachment.filename and '.' in student_attachment.filename:
+                ext = student_attachment.filename.rsplit('.', 1)[1].lower()
+                if ext in ALLOWED_EXTENSIONS:
+                    unique_name = f"{tid}_{uuid.uuid4().hex[:8]}.{ext}"
+                    student_attachment.save(os.path.join(UPLOAD_FOLDER, unique_name))
+                    student_attachment_name = unique_name
+
             cur.execute("""INSERT INTO complaints
-                (ticket_id,user_id,fullname,email,category,priority,subject,description,sentiment,sentiment_score)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                (ticket_id,user_id,fullname,email,category,priority,subject,description,sentiment,sentiment_score,student_attachment)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                 (tid, uid, request.form.get('fullname'), request.form.get('email'),
-                 category, priority, subject, description, sentiment, sentiment_score))
+                 category, priority, subject, description, sentiment, sentiment_score, student_attachment_name))
             conn.commit()
+
+            conn2 = get_db(); cur2 = conn2.cursor()
+            cur2.execute("SELECT id FROM users WHERE role='admin'")
+            for admin in cur2.fetchall():
+                create_notification(admin['id'], f'New complaint #{tid} ({category})', url_for('admin_complaint_detail', ticket_id=tid))
+            cur2.close(); conn2.close()
+            log_action(uid, 'submit_complaint', 'complaint', tid, f'Category: {category}, Priority: {priority}')
 
             if SMTP_CONFIG['user']:
                 student_email = request.form.get('email')
@@ -242,6 +275,7 @@ def student_login():
                 session['phone'] = user.get('phone', '')
                 session['role'] = 'student'
                 cur.close(); conn.close()
+                log_action(user['id'], 'login', 'session', '', 'Student login')
                 return redirect(url_for('student_dashboard'))
             flash('Incorrect password. Please try again.', 'error')
         else:
@@ -297,9 +331,22 @@ def student_dashboard():
     resolved = sum(1 for c in complaints if c['status'] == 'Resolved')
     in_progress = sum(1 for c in complaints if c['status'] == 'In Progress')
     pending = total - resolved - in_progress
+
+    cur.execute("""SELECT category, COUNT(*) cnt FROM complaints WHERE user_id=%s GROUP BY category ORDER BY cnt DESC""", (session['user_id'],))
+    cat_rows = cur.fetchall()
+    student_cat_labels = [r['category'] for r in cat_rows]
+    student_cat_values = [r['cnt'] for r in cat_rows]
+
+    cur.execute("""SELECT DATE_FORMAT(created_at, '%%Y-%%m') month, COUNT(*) cnt FROM complaints WHERE user_id=%s GROUP BY month ORDER BY month""", (session['user_id'],))
+    trend_rows = cur.fetchall()
+    trend_labels = [r['month'] for r in trend_rows]
+    trend_values = [r['cnt'] for r in trend_rows]
+
     return render_template('student/dashboard.html',
         student_name=session.get('fullname', 'Student'),
-        total=total, resolved=resolved, in_progress=in_progress, pending=pending, complaints=complaints)
+        total=total, resolved=resolved, in_progress=in_progress, pending=pending, complaints=complaints,
+        student_cat_labels=student_cat_labels, student_cat_values=student_cat_values,
+        trend_labels=trend_labels, trend_values=trend_values)
 
 @app.route('/student/complaint/<ticket_id>')
 def student_complaint_detail(ticket_id):
@@ -316,7 +363,12 @@ def student_complaint_detail(ticket_id):
     if not complaint:
         flash('Complaint not found.', 'error')
         return redirect(url_for('student_dashboard'))
-    return render_template('student/complaint_detail.html', c=complaint,
+    cur.execute("""SELECT complaint_comments.*, users.fullname, users.role FROM complaint_comments
+        JOIN users ON complaint_comments.user_id=users.id
+        WHERE complaint_id=%s ORDER BY complaint_comments.created_at ASC""", (complaint['id'],))
+    comments = cur.fetchall()
+    cur.close(); conn.close()
+    return render_template('student/complaint_detail.html', c=complaint, comments=comments,
         student_name=session.get('fullname', 'Student'))
 
 @app.route('/student/settings', methods=['GET', 'POST'])
@@ -379,6 +431,7 @@ def admin_login():
                 session['email'] = user['email']
                 session['role'] = 'admin'
                 cur.close(); conn.close()
+                log_action(user['id'], 'login', 'session', '', 'Admin login')
                 return redirect(url_for('admin_dashboard'))
             flash('Incorrect password.', 'error')
         else:
@@ -526,7 +579,12 @@ def admin_complaint_detail(ticket_id):
     if not complaint:
         flash('Complaint not found.', 'error')
         return redirect(url_for('admin_dashboard'))
-    return render_template('admin/complaint_detail.html', c=complaint,
+    cur.execute("""SELECT complaint_comments.*, users.fullname, users.role FROM complaint_comments
+        JOIN users ON complaint_comments.user_id=users.id
+        WHERE complaint_id=%s ORDER BY complaint_comments.created_at ASC""", (complaint['id'],))
+    comments = cur.fetchall()
+    cur.close(); conn.close()
+    return render_template('admin/complaint_detail.html', c=complaint, comments=comments,
         admin_name=session.get('fullname', 'Admin'))
 
 @app.route('/admin/assign/<ticket_id>', methods=['POST'])
@@ -538,13 +596,16 @@ def admin_assign(ticket_id):
     cur.execute("UPDATE complaints SET assigned_to=%s, assigned_at=NOW(), status='In Progress' WHERE ticket_id=%s",
         (assigned_to, ticket_id))
     conn.commit()
-    cur.execute("SELECT email, subject FROM complaints WHERE ticket_id=%s", (ticket_id,))
+    cur.execute("SELECT email, subject, user_id FROM complaints WHERE ticket_id=%s", (ticket_id,))
     c = cur.fetchone()
     cur.close(); conn.close()
     if c and c['email'] and SMTP_CONFIG['user']:
         send_email_notification(c['email'],
             f'Complaint {ticket_id} - Assigned to {assigned_to}',
             f'Dear Student,\n\nYour complaint ({ticket_id}) has been assigned to {assigned_to}.\n\nWe will resolve it shortly.\n\nRegards,\nComplainify Team')
+    if c and c['user_id']:
+        create_notification(c['user_id'], f'Your complaint #{ticket_id} was assigned to {assigned_to}', url_for('student_complaint_detail', ticket_id=ticket_id))
+    log_action(session['user_id'], 'assign_complaint', 'complaint', ticket_id, f'Assigned to {assigned_to}')
     flash(f'Assigned to {assigned_to}', 'success')
     return redirect(url_for('admin_complaint_detail', ticket_id=ticket_id))
 
@@ -582,13 +643,16 @@ def admin_update_status(ticket_id):
             cur.execute("UPDATE complaints SET status=%s, admin_notes=%s WHERE ticket_id=%s",
                 (status, admin_notes, ticket_id))
     conn.commit()
-    cur.execute("SELECT email, subject FROM complaints WHERE ticket_id=%s", (ticket_id,))
+    cur.execute("SELECT email, subject, user_id FROM complaints WHERE ticket_id=%s", (ticket_id,))
     c = cur.fetchone()
     cur.close(); conn.close()
     if c and c['email'] and SMTP_CONFIG['user']:
         send_email_notification(c['email'],
             f'Complaint {ticket_id} - Status Updated to {status}',
             f'Dear Student,\n\nYour complaint ({ticket_id}) status has been updated to: {status}.\n\nNotes: {admin_notes or "N/A"}\n\nRegards,\nComplainify Team')
+    if c and c['user_id']:
+        create_notification(c['user_id'], f'Your complaint #{ticket_id} status: {status}', url_for('student_complaint_detail', ticket_id=ticket_id))
+    log_action(session['user_id'], 'update_status', 'complaint', ticket_id, f'Status: {status}')
     flash(f'Status updated to {status}', 'success')
     return redirect(url_for('admin_complaint_detail', ticket_id=ticket_id))
 
@@ -599,7 +663,12 @@ def admin_validate(ticket_id):
     conn = get_db(); cur = conn.cursor()
     cur.execute("UPDATE complaints SET validated=1 WHERE ticket_id=%s", (ticket_id,))
     conn.commit()
+    cur.execute("SELECT user_id FROM complaints WHERE ticket_id=%s", (ticket_id,))
+    c = cur.fetchone()
     cur.close(); conn.close()
+    if c and c['user_id']:
+        create_notification(c['user_id'], f'Your complaint #{ticket_id} was validated as legitimate', url_for('student_complaint_detail', ticket_id=ticket_id))
+    log_action(session['user_id'], 'validate_complaint', 'complaint', ticket_id, '')
     flash('Complaint validated as legitimate.', 'success')
     return redirect(url_for('admin_complaint_detail', ticket_id=ticket_id))
 
@@ -767,6 +836,171 @@ def api_predict():
         'confidence': round(result['confidence'], 4),
         'tier': result['tier']
     })
+
+# ── COMMENTS ──
+
+@app.route('/complaint/<ticket_id>/comment', methods=['POST'])
+def add_comment(ticket_id):
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+    message = request.form.get('message', '').strip()
+    if not message:
+        flash('Comment cannot be empty.', 'error')
+        return redirect(request.referrer or url_for('index'))
+    conn = get_db(); cur = conn.cursor()
+    cur.execute("SELECT id, user_id FROM complaints WHERE ticket_id=%s", (ticket_id,))
+    complaint = cur.fetchone()
+    if not complaint:
+        cur.close(); conn.close()
+        flash('Complaint not found.', 'error')
+        return redirect(url_for('index'))
+    cur.execute("INSERT INTO complaint_comments (complaint_id, user_id, message) VALUES (%s, %s, %s)",
+        (complaint['id'], session['user_id'], message))
+    conn.commit()
+    # Notify the other party
+    if session['user_id'] != complaint['user_id']:
+        create_notification(complaint['user_id'], f'New comment on #{ticket_id}', url_for('student_complaint_detail', ticket_id=ticket_id))
+    else:
+        conn2 = get_db(); cur2 = conn2.cursor()
+        cur2.execute("SELECT id FROM users WHERE role='admin'")
+        for admin in cur2.fetchall():
+            create_notification(admin['id'], f'New comment on #{ticket_id}', url_for('admin_complaint_detail', ticket_id=ticket_id))
+        cur2.close(); conn2.close()
+    log_action(session['user_id'], 'add_comment', 'complaint', ticket_id, message[:100])
+    cur.close(); conn.close()
+    flash('Comment added.', 'success')
+    return redirect(request.referrer or url_for('index'))
+
+# ── NOTIFICATIONS API ──
+
+@app.route('/notifications/count')
+def notifications_count():
+    if 'user_id' not in session:
+        return jsonify({'count': 0})
+    conn = get_db(); cur = conn.cursor()
+    cur.execute("SELECT COUNT(*) cnt FROM notifications WHERE user_id=%s AND is_read=0", (session['user_id'],))
+    row = cur.fetchone()
+    cur.close(); conn.close()
+    return jsonify({'count': row['cnt'] if row else 0})
+
+@app.route('/notifications')
+def notifications_list():
+    if 'user_id' not in session:
+        return jsonify({'notifications': []})
+    conn = get_db(); cur = conn.cursor()
+    cur.execute("SELECT id, message, link, is_read, created_at FROM notifications WHERE user_id=%s ORDER BY created_at DESC LIMIT 20", (session['user_id'],))
+    rows = cur.fetchall()
+    cur.close(); conn.close()
+    return jsonify({'notifications': [{
+        'id': r['id'], 'message': r['message'], 'link': r['link'],
+        'is_read': bool(r['is_read']),
+        'created_at': r['created_at'].strftime('%d %b %Y %I:%M %p') if r['created_at'] else ''
+    } for r in rows]})
+
+@app.route('/notifications/mark-read/<int:nid>')
+def notifications_mark_read(nid):
+    if 'user_id' not in session:
+        return jsonify({'ok': False})
+    conn = get_db(); cur = conn.cursor()
+    cur.execute("UPDATE notifications SET is_read=1 WHERE id=%s AND user_id=%s", (nid, session['user_id']))
+    conn.commit(); cur.close(); conn.close()
+    return jsonify({'ok': True})
+
+@app.route('/notifications/mark-all-read')
+def notifications_mark_all_read():
+    if 'user_id' not in session:
+        return jsonify({'ok': False})
+    conn = get_db(); cur = conn.cursor()
+    cur.execute("UPDATE notifications SET is_read=1 WHERE user_id=%s", (session['user_id'],))
+    conn.commit(); cur.close(); conn.close()
+    return jsonify({'ok': True})
+
+# ── AUDIT LOGS (Admin) ──
+
+@app.route('/admin/audit-logs')
+def admin_audit_logs():
+    if not login_required('admin'):
+        return redirect(url_for('admin_login'))
+    conn = get_db(); cur = conn.cursor()
+    action_filter = request.args.get('action', '')
+    page = int(request.args.get('page', 1))
+    per_page = 50
+    offset = (page - 1) * per_page
+    base = "FROM audit_logs WHERE 1=1"
+    params = []
+    if action_filter:
+        base += " AND action=%s"
+        params.append(action_filter)
+    cur.execute(f"SELECT COUNT(*) cnt {base}", params)
+    total = cur.fetchone()['cnt']
+    total_pages = max(1, (total + per_page - 1) // per_page)
+    cur.execute(f"""SELECT audit_logs.*, users.fullname FROM audit_logs
+        LEFT JOIN users ON audit_logs.user_id=users.id
+        {base} ORDER BY created_at DESC LIMIT %s OFFSET %s""", params + [per_page, offset])
+    logs = cur.fetchall()
+    cur.execute("SELECT DISTINCT action FROM audit_logs ORDER BY action")
+    actions = [r['action'] for r in cur.fetchall()]
+    cur.close(); conn.close()
+    return render_template('admin/audit_logs.html', logs=logs, actions=actions,
+        action_filter=action_filter, page=page, total_pages=total_pages, total=total,
+        admin_name=session.get('fullname', 'Admin'))
+
+# ── USER MANAGEMENT (Admin) ──
+
+@app.route('/admin/users')
+def admin_users():
+    if not login_required('admin'):
+        return redirect(url_for('admin_login'))
+    conn = get_db(); cur = conn.cursor()
+    search = request.args.get('search', '')
+    role_filter = request.args.get('role', '')
+    query = "SELECT u.*, (SELECT COUNT(*) FROM complaints WHERE user_id=u.id) complaint_count FROM users u WHERE 1=1"
+    params = []
+    if search:
+        query += " AND (u.fullname LIKE %s OR u.email LIKE %s OR u.phone LIKE %s)"
+        s = f'%{search}%'
+        params.extend([s, s, s])
+    if role_filter:
+        query += " AND u.role=%s"
+        params.append(role_filter)
+    query += " ORDER BY u.created_at DESC"
+    cur.execute(query, params)
+    users = cur.fetchall()
+    cur.close(); conn.close()
+    return render_template('admin/users.html', users=users, search=search, role_filter=role_filter,
+        admin_name=session.get('fullname', 'Admin'))
+
+@app.route('/admin/users/reset-password/<int:uid>', methods=['POST'])
+def admin_reset_user_password(uid):
+    if not login_required('admin'):
+        return redirect(url_for('admin_login'))
+    new_pw = request.form.get('new_password', '')
+    if len(new_pw) < 6:
+        flash('Password must be at least 6 characters.', 'error')
+        return redirect(url_for('admin_users'))
+    conn = get_db(); cur = conn.cursor()
+    cur.execute("UPDATE users SET password=%s, plain_password=%s WHERE id=%s",
+        (hash_pw(new_pw), new_pw, uid))
+    conn.commit(); cur.close(); conn.close()
+    log_action(session['user_id'], 'reset_user_password', 'user', str(uid), '')
+    flash('Password reset successful.', 'success')
+    return redirect(url_for('admin_users'))
+
+@app.route('/admin/users/delete/<int:uid>', methods=['POST'])
+def admin_delete_user(uid):
+    if not login_required('admin'):
+        return redirect(url_for('admin_login'))
+    if uid == session['user_id']:
+        flash('Cannot delete yourself.', 'error')
+        return redirect(url_for('admin_users'))
+    conn = get_db(); cur = conn.cursor()
+    cur.execute("DELETE FROM users WHERE id=%s", (uid,))
+    conn.commit(); cur.close(); conn.close()
+    log_action(session['user_id'], 'delete_user', 'user', str(uid), '')
+    flash('User deleted.', 'success')
+    return redirect(url_for('admin_users'))
+
+# ── FILE SERVING ──
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
