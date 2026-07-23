@@ -1233,12 +1233,12 @@ def admin_audit_logs():
     page = int(request.args.get('page', 1))
     per_page = 50
     offset = (page - 1) * per_page
-    base = "FROM audit_logs WHERE 1=1"
+    base = "WHERE 1=1"
     params = []
     if action_filter:
         base += " AND action=%s"
         params.append(action_filter)
-    cur.execute(f"SELECT COUNT(*) cnt {base}", params)
+    cur.execute(f"SELECT COUNT(*) cnt FROM audit_logs {base}", params)
     total = cur.fetchone()['cnt']
     total_pages = max(1, (total + per_page - 1) // per_page)
     cur.execute(f"""SELECT audit_logs.*, users.fullname FROM audit_logs
