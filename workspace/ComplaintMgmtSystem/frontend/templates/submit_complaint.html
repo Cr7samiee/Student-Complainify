@@ -53,16 +53,8 @@
 <option value="Library">Library</option>
 <option value="Canteen">Canteen</option>
 <option value="Other">Other</option>
-</select>
+ </select>
 <p class="text-[11px] text-on-surface-variant mt-1">Choose "Auto-detect" to let our AI classify your complaint.</p>
-</div>
-<div class="space-y-1.5">
-<label class="block text-sm font-medium text-on-surface" for="priority">Priority</label>
-<select class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm" id="priority" name="priority">
-<option value="Medium">Medium</option>
-<option value="Low">Low</option>
-<option value="High">High</option>
-</select>
 </div>
 </div>
 <div class="space-y-1.5">
@@ -73,18 +65,15 @@
 <label class="block text-sm font-medium text-on-surface" for="description">Description</label>
 <textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm min-h-[120px]" id="description" name="description" placeholder="Provide detailed information about your complaint..." oninput="previewCategory(this.value)"></textarea>
 <div id="aiPreview" class="hidden mt-2 p-3 rounded-lg text-xs"></div>
-</div>
-<div class="space-y-1.5">
-<label class="block text-sm font-medium text-on-surface">Upload Handwritten Complaint (OCR)</label>
-<div class="flex items-center gap-3">
-<input type="file" id="ocrInput" accept="image/*" class="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:brightness-110" onchange="runOCR(this)">
-<button type="button" onclick="document.getElementById('ocrInput').click()" class="px-4 py-2 bg-secondary text-white text-sm rounded-lg hover:brightness-110 flex items-center gap-1"><span class="material-symbols-outlined text-sm">image_search</span>Scan</button>
-</div>
-<div id="ocrStatus" class="text-xs text-on-surface-variant mt-1"></div>
+<div id="similarComplaints" class="hidden mt-2 p-3 rounded-lg text-xs"></div>
 </div>
 <div class="space-y-1.5">
 <label class="block text-sm font-medium text-on-surface" for="student_attachment">Attach File (optional)</label>
-<input type="file" name="student_attachment" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" class="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:brightness-110">
+<div class="flex items-center gap-2">
+<input type="file" id="student_attachment" name="student_attachment" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" class="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:brightness-110" onchange="showFile(this)">
+<button type="button" id="removeFileBtn" class="hidden px-3 py-2 bg-red-100 text-red-600 text-sm rounded-lg hover:bg-red-200 transition-colors" onclick="removeFile()"><span class="material-symbols-outlined text-sm">close</span></button>
+</div>
+<div id="fileInfo" class="text-xs text-gray-400 mt-1"></div>
 </div>
 <button class="w-full bg-primary text-on-primary text-sm font-semibold py-3.5 rounded-lg active:scale-95 transition-all shadow-sm hover:brightness-110" type="submit">Submit Complaint</button>
 </form>
@@ -92,43 +81,53 @@
 </div>
 </main>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
 let debounceTimer;
-function runOCR(input) {
-const file = input.files[0];
-if (!file) return;
-const status = document.getElementById('ocrStatus');
-status.innerHTML = '<span class="text-blue-600">Processing handwritten text...</span>';
-Tesseract.recognize(file, 'eng', { logger: m => {
-if (m.status === 'recognizing text') status.innerHTML = `<span class="text-blue-600">Recognizing... ${Math.round(m.progress * 100)}%</span>`;
-}}).then(({ data: { text } }) => {
-if (text.trim()) {
-document.getElementById('description').value += '\n\n[OCR]: ' + text.trim();
-status.innerHTML = '<span class="text-green-600">Text extracted successfully!</span>';
-} else {
-status.innerHTML = '<span class="text-red-600">No text found in image. Try a clearer photo.</span>';
+
+function showFile(input) {
+  const info = document.getElementById('fileInfo');
+  const btn = document.getElementById('removeFileBtn');
+  if (input.files && input.files[0]) {
+    info.textContent = input.files[0].name + ' (' + (input.files[0].size / 1024).toFixed(1) + ' KB)';
+    btn.classList.remove('hidden');
+  }
 }
-}).catch(() => {
-status.innerHTML = '<span class="text-red-600">OCR failed. Try a different image.</span>';
-});
+
+function removeFile() {
+  const input = document.getElementById('student_attachment');
+  input.value = '';
+  document.getElementById('fileInfo').textContent = '';
+  document.getElementById('removeFileBtn').classList.add('hidden');
 }
+
 function previewCategory(text) {
 clearTimeout(debounceTimer);
 const preview = document.getElementById('aiPreview');
-if (text.trim().length < 20) { preview.classList.add('hidden'); return; }
+const similar = document.getElementById('similarComplaints');
+if (text.trim().length < 20) { preview.classList.add('hidden'); similar.classList.add('hidden'); return; }
 debounceTimer = setTimeout(() => {
-fetch('{{ url_for("api_predict") }}', {
+fetch('{{ url_for("api_predict_top3") }}', {
 method: 'POST',
 headers: {'Content-Type': 'application/json'},
 body: JSON.stringify({text: text})
 }).then(r => r.json()).then(data => {
-if (data.category) {
+if (data.predictions) {
 preview.classList.remove('hidden');
 preview.className = 'mt-2 p-3 rounded-lg text-xs bg-blue-50 text-blue-700 border border-blue-100';
-preview.innerHTML = 'AI Detected: <strong>' + data.category + '</strong> (' + (data.confidence * 100).toFixed(1) + '% confidence)';
+let html = '<div class="font-semibold mb-2">AI Predictions:</div>';
+const colors = ['bg-blue-600', 'bg-blue-400', 'bg-blue-200'];
+data.predictions.forEach((p, i) => {
+const pct = (p.confidence * 100).toFixed(1);
+html += '<div class="flex items-center gap-2 mb-1"><span class="w-20 text-right text-blue-800 font-medium">' + p.category + '</span><div class="flex-1 bg-gray-200 h-4 rounded-full overflow-hidden"><div class="' + colors[i] + ' h-full rounded-full" style="width:' + pct + '%"></div></div><span class="w-12 text-blue-800">' + pct + '%</span></div>';
+});
+fetch('/api/predict-resolution?text=' + encodeURIComponent(text)).then(r => r.json()).then(res => {
+html += '<div class="mt-2 pt-2 border-t border-blue-200 text-blue-800">Estimated resolution: <strong>' + res.hours + ' hours</strong></div>';
+}).catch(() => {});
+fetch('/api/detect-anomaly', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:text})}).then(r=>r.json()).then(a=>{if(a.is_anomaly){html+='<div class="mt-2 pt-2 border-t border-blue-200"><span class="text-orange-600 font-medium">⚠ Anomalous complaint</span><span class="text-blue-600 ml-2">Flags: '+a.flags.join(', ')+'</span></div>'}}).catch(()=>{});
+preview.innerHTML = html;
 }
 }).catch(() => {});
+fetch('/api/similar-complaints', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:text})}).then(r=>r.json()).then(d=>{if(d.similar&&d.similar.length){similar.classList.remove('hidden');similar.className='mt-2 p-3 rounded-lg text-xs bg-purple-50 text-purple-700 border border-purple-100';let sh='<div class="font-semibold mb-1">Similar resolved complaints:</div>';d.similar.forEach(s=>{sh+='<div class="flex justify-between"><span>'+s.subject.substring(0,60)+'</span><span class="text-purple-400">sim: '+s.similarity+'</span></div>'});similar.innerHTML=sh}}).catch(()=>{});
 }, 500);
 }
 </script>

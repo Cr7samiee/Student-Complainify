@@ -4,9 +4,12 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from datetime import timedelta, datetime
 from werkzeug.utils import secure_filename
 from fpdf import FPDF
+from dotenv import load_dotenv
+
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'train'))
-from classifier import auto_categorize, categorize
+from classifier import auto_categorize, categorize, predict_top3, detect_anomaly, clean_and_tokenize
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'train'))
 from sentiment import analyze_sentiment, sentiment_priority_boost
 
@@ -15,7 +18,7 @@ app = Flask(
     template_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend', 'templates'),
     static_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend', 'static')
 )
-app.secret_key = 'supersecretkey'
+app.secret_key = os.environ.get('SECRET_KEY', 'supersecretkey')
 app.permanent_session_lifetime = timedelta(days=1)
 
 SMTP_CONFIG = dict(
@@ -25,7 +28,14 @@ SMTP_CONFIG = dict(
     password=os.environ.get('SMTP_PASS', 'vksq mrdy qnqd zbut')
 )
 
-DB_CONFIG = dict(host='127.0.0.1', user='root', password='', database='complainify', port=3306, charset='utf8mb4')
+DB_CONFIG = dict(
+    host=os.environ.get('DB_HOST', '127.0.0.1'),
+    port=int(os.environ.get('DB_PORT', 3306)),
+    user=os.environ.get('DB_USER', 'root'),
+    password=os.environ.get('DB_PASSWORD', ''),
+    database=os.environ.get('DB_NAME', 'complainify'),
+    charset='utf8mb4'
+)
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'uploads')
 ALLOWED_EXTENSIONS = {'pdf', 'svg', 'png', 'jpg', 'jpeg', 'doc', 'docx', 'xls', 'xlsx', 'csv', 'txt', 'zip'}
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -112,14 +122,18 @@ def submit_complaint():
                     flash(f'Unclear complaint ({confidence*100:.1f}%) — category set to Other', 'warning')
                     category = 'Other'
 
+            anomaly = detect_anomaly(full_text)
+            if anomaly['is_anomaly']:
+                flash('⚠️ This complaint looks unusual — will be flagged for manual review', 'warning')
+
             sentiment_result = analyze_sentiment(full_text)
             sentiment = sentiment_result['label']
             sentiment_score = sentiment_result['score']
 
-            priority = request.form.get('priority', 'Medium')
+            priority = 'Medium'
             boosted = sentiment_priority_boost(sentiment, priority)
             if boosted != priority:
-                flash(f'Priority auto-boosted from {priority} to {boosted} due to {sentiment_result["sub_label"]} tone', 'warning')
+                flash(f'Priority set to {boosted} due to {sentiment_result["sub_label"]} tone', 'warning')
                 priority = boosted
 
             student_attachment = request.files.get('student_attachment')
@@ -144,6 +158,16 @@ def submit_complaint():
                 create_notification(admin['id'], f'New complaint #{tid} ({category})', url_for('admin_complaint_detail', ticket_id=tid))
             cur2.close(); conn2.close()
             log_action(uid, 'submit_complaint', 'complaint', tid, f'Category: {category}, Priority: {priority}')
+
+            try:
+                csv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'TrainDataset', 'new_complaints.csv')
+                file_exists = os.path.isfile(csv_path)
+                with open(csv_path, 'a', encoding='utf-8', newline='') as f:
+                    writer = csv.writer(f)
+                    if not file_exists:
+                        writer.writerow(['text', 'category'])
+                    writer.writerow([subject + ' ' + description, category])
+            except: pass
 
             if SMTP_CONFIG['user']:
                 student_email = request.form.get('email')
@@ -690,6 +714,46 @@ def admin_resend_email(ticket_id):
     cur.close(); conn.close()
     return redirect(url_for('admin_complaint_detail', ticket_id=ticket_id))
 
+@app.route('/admin/import-csv', methods=['GET', 'POST'])
+def admin_import_csv():
+    if not login_required('admin'):
+        return redirect(url_for('admin_login'))
+    if request.method == 'POST':
+        file = request.files.get('csv_file')
+        if not file or not file.filename.endswith('.csv'):
+            flash('Please upload a .csv file', 'error')
+            return redirect(url_for('admin_import_csv'))
+        try:
+            content = file.read().decode('utf-8').splitlines()
+            reader = csv.DictReader(io.StringIO('\n'.join(content)))
+            conn = get_db(); cur = conn.cursor()
+            imported = 0; errors = 0
+            for row in reader:
+                try:
+                    tid = 'TKT' + hashlib.md5((str(row.get('subject','')) + str(row.get('description','')) + str(random.random())).encode()).hexdigest()[:8].upper()
+                    uid = session.get('user_id', 1)
+                    fullname = row.get('fullname', 'Imported Student')
+                    email = row.get('email', 'imported@example.com')
+                    cat = row.get('category', 'Other')
+                    priority = row.get('priority', 'Medium')
+                    subject = row.get('subject', 'No subject')
+                    description = row.get('description', '')
+                    sentiment = row.get('sentiment', 'Neutral')
+                    score = float(row.get('sentiment_score', 0))
+                    cur.execute("""INSERT INTO complaints
+                        (ticket_id,user_id,fullname,email,category,priority,subject,description,sentiment,sentiment_score)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                        (tid, uid, fullname, email, cat, priority, subject, description, sentiment, score))
+                    imported += 1
+                except: errors += 1
+            conn.commit(); cur.close(); conn.close()
+            flash(f'Imported {imported} complaints ({errors} errors)', 'success')
+            log_action(session['user_id'], 'import_csv', 'complaint', '', f'{imported} rows')
+        except Exception as e:
+            flash(f'Import failed: {str(e)[:200]}', 'error')
+        return redirect(url_for('admin_import_csv'))
+    return render_template('admin/import_csv.html', admin_name=session.get('fullname', 'Admin'))
+
 @app.route('/admin/settings', methods=['GET', 'POST'])
 def admin_settings():
     if not login_required('admin'):
@@ -933,6 +997,48 @@ def api_predict():
         'tier': result['tier']
     })
 
+@app.route('/api/predict-top3', methods=['POST'])
+def api_predict_top3():
+    data = request.get_json()
+    if not data or 'text' not in data:
+        return jsonify({'error': 'No text provided'}), 400
+    result = predict_top3(data['text'])
+    return jsonify({'predictions': result})
+
+@app.route('/api/predict-resolution')
+def api_predict_resolution():
+    conn = get_db(); cur = conn.cursor()
+    text = request.args.get('text', '')
+    if text:
+        result = categorize(text)
+        category = result['category']
+    else:
+        category = request.args.get('category', '')
+    priority = request.args.get('priority', 'Medium')
+    sentiment = request.args.get('sentiment', 'Neutral')
+    cur.execute("""SELECT AVG(TIMESTAMPDIFF(HOUR, created_at, resolved_at)) avg_hrs,
+        COUNT(*) samples FROM complaints
+        WHERE status='Resolved' AND category=%s AND priority=%s AND sentiment=%s
+        AND resolved_at IS NOT NULL""", (category, priority, sentiment))
+    row = cur.fetchone()
+    if row and row['samples'] >= 3:
+        result = {'hours': round(float(row['avg_hrs']), 1), 'samples': row['samples'], 'confidence': 'high'}
+    else:
+        cur.execute("""SELECT AVG(TIMESTAMPDIFF(HOUR, created_at, resolved_at)) avg_hrs,
+            COUNT(*) samples FROM complaints
+            WHERE status='Resolved' AND category=%s AND resolved_at IS NOT NULL""", (category,))
+        row = cur.fetchone()
+        if row and row['samples'] >= 3:
+            result = {'hours': round(float(row['avg_hrs']), 1), 'samples': row['samples'], 'confidence': 'medium'}
+        else:
+            cur.execute("""SELECT AVG(TIMESTAMPDIFF(HOUR, created_at, resolved_at)) avg_hrs,
+                COUNT(*) samples FROM complaints
+                WHERE status='Resolved' AND resolved_at IS NOT NULL""")
+            row = cur.fetchone()
+            result = {'hours': round(float(row['avg_hrs'] or 48)), 'samples': row['samples'] if row else 0, 'confidence': 'low'}
+    cur.close(); conn.close()
+    return jsonify(result)
+
 # ── COMMENTS ──
 
 @app.route('/complaint/<ticket_id>/comment', methods=['POST'])
@@ -1095,6 +1201,186 @@ def admin_delete_user(uid):
     log_action(session['user_id'], 'delete_user', 'user', str(uid), '')
     flash('User deleted.', 'success')
     return redirect(url_for('admin_users'))
+
+# ── RETRAIN & TRAINING LOGS ──
+
+TRAIN_LOG_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'train', 'training_log.json')
+
+@app.route('/admin/training-logs')
+def admin_training_logs():
+    if not login_required('admin'):
+        return redirect(url_for('admin_login'))
+    log_data = {}
+    try:
+        with open(TRAIN_LOG_PATH) as f:
+            log_data = json.load(f)
+    except: pass
+    conn = get_db(); cur = conn.cursor()
+    cur.execute("SELECT COUNT(*) cnt FROM complaints")
+    total_complaints = cur.fetchone()['cnt']
+    cur.execute("SELECT COUNT(*) cnt FROM complaints WHERE status='Resolved'")
+    resolved = cur.fetchone()['cnt']
+    cur.close(); conn.close()
+    return render_template('admin/training_logs.html', log=log_data,
+        total_complaints=total_complaints, resolved=resolved,
+        admin_name=session.get('fullname', 'Admin'))
+
+@app.route('/admin/retrain', methods=['POST'])
+def admin_retrain():
+    if not login_required('admin'):
+        return redirect(url_for('admin_login'))
+    import subprocess, sys as sys_mod
+    try:
+        result = subprocess.run([sys_mod.executable, '-c', """
+import sys, os, json, csv, math, random
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'train'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'train'))
+
+BASE = os.path.dirname(os.path.abspath(__file__))
+TRAIN_PATH = os.path.join(BASE, 'TrainDataset', 'train_dataset.csv')
+NEW_PATH = os.path.join(BASE, 'TrainDataset', 'new_complaints.csv')
+TEST_PATH = os.path.join(BASE, 'TrainDataset', 'test_dataset.csv')
+ENC_PATH = os.path.join(BASE, 'TrainDataset', 'encoders', 'category_decoder.json')
+LOG_PATH = os.path.join(BASE, 'train', 'training_log.json')
+
+from classifier import MultinomialNB
+
+# Load encoders
+from collections import Counter, defaultdict
+import re
+
+enc_path = os.path.join(BASE, 'TrainDataset', 'encoders', 'category_encoder.json')
+with open(enc_path) as f: cat_encoder = json.load(f)
+with open(ENC_PATH) as f: cat_decoder = {int(k): v for k, v in json.load(f).items()}
+
+all_rows = []
+with open(TRAIN_PATH, encoding='utf-8') as f:
+    all_rows += list(csv.DictReader(f))
+if os.path.isfile(NEW_PATH):
+    with open(NEW_PATH, encoding='utf-8') as f:
+        new_rows = list(csv.DictReader(f))
+        for r in new_rows:
+            if r['category'] in cat_encoder:
+                r['category_encoded'] = cat_encoder[r['category']]
+                all_rows.append(r)
+
+random.shuffle(all_rows)
+split = int(len(all_rows) * 0.8)
+train_rows = all_rows[:split]
+test_rows = all_rows[split:]
+
+train_texts = [r['text'] for r in train_rows]
+train_labels = [int(r['category_encoded']) for r in train_rows]
+test_texts = [r['text'] for r in test_rows]
+test_labels = [int(r['category_encoded']) for r in test_rows]
+
+model = MultinomialNB()
+model.fit(train_texts, train_labels)
+model.save(os.path.join(BASE, 'TrainDataset', 'model_params.json'))
+
+correct = 0
+per_class = {}
+for i, text in enumerate(test_texts):
+    pred, probs = model.predict_with_proba(text)
+    true_label = test_labels[i]
+    if pred == true_label: correct += 1
+    cat_name = cat_decoder.get(pred, 'Unknown')
+    true_cat = cat_decoder.get(true_label, 'Unknown')
+    if cat_name not in per_class:
+        per_class[cat_name] = {'tp': 0, 'fp': 0, 'fn': 0}
+    if pred == true_label:
+        per_class[cat_name]['tp'] += 1
+    else:
+        per_class[cat_name]['fp'] += 1
+        per_class[cat_name.replace(cat_name, true_cat) if False else 'Unknown']  # Simplified
+
+# Compute per-class metrics
+class_metrics = []
+for cat, counts in per_class.items():
+    p = counts['tp'] / max(counts['tp'] + counts['fp'], 1)
+    r = counts['tp'] / max(counts['tp'] + counts['fn'], 1)
+    f1 = 2 * p * r / max(p + r, 1)
+    class_metrics.append({'category': cat, 'precision': round(p, 4), 'recall': round(r, 4), 'f1': round(f1, 4)})
+
+p_vals = [m['precision'] for m in class_metrics]
+r_vals = [m['recall'] for m in class_metrics]
+macro_f1 = round(sum(m['f1'] for m in class_metrics) / max(len(class_metrics), 1), 4)
+
+# Load previous log
+log_data = {}
+if os.path.isfile(LOG_PATH):
+    with open(LOG_PATH) as f: log_data = json.load(f)
+
+history = log_data.get('history', [])
+history.append({'date': __import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M'), 'accuracy': round(correct/len(test_texts)*100, 1)})
+
+new_log = {
+    'last_trained': __import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+    'train_samples': len(train_texts),
+    'test_samples': len(test_texts),
+    'accuracy': round(correct / len(test_texts) * 100, 2),
+    'macro_f1': macro_f1,
+    'per_class': class_metrics,
+    'history': history[-20:]
+}
+
+with open(LOG_PATH, 'w') as f: json.dump(new_log, f, indent=2)
+print(json.dumps(new_log))
+"""], capture_output=True, text=True, timeout=120, cwd=os.path.dirname(os.path.dirname(__file__)))
+        if result.returncode == 0:
+            log_data = json.loads(result.stdout.strip())
+            import train.classifier as clf
+            clf._model = None
+            flash(f'Retrain complete! Accuracy: {log_data["accuracy"]}%, F1: {log_data["macro_f1"]}', 'success')
+        else:
+            flash(f'Retrain failed: {result.stderr[:500]}', 'error')
+    except Exception as e:
+        flash(f'Retrain error: {str(e)[:200]}', 'error')
+    log_action(session['user_id'], 'retrain_model', 'model', '', '')
+    return redirect(url_for('admin_training_logs'))
+
+# ── ANOMALY API ──
+
+@app.route('/api/detect-anomaly', methods=['POST'])
+def api_detect_anomaly():
+    data = request.get_json()
+    if not data or 'text' not in data:
+        return jsonify({'error': 'No text provided'}), 400
+    result = detect_anomaly(data['text'])
+    return jsonify(result)
+
+# ── SIMILAR COMPLAINTS ──
+
+@app.route('/api/similar-complaints', methods=['POST'])
+def api_similar_complaints():
+    data = request.get_json()
+    if not data or 'text' not in data:
+        return jsonify({'error': 'No text provided'}), 400
+    text = data['text']
+    conn = get_db(); cur = conn.cursor()
+    cur.execute("SELECT ticket_id, subject, description, category, status FROM complaints WHERE status='Resolved' ORDER BY created_at DESC LIMIT 500")
+    candidates = cur.fetchall()
+    cur.close(); conn.close()
+    if not candidates:
+        return jsonify({'similar': []})
+    query_tokens = set(clean_and_tokenize(text, add_bigrams=False))
+    scored = []
+    for c in candidates:
+        candidate_text = (c['subject'] or '') + ' ' + (c['description'] or '')
+        candidate_tokens = set(clean_and_tokenize(candidate_text, add_bigrams=False))
+        intersection = query_tokens & candidate_tokens
+        union = query_tokens | candidate_tokens
+        if union:
+            similarity = len(intersection) / len(union)
+            scored.append((similarity, c))
+    scored.sort(key=lambda x: x[0], reverse=True)
+    top3 = scored[:3]
+    return jsonify({'similar': [{
+        'ticket_id': s[1]['ticket_id'],
+        'subject': s[1]['subject'],
+        'category': s[1]['category'],
+        'similarity': round(s[0], 3)
+    } for s in top3 if s[0] > 0.05]})
 
 # ── FILE SERVING ──
 
