@@ -104,7 +104,7 @@
 - [x] **Student File Upload** — Attach files when submitting complaint
 - [x] **Audit Logs** — Admin page with action filter, pagination, timestamped activity log
 - [x] **User Management** — Admin can search, filter, reset passwords, delete users
-- [x] **Handwriting OCR** — Tesseract.js on submit page, upload handwritten image → auto-fills description
+- [x] ~~**Handwriting OCR**~~ — ~~Tesseract.js on submit page, upload handwritten image → auto-fills description~~ *(removed — performed on client-side, not reliable)*
 - [x] **Top-3 category predictions** — `predict_top3()` + `/api/predict-top3` route + live probability bars on submit form
 - [x] **Similar complaint finder** — `/api/similar-complaints` — Jaccard similarity on resolved complaints
 - [x] **Anomaly detection** — `detect_anomaly()` + `/api/detect-anomaly` — flags unusual/vague complaints
@@ -118,6 +118,9 @@
 - [x] **Unit tests** — 30 pytest tests covering classifier, sentiment, and all API routes in `tests/`
 - [x] **Prod config** — `.env.example` + `python-dotenv` for `SECRET_KEY`, `DB_*`, `SMTP_*`
 - [x] **Deployment config** — `requirements.txt`, `Procfile`, `runtime.txt` for Render/PythonAnywhere
+- [x] **Retrain subprocess fix** — Replaced inline `-c` script with standalone `train/retrain.py` using `os.path.abspath(__file__)` for reliable imports
+- [x] **Audit logs SQL fix** — Fixed duplicate `FROM audit_logs` clause in paginated query
+- [x] **Retrain button loading state** — Button disables + shows spinner on click to prevent double-submit
 
 ---
 
