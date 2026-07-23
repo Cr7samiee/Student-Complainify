@@ -101,6 +101,13 @@
 - [x] **Category/sentiment filter on dashboard charts** — Click chart segment to filter complaints
 - [x] **Admin resolution message** — Admin notes shown prominently to student (green box for Resolved)
 - [x] **File upload** — Admin can attach PDF/SVG/Excel etc., student can download from detail page
+- [x] **Student Dashboard charts** — Category doughnut + monthly trend line chart via Chart.js
+- [x] **In-App Notifications** — Bell icon with dropdown, unread count, mark read, auto-polling every 10s
+- [x] **Comments System** — Student + admin can comment on complaint threads, notifications to other party
+- [x] **Student File Upload** — Attach files when submitting complaint
+- [x] **Audit Logs** — Admin page with action filter, pagination, timestamped activity log
+- [x] **User Management** — Admin can search, filter, reset passwords, delete users
+- [x] **Handwriting OCR** — Tesseract.js on submit page, upload handwritten image → auto-fills description
 - [ ] **Data augmentation** — Generate more training samples for low-represented categories
 - [ ] **Model persistence** — Save trained model parameters to JSON (avoid retrain on every restart)
 - [ ] **File upload** — Allow students to attach images/docs to complaints
