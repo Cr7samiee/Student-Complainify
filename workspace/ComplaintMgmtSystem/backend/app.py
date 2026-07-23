@@ -1,8 +1,9 @@
 import os, csv, io, json, pymysql, hashlib, smtplib, ssl, sys, random, uuid
 from email.message import EmailMessage
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_from_directory, make_response
 from datetime import timedelta, datetime
 from werkzeug.utils import secure_filename
+from fpdf import FPDF
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'train'))
 from classifier import auto_categorize, categorize
@@ -786,6 +787,101 @@ def admin_report():
         train_max_len=train_max_len, train_median_len=train_median_len,
         train_cat_labels=train_cat_labels, train_cat_values=train_cat_values,
         admin_name=session.get('fullname', 'Admin'))
+
+@app.route('/admin/export/pdf')
+def admin_export_pdf():
+    if not login_required('admin'):
+        return redirect(url_for('admin_login'))
+    conn = get_db(); cur = conn.cursor()
+    status_filter = request.args.get('status', '')
+    category_filter = request.args.get('category', '')
+    base = "FROM complaints WHERE 1=1"
+    params = []
+    if status_filter:
+        base += " AND status=%s"
+        params.append(status_filter)
+    if category_filter:
+        base += " AND category=%s"
+        params.append(category_filter)
+    cur.execute(f"SELECT ticket_id,fullname,category,priority,status,subject,sentiment,assigned_to,date_format(created_at,'%%d %%b %%Y') created_at {base} ORDER BY created_at DESC", params)
+    complaints = cur.fetchall()
+    cur.execute(f"SELECT COUNT(*) total, SUM(status='Resolved') resolved, SUM(status='In Progress') in_progress, SUM(status='Pending') pending {base}", params)
+    stats = cur.fetchone()
+    cur.close(); conn.close()
+
+    pdf = FPDF(orientation='L', unit='mm', format='A4')
+    pdf.add_page()
+    pdf.set_font('Helvetica', 'B', 16)
+    pdf.set_text_color(2, 36, 72)
+    pdf.cell(0, 10, 'Complainify - Complaint Report', new_x='LMARGIN', new_y='NEXT')
+    pdf.set_font('Helvetica', '', 9)
+    pdf.set_text_color(100, 116, 139)
+    pdf.cell(0, 6, f'Generated: {datetime.now().strftime("%d %b %Y %I:%M %p")} | Admin: {session.get("fullname", "Admin")}{" | Status: " + status_filter if status_filter else ""}{" | Category: " + category_filter if category_filter else ""}', new_x='LMARGIN', new_y='NEXT')
+    pdf.ln(4)
+    pdf.set_font('Helvetica', 'B', 10)
+    pdf.set_fill_color(2, 36, 72)
+    pdf.set_text_color(255, 255, 255)
+    pdf.cell(35, 8, 'Ticket', border=1, fill=True)
+    pdf.cell(28, 8, 'Student', border=1, fill=True)
+    pdf.cell(30, 8, 'Category', border=1, fill=True)
+    pdf.cell(18, 8, 'Priority', border=1, fill=True)
+    pdf.cell(18, 8, 'Status', border=1, fill=True)
+    pdf.cell(22, 8, 'Sentiment', border=1, fill=True)
+    pdf.cell(85, 8, 'Subject', border=1, fill=True)
+    pdf.cell(25, 8, 'Assigned To', border=1, fill=True)
+    pdf.cell(22, 8, 'Date', border=1, fill=True)
+    pdf.ln()
+    pdf.set_font('Helvetica', '', 8)
+    pdf.set_text_color(30, 41, 59)
+    for c in complaints:
+        row_h = 6
+        if pdf.get_y() + row_h > 190:
+            pdf.add_page()
+            pdf.set_font('Helvetica', 'B', 10)
+            pdf.set_fill_color(2, 36, 72)
+            pdf.set_text_color(255, 255, 255)
+            pdf.cell(35, 8, 'Ticket', border=1, fill=True)
+            pdf.cell(28, 8, 'Student', border=1, fill=True)
+            pdf.cell(30, 8, 'Category', border=1, fill=True)
+            pdf.cell(18, 8, 'Priority', border=1, fill=True)
+            pdf.cell(18, 8, 'Status', border=1, fill=True)
+            pdf.cell(22, 8, 'Sentiment', border=1, fill=True)
+            pdf.cell(85, 8, 'Subject', border=1, fill=True)
+            pdf.cell(25, 8, 'Assigned To', border=1, fill=True)
+            pdf.cell(22, 8, 'Date', border=1, fill=True)
+            pdf.ln()
+            pdf.set_font('Helvetica', '', 8)
+            pdf.set_text_color(30, 41, 59)
+        if c['sentiment'] == 'Negative': pdf.set_text_color(185, 28, 28)
+        else: pdf.set_text_color(30, 41, 59)
+        pdf.cell(35, row_h, c['ticket_id'], border=1)
+        pdf.cell(28, row_h, c['fullname'][:15], border=1)
+        pdf.cell(30, row_h, c['category'][:12], border=1)
+        pdf.cell(18, row_h, c['priority'], border=1)
+        status_display = c['status']
+        pdf.cell(18, row_h, status_display, border=1)
+        pdf.cell(22, row_h, c['sentiment'] or 'Neutral', border=1)
+        subj = c['subject'][:45] + '...' if len(c['subject']) > 45 else c['subject']
+        pdf.cell(85, row_h, subj, border=1)
+        pdf.cell(25, row_h, c['assigned_to'][:12] if c['assigned_to'] else '-', border=1)
+        pdf.cell(22, row_h, str(c['created_at']), border=1)
+        pdf.ln()
+
+    pdf.add_page()
+    pdf.set_font('Helvetica', 'B', 14)
+    pdf.set_text_color(2, 36, 72)
+    pdf.cell(0, 10, 'Summary Statistics', new_x='LMARGIN', new_y='NEXT')
+    pdf.ln(4)
+    pdf.set_font('Helvetica', '', 11)
+    pdf.set_text_color(30, 41, 59)
+    for label, key in [('Total Complaints', 'total'), ('Resolved', 'resolved'), ('In Progress', 'in_progress'), ('Pending', 'pending')]:
+        val = stats[key] if stats[key] is not None else 0
+        pdf.cell(60, 8, f'{label}: {val}', new_x='LMARGIN', new_y='NEXT')
+
+    response = make_response(pdf.output())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=complainify_report.pdf'
+    return response
 
 @app.route('/admin/export/csv')
 def admin_export_csv():

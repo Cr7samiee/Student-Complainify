@@ -60,6 +60,7 @@
 {% if status_filter or category_filter or priority_filter or sentiment_filter %}
 <a href="{{ url_for('admin_complaints') }}" class="px-3 py-1.5 text-xs text-gray-500 hover:text-[#d32f2f]">Clear</a>
 {% endif %}
+<a href="{{ url_for('admin_export_pdf', status=status_filter, category=category_filter) }}" class="ml-auto px-3 py-1.5 bg-[#d32f2f] text-white text-xs font-semibold rounded-lg hover:bg-[#b71c1c] transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-xs">picture_as_pdf</span>PDF</a>
 </form>
 </div>
 {% if complaints %}
