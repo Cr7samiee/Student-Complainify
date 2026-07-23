@@ -90,12 +90,9 @@
 
 ---
 
-## 🚧 Remaining Backend & Data Tasks
+## 🚧 Remaining
 
-- [ ] **Unit tests** — pytest/unittest for classifier, sentiment analyzer, and API routes
 - [ ] **Deployment** — Deploy on Render / PythonAnywhere / VPS
-- [ ] **Prod config** — Move `secret_key`, `DB_CONFIG`, `SMTP_CONFIG` to `.env` or env vars
-- [ ] **CSV import for admins** — Bulk upload complaints from CSV file
 - [x] **Priority filter on admin complaints page** — Filter by High/Medium/Low
 - [x] **Pagination** — Add pagination to admin complaints list (20/page, Prev/Next + page numbers)
 - [x] **Category/sentiment filter on dashboard charts** — Click chart segment to filter complaints
@@ -108,9 +105,19 @@
 - [x] **Audit Logs** — Admin page with action filter, pagination, timestamped activity log
 - [x] **User Management** — Admin can search, filter, reset passwords, delete users
 - [x] **Handwriting OCR** — Tesseract.js on submit page, upload handwritten image → auto-fills description
-- [ ] **Data augmentation** — Generate more training samples for low-represented categories
-- [ ] **Model persistence** — Save trained model parameters to JSON (avoid retrain on every restart)
-- [ ] **File upload** — Allow students to attach images/docs to complaints
+- [x] **Top-3 category predictions** — `predict_top3()` + `/api/predict-top3` route + live probability bars on submit form
+- [x] **Similar complaint finder** — `/api/similar-complaints` — Jaccard similarity on resolved complaints
+- [x] **Anomaly detection** — `detect_anomaly()` + `/api/detect-anomaly` — flags unusual/vague complaints
+- [x] **Resolution time prediction** — `/api/predict-resolution` — avg hours by category/priority/sentiment with confidence tiers
+- [x] **Auto-save to CSV** — New complaints appended to `TrainDataset/new_complaints.csv`
+- [x] **Retrain pipeline** — Admin retrain button + subprocess runs full train+test cycle
+- [x] **Training logs page** — `/admin/training-logs` — accuracy, F1, per-class metrics, accuracy-over-time chart
+- [x] **Data augmentation** — `train/augment_data.py` — balanced Canteen/Library to 750 each
+- [x] **Model persistence** — `MultinomialNB.save()`/`load()` → `model_params.json`, no retrain on restart
+- [x] **CSV import for admins** — `/admin/import-csv` — bulk upload from CSV with column mapping
+- [x] **Unit tests** — 30 pytest tests covering classifier, sentiment, and all API routes in `tests/`
+- [x] **Prod config** — `.env.example` + `python-dotenv` for `SECRET_KEY`, `DB_*`, `SMTP_*`
+- [x] **Deployment config** — `requirements.txt`, `Procfile`, `runtime.txt` for Render/PythonAnywhere
 
 ---
 
