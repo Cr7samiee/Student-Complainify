@@ -950,10 +950,9 @@ def admin_export_pdf():
     pdf.add_page()
     pdf.set_font('Helvetica', 'B', 16)
     pdf.set_text_color(2, 36, 72)
-    pdf.cell(0, 10, 'Complainify - Complaint Report', new_x='LMARGIN', new_y='NEXT')
-    pdf.set_font('Helvetica', '', 9)
-    pdf.set_text_color(100, 116, 139)
-    pdf.cell(0, 6, f'Generated: {datetime.now().strftime("%d %b %Y %I:%M %p")} | Admin: {session.get("fullname", "Admin")}{" | Status: " + status_filter if status_filter else ""}{" | Category: " + category_filter if category_filter else ""}', new_x='LMARGIN', new_y='NEXT')
+    pdf.cell(0, 10, 'Complainify - Complaint Report', ln=1)
+    pdf.set_font('helvetica', 'I', 7)
+    pdf.cell(0, 6, f'Generated: {datetime.now().strftime("%d %b %Y %I:%M %p")} | Admin: {session.get("fullname", "Admin")}{" | Status: " + status_filter if status_filter else ""}{" | Category: " + category_filter if category_filter else ""}', ln=1)
     pdf.ln(4)
     pdf.set_font('Helvetica', 'B', 10)
     pdf.set_fill_color(2, 36, 72)
@@ -1007,13 +1006,13 @@ def admin_export_pdf():
     pdf.add_page()
     pdf.set_font('Helvetica', 'B', 14)
     pdf.set_text_color(2, 36, 72)
-    pdf.cell(0, 10, 'Summary Statistics', new_x='LMARGIN', new_y='NEXT')
+    pdf.cell(0, 10, 'Summary Statistics', ln=1)
     pdf.ln(4)
     pdf.set_font('Helvetica', '', 11)
     pdf.set_text_color(30, 41, 59)
     for label, key in [('Total Complaints', 'total'), ('Resolved', 'resolved'), ('In Progress', 'in_progress'), ('Pending', 'pending')]:
         val = stats[key] if stats[key] is not None else 0
-        pdf.cell(60, 8, f'{label}: {val}', new_x='LMARGIN', new_y='NEXT')
+        pdf.cell(60, 8, f'{label}: {val}', ln=1)
 
     response = make_response(pdf.output())
     response.headers['Content-Type'] = 'application/pdf'
