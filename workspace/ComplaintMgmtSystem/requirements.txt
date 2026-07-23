@@ -1,0 +1,6 @@
+flask>=3.0
+pymysql>=1.1
+fpdf2>=2.7
+python-dotenv>=1.0
+pytest>=8.0
+gunicorn>=21.2
