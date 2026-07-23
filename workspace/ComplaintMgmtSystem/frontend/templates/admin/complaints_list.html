@@ -32,35 +32,35 @@
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
 <div class="px-5 py-3 border-b border-gray-100 bg-gray-50/50 flex flex-wrap gap-3 items-center">
 <form method="GET" class="flex flex-wrap gap-3 items-center">
-<select name="status" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:ring-2 focus:ring-[#d32f2f] outline-none">
+              <select name="status" class="px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none min-w-[130px]">
 <option value="">All Status</option>
 <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending</option>
 <option value="In Progress" {% if status_filter == 'In Progress' %}selected{% endif %}>In Progress</option>
 <option value="Resolved" {% if status_filter == 'Resolved' %}selected{% endif %}>Resolved</option>
 </select>
-<select name="priority" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:ring-2 focus:ring-[#d32f2f] outline-none">
+<select name="priority" class="px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none min-w-[130px]">
 <option value="">All Priority</option>
 <option value="High" {% if priority_filter == 'High' %}selected{% endif %}>High</option>
 <option value="Medium" {% if priority_filter == 'Medium' %}selected{% endif %}>Medium</option>
 <option value="Low" {% if priority_filter == 'Low' %}selected{% endif %}>Low</option>
 </select>
-<select name="category" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:ring-2 focus:ring-[#d32f2f] outline-none">
+<select name="category" class="px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none min-w-[150px]">
 <option value="">All Categories</option>
 {% for cat in categories %}
 <option value="{{ cat }}" {% if category_filter == cat %}selected{% endif %}>{{ cat }}</option>
 {% endfor %}
 </select>
-<select name="sentiment" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:ring-2 focus:ring-[#d32f2f] outline-none">
+<select name="sentiment" class="px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none min-w-[130px]">
 <option value="">All Sentiment</option>
 <option value="Positive" {% if sentiment_filter == 'Positive' %}selected{% endif %}>Positive</option>
 <option value="Neutral" {% if sentiment_filter == 'Neutral' %}selected{% endif %}>Neutral</option>
 <option value="Negative" {% if sentiment_filter == 'Negative' %}selected{% endif %}>Negative</option>
 </select>
-<button type="submit" class="px-4 py-1.5 bg-[#0a1628] text-white text-xs font-semibold rounded-lg hover:bg-[#1a2a3a] transition-colors">Filter</button>
+<button type="submit" class="px-5 py-2.5 bg-[#0a1628] text-white text-sm font-semibold rounded-lg hover:bg-[#1a2a3a] transition-colors">Filter</button>
 {% if status_filter or category_filter or priority_filter or sentiment_filter %}
-<a href="{{ url_for('admin_complaints') }}" class="px-3 py-1.5 text-xs text-gray-500 hover:text-[#d32f2f]">Clear</a>
+<a href="{{ url_for('admin_complaints') }}" class="px-4 py-2 text-sm text-gray-500 hover:text-[#d32f2f]">Clear</a>
 {% endif %}
-<a href="{{ url_for('admin_export_pdf', status=status_filter, category=category_filter) }}" class="ml-auto px-3 py-1.5 bg-[#d32f2f] text-white text-xs font-semibold rounded-lg hover:bg-[#b71c1c] transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-xs">picture_as_pdf</span>PDF</a>
+<a href="{{ url_for('admin_export_pdf', status=status_filter, category=category_filter) }}" class="ml-auto px-4 py-2.5 bg-[#d32f2f] text-white text-sm font-semibold rounded-lg hover:bg-[#b71c1c] transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">picture_as_pdf</span>PDF</a>
 </form>
 </div>
 {% if complaints %}
