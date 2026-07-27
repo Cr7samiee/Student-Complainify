@@ -3,6 +3,18 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 _analyzer = SentimentIntensityAnalyzer()
 
+_APPRECIATION = re.compile(
+    r'\b(thank|appreciate|grateful|excellent|wonderful|amazing|great)\b',
+    re.IGNORECASE
+)
+
+_COMPLAINT_WORDS = re.compile(
+    r'\b(complaint|complain|problem|issue|fix|repair|broken|damage|leak|'
+    r'not\s+work(?:ing)?|not\s+function|stole|theft|delay|not\s+good|'
+    r'wifi|internet|power|water|electricity|down)\b',
+    re.IGNORECASE
+)
+
 _NEG_PATTERNS = re.compile(
     r'\b(not\s+work(?:ing)?|doesn.?t\s+work|dont\s+work|wont\s+work|'
     r'not\s+function(?:ing)?|stole|theft|robbery|harass\w*|'
@@ -21,6 +33,9 @@ def analyze_sentiment(text):
 
     if compound > -0.05 and _NEG_PATTERNS.search(text):
         compound = min(compound, -0.1)
+
+    if compound >= 0.05 and _COMPLAINT_WORDS.search(text) and not _APPRECIATION.search(text):
+        compound = 0.0
 
     if compound <= -0.5:
         label, sub_label = 'Negative', 'Angry / Frustrated'
