@@ -304,6 +304,8 @@ def track_complaint():
         conn = get_db(); cur = conn.cursor()
         cur.execute("""SELECT ticket_id,status,priority,category,subject,
             date_format(created_at,'%%d %%b %%Y') date,
+            date_format(assigned_at,'%%d %%b %%Y %%h:%%i %%p') assigned_date,
+            date_format(resolved_at,'%%d %%b %%Y %%h:%%i %%p') resolved_date,
             assigned_to,admin_notes,validated
             FROM complaints WHERE ticket_id=%s""", (tid,))
         result = cur.fetchone()
