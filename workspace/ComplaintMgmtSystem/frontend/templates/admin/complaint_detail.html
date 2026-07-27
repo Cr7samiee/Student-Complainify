@@ -138,9 +138,9 @@
 <p class="text-sm text-gray-500 text-center py-4">No comments yet.</p>
 {% endfor %}
 </div>
-<form method="POST" action="{{ url_for('add_comment', ticket_id=c.ticket_id) }}" class="flex gap-3">
-<input type="text" name="message" placeholder="Write a reply..." required class="flex-1 px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none">
-<button type="submit" class="bg-[#0a1628] text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#1a2a3a]">Send</button>
+<form method="POST" action="{{ url_for('add_comment', ticket_id=c.ticket_id) }}" class="flex gap-2">
+<input type="text" name="message" placeholder="Write a reply..." required class="flex-1 min-w-0 px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none">
+<button type="submit" class="bg-[#0a1628] text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#1a2a3a] transition-colors flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">send</span>Send</button>
 </form>
 </div>
 </div>
@@ -148,7 +148,7 @@
 <footer class="bg-[#0a1628] w-full mt-auto">
 <div class="max-w-7xl mx-auto px-6 py-3 flex flex-col md:flex-row justify-between items-center border-t border-white/5 gap-2">
 <div class="flex items-center gap-2"><span class="text-sm font-bold text-white">Complainify</span><span class="text-[10px] text-gray-500">v4.2.0-Admin</span></div>
-<p class="text-[10px] text-gray-500">&copy; 2024 Complainify</p>
+<p class="text-[10px] text-gray-500">&copy; 2024 Complainify. Institutional Navy Standard.</p>
 </div>
 </footer>
 </main>
