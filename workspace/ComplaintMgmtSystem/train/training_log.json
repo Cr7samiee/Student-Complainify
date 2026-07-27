@@ -1,67 +1,67 @@
 {
-  "last_trained": "2026-07-23 19:21:15",
-  "train_samples": 5916,
+  "last_trained": "2026-07-27 21:12:19",
+  "train_samples": 5918,
   "test_samples": 1480,
-  "accuracy": 97.3,
-  "macro_f1": 0.9734,
+  "accuracy": 95.47,
+  "macro_f1": 0.9551,
   "per_class": [
     {
       "category": "IT Support",
-      "precision": 0.9805,
-      "recall": 0.9805,
-      "f1": 0.9805
+      "precision": 0.961,
+      "recall": 0.9867,
+      "f1": 0.9737
     },
     {
       "category": "Hostels",
-      "precision": 0.963,
-      "recall": 0.9455,
-      "f1": 0.9541
+      "precision": 0.897,
+      "recall": 0.9548,
+      "f1": 0.925
     },
     {
       "category": "Academics",
-      "precision": 0.9704,
-      "recall": 0.9291,
-      "f1": 0.9493
+      "precision": 0.9542,
+      "recall": 0.9191,
+      "f1": 0.9363
     },
     {
       "category": "Fees / Finance",
-      "precision": 0.979,
-      "recall": 0.979,
-      "f1": 0.979
+      "precision": 0.931,
+      "recall": 0.9586,
+      "f1": 0.9446
     },
     {
       "category": "Maintenance",
-      "precision": 0.9367,
-      "recall": 0.961,
-      "f1": 0.9487
+      "precision": 0.9538,
+      "recall": 0.9185,
+      "f1": 0.9358
     },
     {
       "category": "Transport",
-      "precision": 0.9859,
-      "recall": 1.0,
-      "f1": 0.9929
+      "precision": 0.9726,
+      "recall": 0.9726,
+      "f1": 0.9726
     },
     {
       "category": "Security / Discipline",
-      "precision": 0.9809,
-      "recall": 0.9872,
-      "f1": 0.984
+      "precision": 0.9481,
+      "recall": 0.9542,
+      "f1": 0.9511
     },
     {
       "category": "Administration",
-      "precision": 0.9527,
-      "recall": 0.9527,
-      "f1": 0.9527
+      "precision": 0.9507,
+      "recall": 0.8824,
+      "f1": 0.9153
     },
     {
       "category": "Library",
-      "precision": 0.9926,
+      "precision": 1.0,
       "recall": 1.0,
-      "f1": 0.9963
+      "f1": 1.0
     },
     {
       "category": "Canteen",
-      "precision": 0.9931,
+      "precision": 0.993,
       "recall": 1.0,
       "f1": 0.9965
     }
@@ -98,6 +98,10 @@
     {
       "date": "2026-07-23 19:21",
       "accuracy": 97.3
+    },
+    {
+      "date": "2026-07-27 21:12",
+      "accuracy": 95.5
     }
   ]
 }

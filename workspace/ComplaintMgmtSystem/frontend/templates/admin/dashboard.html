@@ -79,9 +79,9 @@
 <a href="{{ url_for('admin_complaints', sentiment='Negative') }}" class="flex-1 bg-red-400 rounded-t-lg relative group hover:opacity-80" style="height:{{ neg_h + 10 }}%"><div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-600 opacity-0 group-hover:opacity-100">{{ sent_neg }}</div></a>
 </div>
 <div class="px-5 py-3 border-t border-gray-100 flex gap-4 text-[11px] font-medium">
-<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#d32f2f]"></span> Positive</span>
-<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-indigo-300"></span> Neutral</span>
-<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-gray-300"></span> Negative</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-400"></span> Positive</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span> Neutral</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-400"></span> Negative</span>
 </div>
 </div>
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
@@ -120,12 +120,12 @@
 <button class="p-1.5 hover:bg-gray-100 rounded-md border border-gray-200"><span class="material-symbols-outlined text-sm text-gray-500">download</span></button>
 </div>
 </div>
-{% if complaints %}
+      {% if recent %}
 <div class="overflow-x-auto">
 <table class="w-full text-left">
 <thead><tr class="text-[11px] text-gray-500 font-semibold uppercase tracking-wider bg-gray-50/50"><th class="px-5 py-3">Ticket</th><th class="px-5 py-3">Student</th><th class="px-5 py-3">Category</th><th class="px-5 py-3">Sentiment</th><th class="px-5 py-3">Status</th><th class="px-5 py-3">Priority</th><th class="px-5 py-3">Assigned To</th><th class="px-5 py-3">Action</th></tr></thead>
 <tbody class="divide-y divide-gray-50">
-{% for c in complaints %}
+{% for c in recent %}
 <tr class="hover:bg-gray-50 transition-colors">
 <td class="px-5 py-3.5 text-sm font-bold text-[#0a1628]">#{{ c.ticket_id }}</td>
 <td class="px-5 py-3.5 text-sm text-gray-600">{{ c.student }}</td>

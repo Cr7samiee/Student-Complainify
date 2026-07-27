@@ -90,7 +90,8 @@ def log_action(user_id, action, target_type=None, target_id=None, details=None):
             (user_id, action, target_type, target_id, details))
         conn.commit()
         cur.close(); conn.close()
-    except: pass
+    except Exception as e:
+        print(f"[LOG_ACTION ERROR] {e}")
 
 def send_email_notification(to_email, subject, body):
     if not SMTP_CONFIG['user'] or not SMTP_CONFIG['password']:
@@ -558,10 +559,10 @@ def admin_dashboard():
         date_format(created_at,'%%d %%b %%Y') date,
         assigned_to,validated
         FROM complaints ORDER BY created_at DESC""")
-    complaints = cur.fetchall()
-    total = len(complaints)
-    resolved = sum(1 for c in complaints if c['status'] == 'Resolved')
-    in_progress = sum(1 for c in complaints if c['status'] == 'In Progress')
+    all_complaints = cur.fetchall()
+    total = len(all_complaints)
+    resolved = sum(1 for c in all_complaints if c['status'] == 'Resolved')
+    in_progress = sum(1 for c in all_complaints if c['status'] == 'In Progress')
     pending = total - resolved - in_progress
 
     cur.execute("SELECT COUNT(*) cnt FROM complaints WHERE status='Resolved' AND resolved_at IS NOT NULL AND TIMESTAMPDIFF(MINUTE, created_at, resolved_at) IS NOT NULL")
@@ -595,7 +596,7 @@ def admin_dashboard():
         avg_resolution=avg_resolution,
         cat_labels=cat_labels, cat_values=cat_values, cat_pcts=cat_pcts,
         sent_pos=sent_pos, sent_neg=sent_neg, sent_neu=sent_neu,
-        complaints=complaints,
+        complaints=all_complaints, recent=all_complaints[:10],
         admin_name=session.get('fullname', 'Admin'))
 
 @app.route('/admin/complaints')
@@ -652,8 +653,8 @@ def admin_complaint_detail(ticket_id):
         date_format(resolved_at,'%%d %%b %%Y %%h:%%i %%p') resolved_date
         FROM complaints WHERE ticket_id=%s""", (ticket_id,))
     complaint = cur.fetchone()
-    cur.close(); conn.close()
     if not complaint:
+        cur.close(); conn.close()
         flash('Complaint not found.', 'error')
         return redirect(url_for('admin_dashboard'))
     cur.execute("""SELECT complaint_comments.*, users.fullname, users.role FROM complaint_comments
