@@ -7,5 +7,7 @@ venv/
 .DS_Store
 Thumbs.db
 
+uploads/
+
 # opencode config
 opencode.json
