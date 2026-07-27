@@ -675,7 +675,8 @@ def admin_complaint_detail(ticket_id):
     comments = cur.fetchall()
     cur.close(); conn.close()
     return render_template('admin/complaint_detail.html', c=complaint, comments=comments,
-        admin_name=session.get('fullname', 'Admin'))
+        admin_name=session.get('fullname', 'Admin'),
+        departments=[d for d in CATEGORIES if d != 'Other'])
 
 @app.route('/admin/assign/<ticket_id>', methods=['POST'])
 def admin_assign(ticket_id):
