@@ -177,11 +177,20 @@ def submit_complaint():
                     student_attachment.save(os.path.join(UPLOAD_FOLDER, unique_name))
                     student_attachment_name = unique_name
 
+            dept_name = DEPARTMENT_EMAILS.get(category)
+            if dept_name and category != 'Other':
+                assigned_to = category
+                auto_status = 'In Progress'
+            else:
+                assigned_to = None
+                auto_status = 'Pending'
+
             cur.execute("""INSERT INTO complaints
-                (ticket_id,user_id,fullname,email,category,priority,subject,description,sentiment,sentiment_score,student_attachment)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                (ticket_id,user_id,fullname,email,category,priority,subject,description,sentiment,sentiment_score,student_attachment,assigned_to,status,assigned_at)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                 (tid, uid, fullname, email,
-                 category, priority, subject, description, sentiment, sentiment_score, student_attachment_name))
+                 category, priority, subject, description, sentiment, sentiment_score, student_attachment_name,
+                 assigned_to, auto_status, datetime.now() if assigned_to else None))
             conn.commit()
 
             conn2 = get_db(); cur2 = conn2.cursor()
