@@ -93,7 +93,43 @@ def log_action(user_id, action, target_type=None, target_id=None, details=None):
         conn.commit()
         cur.close(); conn.close()
     except Exception as e:
-        print(f"[LOG_ACTION ERROR] {e}")
+        print(f"[LOG_ACTION ERROR] {e} — retrying with table init")
+        try:
+            conn = get_db(); cur = conn.cursor()
+            for tbl in ['audit_logs', 'notifications', 'complaint_comments']:
+                cur.execute(f"DROP TABLE IF EXISTS {tbl}")
+            cur.execute("""CREATE TABLE audit_logs (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT DEFAULT NULL,
+                action VARCHAR(100) NOT NULL,
+                target_type VARCHAR(50) DEFAULT NULL,
+                target_id VARCHAR(50) DEFAULT NULL,
+                details TEXT DEFAULT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )""")
+            cur.execute("""CREATE TABLE notifications (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                message TEXT NOT NULL,
+                link VARCHAR(255) DEFAULT NULL,
+                is_read TINYINT(1) DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )""")
+            cur.execute("""CREATE TABLE complaint_comments (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                complaint_id INT NOT NULL,
+                user_id INT NOT NULL,
+                message TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )""")
+            conn.commit()
+            cur.execute("INSERT INTO audit_logs (user_id, action, target_type, target_id, details) VALUES (%s, %s, %s, %s, %s)",
+                (user_id, action, target_type, target_id, details))
+            conn.commit()
+            cur.close(); conn.close()
+            print(f"[LOG_ACTION] Recovered — tables recreated, log inserted")
+        except Exception as e2:
+            print(f"[LOG_ACTION] Fatal: {e2}")
 
 def send_email_notification(to_email, subject, body):
     if not SMTP_CONFIG['user'] or not SMTP_CONFIG['password']:
