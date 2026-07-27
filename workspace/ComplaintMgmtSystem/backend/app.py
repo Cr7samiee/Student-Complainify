@@ -49,7 +49,8 @@ if os.path.isfile(DEPARTMENT_EMAILS_PATH):
         with open(DEPARTMENT_EMAILS_PATH) as f:
             saved = json.load(f)
             DEPARTMENT_EMAILS.update(saved)
-    except: pass
+    except Exception as e:
+        print(f"[DEPARTMENT EMAILS] {e}")
 
 DB_CONFIG = dict(
     host=os.environ.get('DB_HOST', '127.0.0.1'),
@@ -81,7 +82,8 @@ def create_notification(user_id, message, link=None):
         cur.execute("INSERT INTO notifications (user_id, message, link) VALUES (%s, %s, %s)", (user_id, message, link))
         conn.commit()
         cur.close(); conn.close()
-    except: pass
+    except Exception as e:
+        print(f"[NOTIFICATION ERROR] {e}")
 
 def log_action(user_id, action, target_type=None, target_id=None, details=None):
     try:
@@ -208,7 +210,8 @@ def submit_complaint():
                     if not file_exists:
                         writer.writerow(['text', 'category'])
                     writer.writerow([subject + ' ' + description, category])
-            except: pass
+            except Exception as ex:
+                print(f"[CSV APPEND ERROR] {ex}")
 
             if SMTP_CONFIG['user'] and not anon:
                 student_email = email
@@ -870,7 +873,8 @@ def admin_settings():
         try:
             with open(dept_file) as f:
                 dept_emails = json.load(f)
-        except: pass
+        except Exception as e:
+            print(f"[SETTINGS DEPT EMAILS] {e}")
     for cat in DEPARTMENT_EMAILS:
         dept_emails.setdefault(cat, DEPARTMENT_EMAILS[cat])
     return render_template('admin/settings.html', user=user,
@@ -930,7 +934,7 @@ def admin_report():
     cur.close(); conn.close()
 
     # Training dataset analysis
-    train_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'TrainDataset', 'processed_dataset_4500.csv')
+    train_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'TrainDataset', 'train_dataset.csv')
     train_cats = {}
     train_total = 0
     train_lens = []
@@ -946,7 +950,8 @@ def admin_report():
             train_lens.append(len(r['text']))
             unique_texts.add(r['text'])
         train_unique = len(unique_texts)
-    except: pass
+    except Exception as e:
+        print(f"[TRAIN ANALYSIS] {e}")
     train_avg_len = round(sum(train_lens) / len(train_lens)) if train_lens else 0
     train_min_len = min(train_lens) if train_lens else 0
     train_max_len = max(train_lens) if train_lens else 0
@@ -1329,7 +1334,8 @@ def admin_training_logs():
     try:
         with open(TRAIN_LOG_PATH) as f:
             log_data = json.load(f)
-    except: pass
+    except Exception as e:
+        print(f"[TRAIN LOG LOAD] {e}")
     conn = get_db(); cur = conn.cursor()
     cur.execute("SELECT COUNT(*) cnt FROM complaints")
     total_complaints = cur.fetchone()['cnt']
@@ -1422,6 +1428,40 @@ def dashboard_redirect():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+def init_db():
+    try:
+        conn = get_db(); cur = conn.cursor()
+        cur.execute("""CREATE TABLE IF NOT EXISTS audit_logs (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT DEFAULT NULL,
+            action VARCHAR(100) NOT NULL,
+            target_type VARCHAR(50) DEFAULT NULL,
+            target_id VARCHAR(50) DEFAULT NULL,
+            details TEXT DEFAULT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )""")
+        cur.execute("""CREATE TABLE IF NOT EXISTS notifications (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            message TEXT NOT NULL,
+            link VARCHAR(255) DEFAULT NULL,
+            is_read TINYINT(1) DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )""")
+        cur.execute("""CREATE TABLE IF NOT EXISTS complaint_comments (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            complaint_id INT NOT NULL,
+            user_id INT NOT NULL,
+            message TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )""")
+        conn.commit()
+        cur.close(); conn.close()
+    except Exception as e:
+        print(f"[INIT DB] {e}")
+
+init_db()
 
 if __name__ == '__main__':
     app.run(debug=True)
