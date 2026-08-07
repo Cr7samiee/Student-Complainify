@@ -1049,6 +1049,9 @@ def _chart_png(kind, **data):
     values = data.get('values') or []
     if not labels or not values:
         return None
+    values = [v if v is not None else 0 for v in values]
+    if kind in ('sentiment', 'status') and sum(values) == 0:
+        return None
 
     bar_colors = ['#3b82f6', '#6366f1', '#8b5cf6', '#ec4899', '#f43f5e',
                   '#f59e0b', '#10b981', '#06b6d4', '#94a3b8', '#f97316']
@@ -1063,8 +1066,9 @@ def _chart_png(kind, **data):
     if kind in ('category', 'monthly', 'resolution'):
         if len(labels) > len(bar_colors):
             bar_colors = bar_colors * (len(labels) // len(bar_colors) + 1)
+        fill = data.get('colors') or bar_colors[:len(labels)]
         bars = ax.bar(labels, values,
-                      color=bar_colors[:len(labels)],
+                      color=fill,
                       edgecolor='#1e3a8a', linewidth=0.6)
         for b, v in zip(bars, values):
             ax.text(b.get_x() + b.get_width()/2, v + max(values) * 0.01, str(v),
@@ -1074,9 +1078,10 @@ def _chart_png(kind, **data):
         ax.tick_params(axis='y', labelsize=8)
         ax.grid(axis='y', alpha=0.3)
     elif kind in ('sentiment', 'status'):
-        c = [pie_colors.get(l, '#6366f1') for l in labels]
+        c = [pie_colors.get(l.split(' (')[0], '#6366f1') for l in labels]
         wedges, _, autotexts = ax.pie(values, labels=labels, autopct='%1.0f%%',
                                       startangle=90, colors=c,
+                                      wedgeprops=dict(width=0.35),
                                       textprops={'fontsize': 9})
         for at in autotexts:
             at.set_color('white'); at.set_fontsize(8); at.set_fontweight('bold')
@@ -1178,16 +1183,17 @@ def admin_export_pdf():
     # Build chart PNGs (each chart -> own page in the PDF)
     cat_labels = [r['category'] for r in cat_rows]
     cat_values = [r['cnt'] for r in cat_rows]
-    sent_labels = [r['sentiment'] for r in sent_rows]
-    sent_values = [r['cnt'] for r in sent_rows]
-    status_labels = [r['status'] for r in status_rows]
-    status_values = [r['cnt'] for r in status_rows]
-    status_order = ['Pending', 'In Progress', 'Resolved']
-    status_labels.sort(key=lambda s: status_order.index(s) if s in status_order else 99)
-    status_values = [dict(zip(status_labels, status_values))[s] for s in status_labels]
 
     acc_labels = [h['date'] for h in train_log.get('history', []) if h.get('accuracy') is not None]
     acc_values = [h['accuracy'] for h in train_log.get('history', []) if h.get('accuracy') is not None]
+
+    # Match report page graph labels (slice names + counts, same order/colors)
+    sent_map = {r['sentiment']: r['cnt'] for r in sent_rows}
+    sent_lbl = [f'{s} ({sent_map.get(s, 0)})' for s in ['Positive', 'Neutral', 'Negative']]
+    sent_vals = [sent_map.get(s, 0) for s in ['Positive', 'Neutral', 'Negative']]
+    status_map = {r['status']: r['cnt'] for r in status_rows}
+    status_lbl = [f'{s} ({status_map.get(s, 0)})' for s in ['Pending', 'In Progress', 'Resolved']]
+    status_vals = [status_map.get(s, 0) for s in ['Pending', 'In Progress', 'Resolved']]
 
     # ML Training Dataset analysis (matches report page)
     train_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'train_dataset.csv')
@@ -1206,20 +1212,25 @@ def admin_export_pdf():
     train_avg_len = round(sum(train_lens) / len(train_lens)) if train_lens else 0
     train_min_len = min(train_lens) if train_lens else 0
     train_max_len = max(train_lens) if train_lens else 0
+    sorted_lens = sorted(train_lens)
+    train_median_len = sorted_lens[len(sorted_lens)//2] if sorted_lens else 0
 
     charts = [
         ('category', cat_labels, cat_values, 'Complaint Category Distribution'),
-        ('sentiment', sent_labels, sent_values, 'Complaint Sentiment Breakdown'),
-        ('status', status_labels, status_values, 'Complaint Status Breakdown'),
+        ('sentiment', sent_lbl, sent_vals, 'Complaint Sentiment Breakdown'),
+        ('status', status_lbl, status_vals, 'Complaint Status Breakdown'),
         ('daily', daily_labels, daily_data, 'Daily Complaint Trend (Last 30 Days)'),
-        ('monthly', month_labels, month_data, 'Monthly Complaint Trends'),
-        ('resolution', ['Fastest', 'Average', 'Slowest'], [min_res, avg_res, max_res], 'Resolution Time (Hours)'),
+        ('monthly', month_labels, month_data, 'Monthly Complaint Trends',
+         {'colors': ['#6366f1'] * len(month_labels)}),
+        ('resolution', ['Average', 'Fastest', 'Slowest'], [avg_res, min_res, max_res], 'Resolution Time (Hours)'),
     ]
     if train_cat_labels:
         charts.append(('category', train_cat_labels, train_cat_values, 'ML Training Dataset - Category Distribution'))
     if train_lens:
-        charts.append(('resolution', ['Min', 'Avg', 'Max'], [train_min_len, train_avg_len, train_max_len],
-                       'ML Training Dataset - Text Length (Characters)'))
+        charts.append(('resolution', ['Min', 'Max', 'Avg', 'Median'],
+                       [train_min_len, train_max_len, train_avg_len, train_median_len],
+                       'ML Training Dataset - Text Length (Characters)',
+                       {'colors': ['#f59e0b', '#ef4444', '#3b82f6', '#10b981']}))
     if len(acc_labels) >= 2:
         charts.append(('accuracy', acc_labels, acc_values, 'Classifier Accuracy Over Time',
                        {'current': train_log.get('accuracy')}))

@@ -83,6 +83,13 @@
 <div class="bg-red-50 rounded-lg p-4 text-center"><p class="text-2xl font-bold text-red-600">{{ max_res }}h</p><p class="text-xs text-gray-500">Slowest</p></div>
 </div>
 </div>
+{% if train_log and train_log.get('history') and train_log.history|length > 1 %}
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+<h3 class="text-sm font-bold text-[#0a1628] mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">model_training</span>Classifier Accuracy Over Time</h3>
+<p class="text-xs text-gray-500 mb-4">Naive Bayes model accuracy per retraining cycle. Current: <strong>{{ train_log.accuracy ~ '%' if train_log.accuracy is not none else 'N/A' }}</strong> ({{ train_log.train_samples }} train / {{ train_log.test_samples }} test samples)</p>
+<div style="height:180px"><canvas id="reportAccChart"></canvas></div>
+</div>
+{% endif %}
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
 <div class="px-5 py-3 border-b border-gray-100 flex justify-between items-center">
 <h3 class="text-sm font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">table</span>All Complaints</h3>
@@ -185,6 +192,13 @@ new Chart(document.getElementById('dailyChart'),{type:'line',data:{labels:{{dail
 {% endif %}
 {% if month_labels %}
 new Chart(document.getElementById('monthChart'),{type:'bar',data:{labels:{{month_labels|tojson}},datasets:[{label:'Complaints',data:{{month_data|tojson}},backgroundColor:'#6366f1',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#eef2f7'}}}}});
+{% endif %}
+{% if train_log and train_log.get('history') and train_log.history|length > 1 %}
+(function() {
+const lbls = {{ train_log.history|map(attribute='date')|list|tojson }};
+const vals = {{ train_log.history|map(attribute='accuracy')|list|tojson }};
+new Chart(document.getElementById('reportAccChart'), {type:'line', data:{labels:lbls, datasets:[{label:'Accuracy %', data:vals.map(function(v){return v!==null?v:undefined;}), borderColor:'#d32f2f', backgroundColor:'rgba(211,47,47,0.1)', fill:true, tension:0.3, spanGaps:true}]}, options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, max:100, grid:{color:'#eef2f7'}}},}});
+})();
 {% endif %}
 {% if train_cat_labels %}
 const tc = ['#3b82f6','#6366f1','#8b5cf6','#ec4899','#f43f5e','#f59e0b','#10b981','#06b6d4','#94a3b8','#f97316','#022448'];

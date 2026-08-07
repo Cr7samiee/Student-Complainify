@@ -33,18 +33,22 @@
 {% if log %}
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5"><span class="text-xs text-gray-400 uppercase">Last Trained</span><p class="text-lg font-bold text-[#0a1628] mt-1">{{ log.last_trained[:10] if log.last_trained else '-' }}</p></div>
-<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5"><span class="text-xs text-gray-400 uppercase">Accuracy</span><p class="text-lg font-bold text-green-600 mt-1">{{ log.accuracy }}%</p></div>
-<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5"><span class="text-xs text-gray-400 uppercase">Macro F1</span><p class="text-lg font-bold text-blue-600 mt-1">{{ log.macro_f1 }}</p></div>
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5"><span class="text-xs text-gray-400 uppercase">Accuracy</span><p class="text-lg font-bold mt-1{% if log.accuracy is not none %} text-green-600{% else %} text-gray-400{% endif %}">{{ log.accuracy ~ '%' if log.accuracy is not none else 'N/A' }}</p>{% if log.note %}<p class="text-[10px] text-amber-500 mt-1">{{ log.note }}</p>{% endif %}</div>
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5"><span class="text-xs text-gray-400 uppercase">Macro F1</span><p class="text-lg font-bold text-blue-600 mt-1">{{ log.macro_f1 if log.macro_f1 is not none else 'N/A' }}</p></div>
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5"><span class="text-xs text-gray-400 uppercase">Samples</span><p class="text-lg font-bold text-[#0a1628] mt-1">{{ log.train_samples }} train / {{ log.test_samples }} test</p></div>
 </div>
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
 <h3 class="text-sm font-bold text-[#0a1628] mb-4">Per-Class Performance</h3>
 {% if log.per_class %}
 <table class="w-full text-left">
-<thead><tr class="text-[11px] text-gray-500 font-semibold uppercase tracking-wider bg-gray-50"><th class="px-4 py-3">Category</th><th class="px-4 py-3">Precision</th><th class="px-4 py-3">Recall</th><th class="px-4 py-3">F1-Score</th></tr></thead>
+<thead><tr class="text-[11px] text-gray-500 font-semibold uppercase tracking-wider bg-gray-50"><th class="px-4 py-3">Category</th><th class="px-4 py-3">Precision</th><th class="px-4 py-3">Recall</th><th class="px-4 py-3">F1-Score</th><th class="px-4 py-3">Samples</th></tr></thead>
 <tbody class="divide-y divide-gray-50">
 {% for m in log.per_class %}
-<tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-semibold text-[#0a1628]">{{ m.category }}</td><td class="px-4 py-3 text-sm">{{ "%.2f"|format(m.precision) }}</td><td class="px-4 py-3 text-sm">{{ "%.2f"|format(m.recall) }}</td><td class="px-4 py-3 text-sm font-bold">{{ "%.2f"|format(m.f1) }}</td></tr>
+<tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-semibold text-[#0a1628]">{{ m.category }}</td>
+<td class="px-4 py-3 text-sm">{% if m.precision is not none %}{{ "%.2f"|format(m.precision) }}{% else %}<span class="text-amber-500">insufficient</span>{% endif %}</td>
+<td class="px-4 py-3 text-sm">{% if m.recall is not none %}{{ "%.2f"|format(m.recall) }}{% else %}<span class="text-amber-500">insufficient</span>{% endif %}</td>
+<td class="px-4 py-3 text-sm font-bold">{% if m.f1 is not none %}{{ "%.2f"|format(m.f1) }}{% else %}<span class="text-amber-500">insufficient</span>{% endif %}</td>
+<td class="px-4 py-3 text-sm text-gray-500">{{ m.samples if m.samples is defined else '-' }}</td></tr>
 {% endfor %}
 </tbody>
 </table>
@@ -56,7 +60,10 @@
 <canvas id="accuracyChart" height="80"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script>
-new Chart(document.getElementById('accuracyChart'), {type:'line', data:{labels:{{ log.history|map(attribute='date')|list|tojson }}, datasets:[{label:'Accuracy %', data:{{ log.history|map(attribute='accuracy')|list|tojson }}, borderColor:'#d32f2f', backgroundColor:'rgba(211,47,47,0.1)', fill:true, tension:0.3}]}, options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,max:100}}, responsive:true}});
+const accLabels = {{ log.history|map(attribute='date')|list|tojson }};
+const accData = {{ log.history|map(attribute='accuracy')|list|tojson }};
+const validData = accData.map(function(v) { return v !== null ? v : undefined; });
+new Chart(document.getElementById('accuracyChart'), {type:'line', data:{labels:accLabels, datasets:[{label:'Accuracy %', data:validData, borderColor:'#d32f2f', backgroundColor:'rgba(211,47,47,0.1)', fill:true, tension:0.3, spanGaps:true}]}, options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,max:100}}, responsive:true}});
 </script>
 </div>
 {% endif %}

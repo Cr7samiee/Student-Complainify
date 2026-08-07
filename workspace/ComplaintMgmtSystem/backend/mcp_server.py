@@ -1,5 +1,5 @@
 import sys, os, json
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'train'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'ml'))
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import Tool, TextContent
@@ -62,7 +62,7 @@ async def call_tool(name: str, arguments: dict):
     elif name == "analyze_sentiment":
         return [TextContent(type="text", text=json.dumps(analyze_sentiment(arguments["text"]), indent=2))]
     elif name == "get_training_log":
-        log_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'train', 'training_log.json')
+        log_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml', 'training_log.json')
         if os.path.isfile(log_path):
             with open(log_path) as f: data = json.load(f)
         else: data = {"error": "No training log found"}

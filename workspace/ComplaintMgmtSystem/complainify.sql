@@ -41,6 +41,10 @@ CREATE TABLE IF NOT EXISTS complaints (
     email_sent TINYINT(1) DEFAULT 0,
     attachment VARCHAR(255) DEFAULT NULL,
     student_attachment VARCHAR(255) DEFAULT NULL,
+    model_version VARCHAR(20) DEFAULT NULL,
+    category_confirmed TINYINT(1) DEFAULT 0,
+    confirmed_by VARCHAR(100) DEFAULT NULL,
+    confirmed_at DATETIME DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
@@ -63,6 +67,16 @@ ALTER TABLE complaints ADD COLUMN IF NOT EXISTS admin_notes TEXT DEFAULT NULL AF
 ALTER TABLE complaints ADD COLUMN IF NOT EXISTS validated TINYINT(1) DEFAULT 0 AFTER admin_notes;
 ALTER TABLE complaints ADD COLUMN IF NOT EXISTS email_sent TINYINT(1) DEFAULT 0 AFTER validated;
 ALTER TABLE complaints ADD COLUMN IF NOT EXISTS student_attachment VARCHAR(255) DEFAULT NULL AFTER attachment;
+
+-- ML data-lifecycle columns (admin-confirmed rows feed the training pipeline)
+--   category_confirmed : human confirms the true category before it may enter training
+--   confirmed_by       : admin user id / name who confirmed the label
+--   confirmed_at       : when the label was confirmed
+--   model_version      : which registered model produced the prediction at submit time
+ALTER TABLE complaints ADD COLUMN IF NOT EXISTS model_version VARCHAR(20) DEFAULT NULL AFTER student_attachment;
+ALTER TABLE complaints ADD COLUMN IF NOT EXISTS category_confirmed TINYINT(1) DEFAULT 0 AFTER model_version;
+ALTER TABLE complaints ADD COLUMN IF NOT EXISTS confirmed_by VARCHAR(100) DEFAULT NULL AFTER category_confirmed;
+ALTER TABLE complaints ADD COLUMN IF NOT EXISTS confirmed_at DATETIME DEFAULT NULL AFTER confirmed_by;
 
 -- Notifications table
 CREATE TABLE IF NOT EXISTS notifications (

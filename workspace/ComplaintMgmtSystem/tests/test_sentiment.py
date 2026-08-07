@@ -1,5 +1,5 @@
 import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'train'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ml'))
 from sentiment import analyze_sentiment, sentiment_priority_boost
 
 def test_analyze_sentiment_returns_dict():

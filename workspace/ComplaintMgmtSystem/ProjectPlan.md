@@ -109,8 +109,7 @@
 - [x] **Similar complaint finder** — `/api/similar-complaints` — Jaccard similarity on resolved complaints
 - [x] **Anomaly detection** — `detect_anomaly()` + `/api/detect-anomaly` — flags unusual/vague complaints
 - [x] **Resolution time prediction** — `/api/predict-resolution` — avg hours by category/priority/sentiment with confidence tiers
-- [x] **Auto-save to CSV** — New complaints appended to `TrainDataset/new_complaints.csv`
-- [x] **Retrain pipeline** — Admin retrain button + subprocess runs full train+test cycle
+- [x] **Retrain pipeline** — Admin retrain button + subprocess runs full train+test cycle; new complaints pulled straight from the MySQL DB (single source of truth, no duplicate CSV)
 - [x] **Training logs page** — `/admin/training-logs` — accuracy, F1, per-class metrics, accuracy-over-time chart
 - [x] **Data augmentation** — `train/augment_data.py` — balanced Canteen/Library to 750 each
 - [x] **Model persistence** — `MultinomialNB.save()`/`load()` → `model_params.json`, no retrain on restart
@@ -144,17 +143,19 @@
 
 | File | Purpose |
 |------|---------|
-| `backend/app.py` | Flask routes, auth, DB, classifier + sentiment integration |
-| `train/classifier.py` | Naive Bayes: stemmer, tokenizer, bigrams, categorize() |
-| `train/sentiment.py` | Lexicon analyzer: analyze_sentiment(), sentiment_priority_boost() |
-| `train/predict.py` | CLI predictor tool |
-| `TrainDataset/naive_bayes_training.ipynb` | Training pipeline + evaluation |
-| `TrainDataset/sentiment_analysis.ipynb` | Sentiment distribution analysis |
-| `TrainDataset/train_dataset.csv` | 7204 training samples |
-| `TrainDataset/test_dataset.csv` | 1806 test samples |
-| `complainify.sql` | Full DB schema + sample data |
-| `report.tex` | LaTeX project report (1318 lines) |
-| `README.md` | Setup guide + architecture overview |
+| `backend/app.py` | Flask routes, auth, DB, classifier + sentiment integration, ML APIs |
+| `ml/classifier.py` | Naive Bayes: stemmer, tokenizer, bigrams, categorize(), model load |
+| `ml/sentiment.py` | Lexicon analyzer: analyze_sentiment(), sentiment_priority_boost() |
+| `ml/predict.py` | CLI predictor tool |
+| `ml/validate_data.py` | Data validation gate before rows enter training |
+| `ml/model_registry.py` | Model versioning: save_version(), load_latest(), list_versions() |
+| `ml/retrain.py` | Production retrain pipeline (collect → validate → append → train → version) |
+| `data/train_dataset.csv` | Collected, labeled training samples (source of truth) |
+| `data/test_dataset.csv` | Held-out test set |
+| `data/model_params.json` | Active model copy (back-compat) |
+| `notebook/Complainify_AI_Study.ipynb` | Full study notebook |
+| `notebook/subfunctions/*.ipynb` | 8 executed per-topic notebooks |
+| `complainify.sql` | Full DB schema + sample data + ML column migrations |
 
 ---
 

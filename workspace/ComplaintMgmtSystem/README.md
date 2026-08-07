@@ -22,7 +22,7 @@ Admin dashboard shows classified + sentiment-tagged complaints
 
 ### Core Components
 
-#### 1. Naive Bayes Classifier (`train/classifier.py`)
+#### 1. Naive Bayes Classifier (`ml/classifier.py`)
 - Multinomial Naive Bayes written from scratch (no sklearn)
 - Custom stemmer with 25 rules (no nltk)
 - Bigram features (e.g. "wifi_router", "exam_schedule")
@@ -34,7 +34,7 @@ Admin dashboard shows classified + sentiment-tagged complaints
   - **Unknown** (<60%): too ambiguous
 - Rule-based override: complaints mentioning hackathon/event keywords auto-classify to Hackathon/Event
 
-#### 2. Sentiment Analyzer (`train/sentiment.py`)
+#### 2. Sentiment Analyzer (`ml/sentiment.py`)
 - Lexicon-based approach — no training needed
 - ~150 words with intensity scores (negative: -1 to -3, positive: +1 to +3)
 - Negation handling: words like "not", "never" flip polarity
@@ -75,27 +75,29 @@ Admin dashboard shows classified + sentiment-tagged complaints
 ```
 Student-Complainify/
 ├── backend/
-│   ├── app.py                    # Flask server (routes, auth, DB)
-│   └── __init__.py
+│   ├── app.py                    # Flask server (routes, auth, DB, ML APIs)
+│   └── mcp_server.py             # MCP tools (predict, search)
 ├── frontend/
 │   └── templates/
-│       ├── admin/                # Admin pages (dashboard, complaints)
+│       ├── admin/                # Admin pages (dashboard, complaints, training)
 │       ├── student/              # Student pages (dashboard, submit)
-│       ├── auth/                 # Login / Register
-│       └── complaint_detail.html # Detail view with sentiment badge
-├── train/
-│   ├── classifier.py             # Naive Bayes (from scratch)
+│       └── base.html             # Shared layout
+├── ml/                           # Machine-learning package (production pipeline)
+│   ├── classifier.py             # MultinomialNB (from scratch) + categorize()
 │   ├── sentiment.py              # Lexicon sentiment analyzer
-│   └── predict.py                # CLI predictor tool
-├── TrainDataset/
-│   ├── naive_bayes_training.ipynb            # Full training pipeline
-│   ├── naive_bayes_training_executed.ipynb   # Executed with outputs
-│   ├── sentiment_analysis.ipynb              # Sentiment distribution
-│   ├── sentiment_analysis_executed.ipynb     # Executed with outputs
-│   ├── train_dataset.csv         # 7204 labeled complaints (training)
-│   ├── test_dataset.csv          # 1806 labeled complaints (testing)
-│   └── processed_dataset_4500.csv # Full dataset with added examples
-├── complainify.sql               # DB schema + sample data
+│   ├── predict.py                # CLI predictor tool
+│   ├── validate_data.py          # Data validation gate (before training)
+│   ├── model_registry.py        # Model versioning: save/load/list latest
+│   ├── retrain.py               # Full pipeline: collect → validate → append → train → version
+│   ├── models/                   # Versioned models + manifest.json (registry)
+│   └── reports/                  # Validation reports (JSON)
+├── data/                         # ★ Training data + encoders
+│   ├── train_dataset.csv         # Collected, labeled complaints (source of truth)
+│   ├── test_dataset.csv          # Held-out test set
+│   ├── model_params.json         # Active model copy (back-compat)
+│   └── encoders/                 # category + priority encoders/decoders
+├── notebook/                      # Companion notebooks for each ML topic
+├── complainify.sql               # DB schema + sample data (idempotent)
 └── README.md
 ```
 
@@ -126,11 +128,13 @@ mysql -u root < complainify.sql
 ```
 
 ### 4. (Optional) Train the Classifier
-Notebooks are pre-executed, but to retrain:
+Notebooks are pre-executed, but to retrain from the CLI:
 ```bash
-jupyter notebook TrainDataset/naive_bayes_training.ipynb
-jupyter notebook TrainDataset/sentiment_analysis.ipynb
+python ml/retrain.py            # collect CSV + confirmed DB rows → validate → train → new model version
+python ml/predict.py "WiFi slow" # test the active model
 ```
+Or trigger a retrain from the admin UI (Training page → Retrain Model), or schedule it
+by setting `RETRAIN_SCHEDULE_HOURS` (e.g. `168` for weekly) in `.env`.
 
 ### 5. Run the App
 ```bash
@@ -158,23 +162,20 @@ If unset, email sending is silently skipped.
 
 ---
 
-## Notebooks
+## Notebooks (`notebook/subfunctions/`)
 
-### `naive_bayes_training.ipynb`
-Full ML pipeline from scratch:
-1. Loads `train_dataset.csv` + `test_dataset.csv`
-2. Custom stemmer + tokenizer + bigram feature extraction
-3. Multinomial Naive Bayes implementation (log-space, Laplace smoothing)
-4. Confusion matrix, precision, recall, F1 calculated manually
-5. Bar charts for per-category accuracy
-6. Tests 24 sample complaints — 22/24 pass (~92%)
+Study notebooks, each focused on one ML topic and **executed** so outputs are visible:
 
-### `sentiment_analysis.ipynb`
-Sentiment distribution analysis:
-1. Lexicon-based scoring on complaint text
-2. Distribution charts (bar + pie) showing Positive/Neutral/Negative split
-3. Examples from each sentiment category
-4. Priority boost mapping table
+| Notebook | Topic |
+|----------|-------|
+| `01_dataset_structure.ipynb` | CSV columns + category decoder |
+| `02_preprocessing.ipynb` | Stopwords, stemmer, tokenizer/normalization |
+| `03_train_test_split.ipynb` | Load real data + 80/20 split |
+| `04_naive_bayes.ipynb` | MultinomialNB from scratch (fit/predict) |
+| `05_evaluation_metrics.ipynb` | Accuracy, precision, recall, F1 on the test set |
+| `06_sentiment_analysis.ipynb` | Lexicon sentiment → priority pipeline |
+| `07_model_performance.ipynb` | Live `training_log.json` accuracy + per-class charts |
+| `08_model_lifecycle.ipynb` | **Production data lifecycle**: validation gate → registry → versioned retraining |
 
 ---
 

@@ -1,5 +1,5 @@
 import sys, os, json, math
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'train'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ml'))
 from classifier import categorize, predict_top3, detect_anomaly, clean_and_tokenize, stem, MultinomialNB
 
 def test_stem():
