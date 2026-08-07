@@ -3,7 +3,7 @@ from email.message import EmailMessage
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_from_directory, make_response
 from datetime import timedelta, datetime
 from werkzeug.utils import secure_filename
-from fpdf import FPDF
+from fpdf import FPDF, XPos, YPos
 from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
@@ -1256,9 +1256,9 @@ def admin_export_pdf():
         pdf.add_page()
         pdf.set_font('Helvetica', 'B', 16)
         pdf.set_text_color(2, 36, 72)
-        pdf.cell(0, 10, 'Complainify - Complaint Report', ln=1)
+        pdf.cell(0, 10, 'Complainify - Complaint Report', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         pdf.set_font('helvetica', 'I', 7)
-        pdf.cell(0, 6, _pdf_text(f'Generated: {datetime.now().strftime("%d %b %Y %I:%M %p")} | Admin: {session.get("fullname", "Admin")}{" | Status: " + status_filter if status_filter else ""}{" | Category: " + category_filter if category_filter else ""}'), ln=1)
+        pdf.cell(0, 6, _pdf_text(f'Generated: {datetime.now().strftime("%d %b %Y %I:%M %p")} | Admin: {session.get("fullname", "Admin")}{" | Status: " + status_filter if status_filter else ""}{" | Category: " + category_filter if category_filter else ""}'), new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         pdf.ln(4)
         pdf.set_font('Helvetica', 'B', 10)
         pdf.set_fill_color(2, 36, 72)
@@ -1317,10 +1317,10 @@ def admin_export_pdf():
             pdf.add_page()
             pdf.set_font('Helvetica', 'B', 14)
             pdf.set_text_color(2, 36, 72)
-            pdf.cell(0, 10, title, ln=1)
+            pdf.cell(0, 10, title, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             pdf.set_font('helvetica', 'I', 8)
             pdf.set_text_color(100, 116, 139)
-            pdf.cell(0, 6, f'Generated: {datetime.now().strftime("%d %b %Y")}', ln=1)
+            pdf.cell(0, 6, f'Generated: {datetime.now().strftime("%d %b %Y")}', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             pdf.ln(3)
             pdf.set_text_color(30, 41, 59)
             pdf.set_font('Helvetica', '', 8)
@@ -1330,21 +1330,19 @@ def admin_export_pdf():
         pdf.add_page()
         pdf.set_font('Helvetica', 'B', 14)
         pdf.set_text_color(2, 36, 72)
-        pdf.cell(0, 10, 'Summary Statistics', ln=1)
+        pdf.cell(0, 10, 'Summary Statistics', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         pdf.ln(4)
         pdf.set_font('Helvetica', '', 11)
         pdf.set_text_color(30, 41, 59)
         for label, key in [('Total Complaints', 'total'), ('Resolved', 'resolved'), ('In Progress', 'in_progress'), ('Pending', 'pending')]:
             val = stats[key] if stats[key] is not None else 0
-            pdf.cell(60, 8, f'{label}: {val}', ln=1)
+            pdf.cell(60, 8, f'{label}: {val}', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         pdf.ln(3)
-        pdf.cell(60, 8, f'Avg Resolution: {avg_res} hrs', ln=1)
-        pdf.cell(60, 8, f'Fastest Resolution: {min_res} hrs', ln=1)
-        pdf.cell(60, 8, f'Slowest Resolution: {max_res} hrs', ln=1)
+        pdf.cell(60, 8, f'Avg Resolution: {avg_res} hrs', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+        pdf.cell(60, 8, f'Fastest Resolution: {min_res} hrs', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+        pdf.cell(60, 8, f'Slowest Resolution: {max_res} hrs', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
-        pdf_out = pdf.output(dest='S')
-        if isinstance(pdf_out, str):
-            pdf_out = pdf_out.encode('latin-1')
+        pdf_out = bytes(pdf.output())
         response = make_response(pdf_out)
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = 'attachment; filename=complainify_report.pdf'
