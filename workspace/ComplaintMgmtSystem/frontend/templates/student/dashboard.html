@@ -275,14 +275,14 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
         <table class="complaints-table">
           <thead>
             <tr>
-              <th>Ticket</th><th>Category</th><th>Sentiment</th><th>Status</th><th>Priority</th><th>Date</th><th>Action</th>
+              <th>Ticket</th><th>College</th><th>Category</th><th>Sentiment</th><th>Status</th><th>Priority</th><th>Date</th><th>Action</th>
             </tr>
           </thead>
           <tbody>
             {% for c in complaints %}
             <tr>
               <td class="ticket-id">#{{ c.ticket_id }}</td>
-              <td class="ticket-category">{{ c.category }}</td>
+              <td class="ticket-category">{{ c.college or '-' }}</td>
               <td>
                 <span class="badge {% if c.sentiment == 'Positive' %}badge-green{% elif c.sentiment == 'Negative' %}badge-red{% else %}badge-gray{% endif %}">
                   {{ c.sentiment or 'Neutral' }}

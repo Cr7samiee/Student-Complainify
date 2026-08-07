@@ -7,6 +7,22 @@
 CREATE DATABASE IF NOT EXISTS complainify CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE complainify;
 
+-- Colleges / Faculties within the university
+CREATE TABLE IF NOT EXISTS colleges (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+INSERT IGNORE INTO colleges (name) VALUES
+('College of Science & Technology'),
+('School of Business & Management'),
+('College of Engineering'),
+('Faculty of Health Sciences'),
+('Faculty of Humanities & Social Sciences'),
+('College of Education'),
+('Faculty of Law'),
+('Other');
+
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -16,6 +32,7 @@ CREATE TABLE IF NOT EXISTS users (
     plain_password VARCHAR(100),
     password VARCHAR(255) NOT NULL,
     role ENUM('student','admin') NOT NULL DEFAULT 'student',
+    college VARCHAR(100) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -26,6 +43,7 @@ CREATE TABLE IF NOT EXISTS complaints (
     user_id INT,
     fullname VARCHAR(100),
     email VARCHAR(100),
+    college VARCHAR(100) DEFAULT NULL,
     category VARCHAR(50) NOT NULL,
     priority ENUM('Low','Medium','High') NOT NULL DEFAULT 'Medium',
     subject VARCHAR(200) NOT NULL,
@@ -77,6 +95,8 @@ ALTER TABLE complaints ADD COLUMN IF NOT EXISTS model_version VARCHAR(20) DEFAUL
 ALTER TABLE complaints ADD COLUMN IF NOT EXISTS category_confirmed TINYINT(1) DEFAULT 0 AFTER model_version;
 ALTER TABLE complaints ADD COLUMN IF NOT EXISTS confirmed_by VARCHAR(100) DEFAULT NULL AFTER category_confirmed;
 ALTER TABLE complaints ADD COLUMN IF NOT EXISTS confirmed_at DATETIME DEFAULT NULL AFTER confirmed_by;
+ALTER TABLE complaints ADD COLUMN IF NOT EXISTS college VARCHAR(100) DEFAULT NULL AFTER email;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS college VARCHAR(100) DEFAULT NULL AFTER role;
 
 -- Notifications table
 CREATE TABLE IF NOT EXISTS notifications (

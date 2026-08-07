@@ -43,12 +43,13 @@
 {% if users %}
 <div class="overflow-x-auto">
 <table class="w-full text-left">
-<thead><tr class="text-[11px] text-gray-500 font-semibold uppercase tracking-wider bg-gray-50/50"><th class="px-5 py-3">Name</th><th class="px-5 py-3">Email</th><th class="px-5 py-3">Phone</th><th class="px-5 py-3">Role</th><th class="px-5 py-3">Complaints</th><th class="px-5 py-3">Joined</th><th class="px-5 py-3">Actions</th></tr></thead>
+<thead><tr class="text-[11px] text-gray-500 font-semibold uppercase tracking-wider bg-gray-50/50"><th class="px-5 py-3">Name</th><th class="px-5 py-3">Email</th><th class="px-5 py-3">College</th><th class="px-5 py-3">Phone</th><th class="px-5 py-3">Role</th><th class="px-5 py-3">Complaints</th><th class="px-5 py-3">Joined</th><th class="px-5 py-3">Actions</th></tr></thead>
 <tbody class="divide-y divide-gray-50">
 {% for u in users %}
 <tr class="hover:bg-gray-50 transition-colors">
 <td class="px-5 py-3.5 text-sm font-semibold text-[#0a1628]">{{ u.fullname }}</td>
 <td class="px-5 py-3.5 text-sm text-gray-600">{{ u.email }}</td>
+<td class="px-5 py-3.5 text-xs text-gray-500">{{ u.college or '-' }}</td>
 <td class="px-5 py-3.5 text-sm text-gray-600">{{ u.phone or '-' }}</td>
 <td class="px-5 py-3.5"><span class="px-2 py-1 rounded-full text-[10px] font-bold {% if u.role == 'admin' %}bg-purple-100 text-purple-700{% else %}bg-blue-100 text-blue-700{% endif %}">{{ u.role }}</span></td>
 <td class="px-5 py-3.5 text-sm text-gray-600">{{ u.complaint_count }}</td>

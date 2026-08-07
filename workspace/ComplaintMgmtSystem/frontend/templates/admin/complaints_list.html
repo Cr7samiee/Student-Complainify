@@ -50,32 +50,51 @@
 <option value="{{ cat }}" {% if category_filter == cat %}selected{% endif %}>{{ cat }}</option>
 {% endfor %}
 </select>
+<select name="college" class="px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none min-w-[180px]">
+<option value="">All Colleges</option>
+{% for col in colleges %}
+<option value="{{ col }}" {% if college_filter == col %}selected{% endif %}>{{ col }}</option>
+{% endfor %}
+</select>
 <select name="sentiment" class="px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none min-w-[130px]">
 <option value="">All Sentiment</option>
 <option value="Positive" {% if sentiment_filter == 'Positive' %}selected{% endif %}>Positive</option>
 <option value="Neutral" {% if sentiment_filter == 'Neutral' %}selected{% endif %}>Neutral</option>
 <option value="Negative" {% if sentiment_filter == 'Negative' %}selected{% endif %}>Negative</option>
 </select>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-gray-400 text-sm">calendar_today</span>
+<input type="date" name="date_from" value="{{ date_from }}" class="px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none" placeholder="From">
+<span class="text-gray-400">—</span>
+<input type="date" name="date_to" value="{{ date_to }}" class="px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none" placeholder="To">
+</div>
 <button type="submit" class="px-5 py-2.5 bg-[#0a1628] text-white text-sm font-semibold rounded-lg hover:bg-[#1a2a3a] transition-colors">Filter</button>
-{% if status_filter or category_filter or priority_filter or sentiment_filter %}
+{% if status_filter or category_filter or priority_filter or sentiment_filter or college_filter or date_from or date_to %}
 <a href="{{ url_for('admin_complaints') }}" class="px-4 py-2 text-sm text-gray-500 hover:text-[#d32f2f]">Clear</a>
 {% endif %}
-<a href="{{ url_for('admin_export_pdf', status=status_filter, category=category_filter) }}" class="ml-auto px-4 py-2.5 bg-[#d32f2f] text-white text-sm font-semibold rounded-lg hover:bg-[#b71c1c] transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">picture_as_pdf</span>PDF</a>
 </form>
+<div class="flex gap-1.5 mt-1">
+<a href="{{ url_for('admin_complaints', date_from=today, date_to=today, status=status_filter, category=category_filter, priority=priority_filter, sentiment=sentiment_filter, college=college_filter) }}" class="px-3 py-1 text-[10px] font-semibold bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors">Today</a>
+<a href="{{ url_for('admin_complaints', date_from=week_ago, date_to=today, status=status_filter, category=category_filter, priority=priority_filter, sentiment=sentiment_filter, college=college_filter) }}" class="px-3 py-1 text-[10px] font-semibold bg-indigo-50 text-indigo-600 rounded-full hover:bg-indigo-100 transition-colors">Last 7 Days</a>
+<a href="{{ url_for('admin_complaints', date_from=month_start, date_to=today, status=status_filter, category=category_filter, priority=priority_filter, sentiment=sentiment_filter, college=college_filter) }}" class="px-3 py-1 text-[10px] font-semibold bg-purple-50 text-purple-600 rounded-full hover:bg-purple-100 transition-colors">This Month</a>
+</div>
+<a href="{{ url_for('admin_export_pdf', status=status_filter, category=category_filter, college=college_filter) }}" class="ml-auto px-4 py-2.5 bg-[#d32f2f] text-white text-sm font-semibold rounded-lg hover:bg-[#b71c1c] transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-sm">picture_as_pdf</span>PDF</a>
 </div>
 {% if complaints %}
 <div class="overflow-x-auto">
 <table class="w-full text-left">
-<thead><tr class="text-[11px] text-gray-500 font-semibold uppercase tracking-wider bg-gray-50/50"><th class="px-5 py-3">Ticket</th><th class="px-5 py-3">Student</th><th class="px-5 py-3">Category</th><th class="px-5 py-3">Sentiment</th><th class="px-5 py-3">Status</th><th class="px-5 py-3">Priority</th><th class="px-5 py-3">Assigned To</th><th class="px-5 py-3">Valid</th><th class="px-5 py-3">Action</th></tr></thead>
+<thead><tr class="text-[11px] text-gray-500 font-semibold uppercase tracking-wider bg-gray-50/50"><th class="px-5 py-3">Ticket</th><th class="px-5 py-3">Student</th><th class="px-5 py-3">College</th><th class="px-5 py-3">Category</th><th class="px-5 py-3">Sentiment</th><th class="px-5 py-3">Status</th><th class="px-5 py-3">Priority</th><th class="px-5 py-3">Date Received</th><th class="px-5 py-3">Assigned To</th><th class="px-5 py-3">Valid</th><th class="px-5 py-3">Action</th></tr></thead>
 <tbody class="divide-y divide-gray-50">
 {% for c in complaints %}
 <tr class="hover:bg-gray-50 transition-colors">
 <td class="px-5 py-3.5 text-sm font-bold text-[#0a1628]">#{{ c.ticket_id }}</td>
 <td class="px-5 py-3.5 text-sm text-gray-600">{{ c.student }}</td>
+<td class="px-5 py-3.5 text-xs text-gray-500">{{ c.college or '-' }}</td>
 <td class="px-5 py-3.5 text-sm text-gray-600">{{ c.category }}</td>
 <td class="px-5 py-3.5"><span class="px-2 py-1 rounded-full text-[10px] font-bold {% if c.sentiment == 'Positive' %}bg-green-100 text-green-700{% elif c.sentiment == 'Negative' %}bg-red-100 text-red-600{% else %}bg-gray-100 text-gray-500{% endif %}">{{ c.sentiment or 'Neutral' }}</span></td>
 <td class="px-5 py-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold {% if c.status == 'Resolved' %}bg-green-100 text-green-700{% elif c.status == 'In Progress' %}bg-blue-100 text-blue-700{% else %}bg-amber-100 text-amber-700{% endif %}">{{ c.status }}</span></td>
 <td class="px-5 py-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold {% if c.priority == 'High' %}bg-red-100 text-red-700{% elif c.priority == 'Medium' %}bg-amber-100 text-amber-700{% else %}bg-gray-100 text-gray-500{% endif %}">{{ c.priority }}</span></td>
+<td class="px-5 py-3.5 text-xs text-gray-500 whitespace-nowrap">{{ c.date }}</td>
 <td class="px-5 py-3.5 text-sm text-gray-600">{{ c.assigned_to or '-' }}</td>
 <td class="px-5 py-3.5">{% if c.validated %}<span class="text-green-600 text-xs font-bold">Yes</span>{% else %}<span class="text-amber-600 text-xs">No</span>{% endif %}</td>
 <td class="px-5 py-3.5"><a href="{{ url_for('admin_complaint_detail', ticket_id=c.ticket_id) }}" class="text-xs text-[#d32f2f] font-semibold hover:underline">View</a></td>
@@ -89,17 +108,17 @@
 <p class="text-xs text-gray-500">{{ total_count }} total complaints</p>
 <div class="flex gap-1">
 {% if page > 1 %}
-<a href="{{ url_for('admin_complaints', status=status_filter, category=category_filter, priority=priority_filter, sentiment=sentiment_filter, page=page-1) }}" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-100">Prev</a>
+<a href="{{ url_for('admin_complaints', status=status_filter, category=category_filter, priority=priority_filter, sentiment=sentiment_filter, college=college_filter, date_from=date_from, date_to=date_to, page=page-1) }}" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-100">Prev</a>
 {% endif %}
 {% for p in range(1, total_pages + 1) %}
 {% if p == page %}
 <span class="px-3 py-1.5 text-xs bg-[#0a1628] text-white rounded-lg">{{ p }}</span>
 {% elif p <= page + 2 and p >= page - 2 %}
-<a href="{{ url_for('admin_complaints', status=status_filter, category=category_filter, priority=priority_filter, sentiment=sentiment_filter, page=p) }}" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-100">{{ p }}</a>
+<a href="{{ url_for('admin_complaints', status=status_filter, category=category_filter, priority=priority_filter, sentiment=sentiment_filter, college=college_filter, date_from=date_from, date_to=date_to, page=p) }}" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-100">{{ p }}</a>
 {% endif %}
 {% endfor %}
 {% if page < total_pages %}
-<a href="{{ url_for('admin_complaints', status=status_filter, category=category_filter, priority=priority_filter, sentiment=sentiment_filter, page=page+1) }}" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-100">Next</a>
+<a href="{{ url_for('admin_complaints', status=status_filter, category=category_filter, priority=priority_filter, sentiment=sentiment_filter, college=college_filter, date_from=date_from, date_to=date_to, page=page+1) }}" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-100">Next</a>
 {% endif %}
 </div>
 </div>

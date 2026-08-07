@@ -45,6 +45,15 @@
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface" for="college">College / Faculty</label>
+<select class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm" id="college" name="college">
+<option value="">Select your college</option>
+{% for c in colleges %}
+<option value="{{ c }}" {% if session.get('college') == c %}selected{% endif %}>{{ c }}</option>
+{% endfor %}
+</select>
+</div>
+<div class="space-y-1.5">
 <label class="block text-sm font-medium text-on-surface" for="category">Category</label>
 <select class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-sm" id="category" name="category">
 <option value="auto" selected>Auto-detect (AI)</option>

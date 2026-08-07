@@ -38,6 +38,7 @@
 <h2 class="text-sm font-bold text-[#0a1628] mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#d32f2f]">info</span>Complaint Details</h2>
 <div class="grid grid-cols-2 gap-4 text-sm">
 <div><span class="text-gray-400 text-xs block">Student Name</span><span class="font-semibold text-[#0a1628]">{{ c.fullname }}</span></div>
+<div><span class="text-gray-400 text-xs block">College</span><span class="font-semibold text-[#0a1628]">{{ c.college or '-' }}</span></div>
 <div><span class="text-gray-400 text-xs block">Email</span><span class="font-semibold text-[#0a1628]">{{ c.email }}</span></div>
 <div><span class="text-gray-400 text-xs block">Category</span><span class="font-semibold text-[#0a1628]">{{ c.category }}</span></div>
 <div><span class="text-gray-400 text-xs block">Priority</span><span class="font-semibold {% if c.priority == 'High' %}text-red-600{% elif c.priority == 'Medium' %}text-amber-600{% else %}text-gray-500{% endif %}">{{ c.priority }}</span></div>
@@ -121,6 +122,17 @@
 </form>
 {% else %}
 <p class="text-xs text-green-600 flex items-center gap-1"><span class="material-symbols-outlined text-sm">verified</span> Validated</p>
+{% endif %}
+{% if not c.category_confirmed %}
+<form method="POST" action="{{ url_for('admin_confirm_label', ticket_id=c.ticket_id) }}" class="space-y-2 border-t border-gray-100 pt-3">
+<label class="text-xs text-gray-500 block">Confirm true category (becomes training data)</label>
+<select name="category" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#d32f2f] outline-none">
+{% for d in departments %}<option value="{{ d }}" {% if c.category == d %}selected{% endif %}>{{ d }}</option>{% endfor %}
+</select>
+<button type="submit" class="w-full bg-indigo-600 text-white text-sm font-semibold py-2 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-1.5"><span class="material-symbols-outlined text-sm">dataset</span>Confirm for Training</button>
+</form>
+{% else %}
+<p class="text-xs text-indigo-600 flex items-center gap-1 border-t border-gray-100 pt-3"><span class="material-symbols-outlined text-sm">dataset</span> Category confirmed{% if c.confirmed_by %} by {{ c.confirmed_by }}{% endif %}{% if c.confirmed_at %} on {{ c.confirmed_at }}{% endif %}</p>
 {% endif %}
 <form method="POST" action="{{ url_for('admin_resend_email', ticket_id=c.ticket_id) }}">
 <button type="submit" class="w-full bg-blue-600 text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-1.5"><span class="material-symbols-outlined text-sm">mail</span>Resend Email Notification</button>

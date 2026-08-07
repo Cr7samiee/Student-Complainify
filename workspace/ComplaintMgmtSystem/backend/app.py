@@ -77,6 +77,23 @@ def gen_ticket():
 CATEGORIES = ['Academics', 'Hostels', 'IT Support', 'Infrastructure', 'Financial Services',
               'Administrative', 'Security', 'Maintenance', 'Transport', 'Canteen', 'Library', 'Other']
 
+DEFAULT_COLLEGES = ['College of Science & Technology', 'School of Business & Management',
+                    'College of Engineering', 'Faculty of Health Sciences',
+                    'Faculty of Humanities & Social Sciences', 'College of Education',
+                    'Faculty of Law', 'Other']
+
+def get_colleges():
+    """Colleges/faculties within the university (fallback to defaults if table missing)."""
+    try:
+        conn = get_db(); cur = conn.cursor()
+        cur.execute("SELECT name FROM colleges ORDER BY id")
+        rows = cur.fetchall()
+        cur.close(); conn.close()
+        return [r['name'] for r in rows] or DEFAULT_COLLEGES
+    except Exception as e:
+        print(f"[COLLEGES] {e}")
+        return DEFAULT_COLLEGES
+
 def create_notification(user_id, message, link=None):
     try:
         conn = get_db(); cur = conn.cursor()
@@ -171,6 +188,7 @@ def submit_complaint():
             else:
                 fullname = request.form.get('fullname', session.get('fullname', 'Anonymous'))
                 email = request.form.get('email', session.get('email', ''))
+            college = request.form.get('college', session.get('college', '')).strip()
             description = request.form.get('description', '')
             subject = request.form.get('subject', '')
             full_text = subject + ' ' + description
@@ -226,9 +244,9 @@ def submit_complaint():
                 auto_status = 'Pending'
 
             cur.execute("""INSERT INTO complaints
-                (ticket_id,user_id,fullname,email,category,priority,subject,description,sentiment,sentiment_score,student_attachment,assigned_to,status,assigned_at,model_version)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-                (tid, uid, fullname, email,
+                (ticket_id,user_id,fullname,email,college,category,priority,subject,description,sentiment,sentiment_score,student_attachment,assigned_to,status,assigned_at,model_version)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                (tid, uid, fullname, email, college or None,
                  category, priority, subject, description, sentiment, sentiment_score, student_attachment_name,
                  assigned_to, auto_status, datetime.now() if assigned_to else None,
                  model_registry.latest_version_id()))
@@ -286,7 +304,7 @@ Complainify System"""
         finally:
             cur.close(); conn.close()
         return redirect(url_for('track_complaint'))
-    return render_template('submit_complaint.html', categories=CATEGORIES)
+    return render_template('submit_complaint.html', categories=CATEGORIES, colleges=get_colleges())
 
 @app.route('/track', methods=['GET', 'POST'])
 def track_complaint():
@@ -294,7 +312,7 @@ def track_complaint():
     if request.method == 'POST':
         tid = request.form.get('ticket_id')
         conn = get_db(); cur = conn.cursor()
-        cur.execute("""SELECT ticket_id,status,priority,category,subject,description,student_attachment,
+        cur.execute("""SELECT ticket_id,status,priority,category,subject,description,student_attachment,college,
             date_format(created_at,'%%d %%b %%Y') date,
             date_format(assigned_at,'%%d %%b %%Y %%h:%%i %%p') assigned_date,
             date_format(resolved_at,'%%d %%b %%Y %%h:%%i %%p') resolved_date,
@@ -384,7 +402,7 @@ def student_login():
         email = request.form.get('email', '').strip()
         password = hash_pw(request.form.get('password', ''))
         conn = get_db(); cur = conn.cursor()
-        cur.execute("SELECT id,fullname,email,password,role,phone FROM users WHERE email=%s AND role='student'", (email,))
+        cur.execute("SELECT id,fullname,email,password,role,phone,college FROM users WHERE email=%s AND role='student'", (email,))
         user = cur.fetchone()
         if user:
             if user['password'] == password:
@@ -393,6 +411,7 @@ def student_login():
                 session['fullname'] = user['fullname']
                 session['email'] = user['email']
                 session['phone'] = user.get('phone', '')
+                session['college'] = user.get('college') or ''
                 session['role'] = 'student'
                 cur.close(); conn.close()
                 log_action(user['id'], 'login', 'session', '', 'Student login')
@@ -405,43 +424,49 @@ def student_login():
 
 @app.route('/student/register', methods=['GET', 'POST'])
 def student_register():
+    colleges = get_colleges()
     if request.method == 'POST':
         fullname = request.form.get('fullname', '').strip()
         email = request.form.get('email', '').strip()
         phone = request.form.get('phone', '').strip()
         pw = request.form.get('password', '')
         confirm = request.form.get('confirm_password', '')
+        college = request.form.get('college', '').strip()
         if not fullname or not email or not phone or not pw:
             flash('All fields are required.', 'error')
-            return render_template('student/register.html')
+            return render_template('student/register.html', colleges=colleges, selected=college)
+        if college and college not in colleges:
+            flash('Please select a valid college.', 'error')
+            return render_template('student/register.html', colleges=colleges, selected=college)
         if '@' not in email:
             flash('Please enter a valid email address.', 'error')
-            return render_template('student/register.html')
+            return render_template('student/register.html', colleges=colleges, selected=college)
         if len(pw) < 6:
             flash('Password must be at least 6 characters.', 'error')
-            return render_template('student/register.html')
+            return render_template('student/register.html', colleges=colleges, selected=college)
         if pw != confirm:
             flash('Passwords do not match.', 'error')
-            return render_template('student/register.html')
+            return render_template('student/register.html', colleges=colleges, selected=college)
         conn = get_db(); cur = conn.cursor()
         try:
-            cur.execute("INSERT INTO users (fullname,email,phone,plain_password,password,role) VALUES (%s,%s,%s,%s,%s,'student')",
-                (fullname, email, phone, pw, hash_pw(pw)))
+            cur.execute("INSERT INTO users (fullname,email,phone,plain_password,password,role,college) VALUES (%s,%s,%s,%s,%s,'student',%s)",
+                (fullname, email, phone, pw, hash_pw(pw), college or None))
             conn.commit()
             flash('Registration successful! Please login.', 'success')
         except pymysql.err.IntegrityError:
             flash('Email already registered.', 'error')
+            return render_template('student/register.html', colleges=colleges, selected=college)
         finally:
             cur.close(); conn.close()
         return redirect(url_for('student_login'))
-    return render_template('student/register.html')
+    return render_template('student/register.html', colleges=colleges, selected='')
 
 @app.route('/student/dashboard')
 def student_dashboard():
     if not login_required('student'):
         return redirect(url_for('student_login'))
     conn = get_db(); cur = conn.cursor()
-    cur.execute("""SELECT ticket_id,category,priority,status,subject,sentiment,
+    cur.execute("""SELECT ticket_id,category,priority,status,subject,sentiment,college,
         date_format(created_at,'%%d %%b %%Y') date,
         assigned_to,validated
         FROM complaints WHERE user_id=%s ORDER BY created_at DESC""", (session['user_id'],))
@@ -501,12 +526,16 @@ def student_settings():
         if action == 'profile':
             fullname = request.form.get('fullname', '').strip()
             phone = request.form.get('phone', '').strip()
+            college = request.form.get('college', '').strip()
+            if college and college not in get_colleges():
+                college = ''
             if fullname:
-                cur.execute("UPDATE users SET fullname=%s, phone=%s WHERE id=%s",
-                    (fullname, phone, session['user_id']))
+                cur.execute("UPDATE users SET fullname=%s, phone=%s, college=%s WHERE id=%s",
+                    (fullname, phone, college or None, session['user_id']))
                 conn.commit()
                 session['fullname'] = fullname
                 session['phone'] = phone
+                session['college'] = college
                 flash('Profile updated!', 'success')
         elif action == 'password':
             current = hash_pw(request.form.get('current_password', ''))
@@ -525,10 +554,10 @@ def student_settings():
                     (hash_pw(new_pw), new_pw, session['user_id']))
                 conn.commit()
                 flash('Password changed!', 'success')
-    cur.execute("SELECT fullname,email,phone FROM users WHERE id=%s", (session['user_id'],))
+    cur.execute("SELECT fullname,email,phone,college FROM users WHERE id=%s", (session['user_id'],))
     user = cur.fetchone()
     cur.close(); conn.close()
-    return render_template('student/settings.html', user=user,
+    return render_template('student/settings.html', user=user, colleges=get_colleges(),
         student_name=session.get('fullname', 'Student'))
 
 # ── ADMIN ROUTES ──
@@ -660,6 +689,7 @@ def admin_complaints():
     category_filter = request.args.get('category', '')
     priority_filter = request.args.get('priority', '')
     sentiment_filter = request.args.get('sentiment', '')
+    college_filter = request.args.get('college', '')
     date_from = request.args.get('date_from', '')
     date_to = request.args.get('date_to', '')
     page = int(request.args.get('page', 1))
@@ -679,6 +709,9 @@ def admin_complaints():
     if sentiment_filter:
         base_query += " AND sentiment=%s"
         params.append(sentiment_filter)
+    if college_filter:
+        base_query += " AND college=%s"
+        params.append(college_filter)
     if date_from:
         base_query += " AND created_at >= %s"
         params.append(date_from)
@@ -689,7 +722,7 @@ def admin_complaints():
     total_row = cur.fetchone()
     total_count = total_row['cnt'] if total_row else 0
     total_pages = max(1, (total_count + per_page - 1) // per_page)
-    query = f"""SELECT ticket_id,fullname student,category,priority,status,subject,sentiment,
+    query = f"""SELECT ticket_id,fullname student,category,priority,status,subject,sentiment,college,
         date_format(created_at,'%%d %%b %%Y') date,
         date_format(created_at,'%%Y-%%m-%%d') date_input,
         created_at, assigned_to, validated
@@ -705,9 +738,11 @@ def admin_complaints():
         admin_name=session.get('fullname', 'Admin'),
         status_filter=status_filter, category_filter=category_filter,
         priority_filter=priority_filter, sentiment_filter=sentiment_filter,
+        college_filter=college_filter,
         date_from=date_from, date_to=date_to,
         today=today, week_ago=week_ago, month_start=month_start,
         page=page, total_pages=total_pages, total_count=total_count,
+        colleges=get_colleges(),
         categories=[c for c in CATEGORIES if c != 'Other'])
 
 @app.route('/admin/complaint/<ticket_id>')
@@ -1128,6 +1163,7 @@ def admin_export_pdf():
     conn = get_db(); cur = conn.cursor()
     status_filter = request.args.get('status', '')
     category_filter = request.args.get('category', '')
+    college_filter = request.args.get('college', '')
     base = "FROM complaints WHERE 1=1"
     params = []
     if status_filter:
@@ -1136,7 +1172,10 @@ def admin_export_pdf():
     if category_filter:
         base += " AND category=%s"
         params.append(category_filter)
-    cur.execute(f"SELECT ticket_id,fullname,category,priority,status,subject,sentiment,assigned_to,date_format(created_at,'%%d %%b %%Y') created_at {base} ORDER BY created_at DESC", params)
+    if college_filter:
+        base += " AND college=%s"
+        params.append(college_filter)
+    cur.execute(f"SELECT ticket_id,fullname,category,priority,status,subject,sentiment,assigned_to,college,date_format(created_at,'%%d %%b %%Y') created_at {base} ORDER BY created_at DESC", params)
     complaints = cur.fetchall()
     cur.execute(f"SELECT COUNT(*) total, SUM(status='Resolved') resolved, SUM(status='In Progress') in_progress, SUM(status='Pending') pending {base}", params)
     stats = cur.fetchone()
@@ -1258,7 +1297,7 @@ def admin_export_pdf():
         pdf.set_text_color(2, 36, 72)
         pdf.cell(0, 10, 'Complainify - Complaint Report', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         pdf.set_font('helvetica', 'I', 7)
-        pdf.cell(0, 6, _pdf_text(f'Generated: {datetime.now().strftime("%d %b %Y %I:%M %p")} | Admin: {session.get("fullname", "Admin")}{" | Status: " + status_filter if status_filter else ""}{" | Category: " + category_filter if category_filter else ""}'), new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+        pdf.cell(0, 6, _pdf_text(f'Generated: {datetime.now().strftime("%d %b %Y %I:%M %p")} | Admin: {session.get("fullname", "Admin")}{" | Status: " + status_filter if status_filter else ""}{" | Category: " + category_filter if category_filter else ""}{" | College: " + college_filter if college_filter else ""}'), new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         pdf.ln(4)
         pdf.set_font('Helvetica', 'B', 10)
         pdf.set_fill_color(2, 36, 72)
@@ -1269,7 +1308,8 @@ def admin_export_pdf():
         pdf.cell(18, 8, 'Priority', border=1, fill=True)
         pdf.cell(18, 8, 'Status', border=1, fill=True)
         pdf.cell(22, 8, 'Sentiment', border=1, fill=True)
-        pdf.cell(85, 8, 'Subject', border=1, fill=True)
+        pdf.cell(62, 8, 'Subject', border=1, fill=True)
+        pdf.cell(35, 8, 'College', border=1, fill=True)
         pdf.cell(25, 8, 'Assigned To', border=1, fill=True)
         pdf.cell(22, 8, 'Date', border=1, fill=True)
         pdf.ln()
@@ -1288,7 +1328,8 @@ def admin_export_pdf():
                 pdf.cell(18, 8, 'Priority', border=1, fill=True)
                 pdf.cell(18, 8, 'Status', border=1, fill=True)
                 pdf.cell(22, 8, 'Sentiment', border=1, fill=True)
-                pdf.cell(85, 8, 'Subject', border=1, fill=True)
+                pdf.cell(62, 8, 'Subject', border=1, fill=True)
+                pdf.cell(35, 8, 'College', border=1, fill=True)
                 pdf.cell(25, 8, 'Assigned To', border=1, fill=True)
                 pdf.cell(22, 8, 'Date', border=1, fill=True)
                 pdf.ln()
@@ -1303,8 +1344,9 @@ def admin_export_pdf():
             pdf.cell(18, row_h, _pdf_text(c['status']), border=1)
             pdf.cell(22, row_h, _pdf_text(c['sentiment'] or 'Neutral'), border=1)
             subj = _pdf_text(c['subject'])
-            subj = subj[:45] + '...' if len(subj) > 45 else subj
-            pdf.cell(85, row_h, subj, border=1)
+            subj = subj[:32] + '...' if len(subj) > 32 else subj
+            pdf.cell(62, row_h, subj, border=1)
+            pdf.cell(35, row_h, _pdf_text(c['college'] or '-', 16), border=1)
             pdf.cell(25, row_h, _pdf_text(c['assigned_to'] or '-', 12), border=1)
             pdf.cell(22, row_h, _pdf_text(c['created_at']), border=1)
             pdf.ln()
