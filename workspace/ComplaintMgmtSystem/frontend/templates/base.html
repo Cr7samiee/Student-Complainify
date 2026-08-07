@@ -13,10 +13,12 @@
 tailwind.config = { darkMode: "class", theme: { extend: { colors: { primary: "#022448", "on-primary": "#ffffff", "primary-container": "#1e3a5f", "on-primary-container": "#8aa4cf", "primary-fixed-dim": "#adc8f5", secondary: "#0058be", "on-secondary": "#ffffff", "secondary-container": "#2170e4", "on-secondary-container": "#fefcff", tertiary: "#002a1a", "on-tertiary-container": "#10b981", surface: "#f8f9ff", "surface-bright": "#f8f9ff", "surface-container": "#e5eeff", "surface-container-low": "#eff4ff", "surface-container-high": "#dce9ff", "surface-white": "#FFFFFF", "on-surface": "#0b1c30", "on-surface-variant": "#43474e", "outline-variant": "#c4c6cf", "outline": "#74777f", "slate-bg": "#F1F5F9", "error": "#ba1a1a", "error-crimson": "#EF4444", "warning-amber": "#F59E0B", "text-ink": "#1E293B", "on-primary-fixed-variant": "#2d486d" }, fontFamily: { sans: ["Inter"] } } } };
 </script>
 <style>body{font-family:'Inter',sans-serif}.material-symbols-outlined{font-variation-settings:'FILL'0,'wght'400,'GRAD'0,'opsz'24;display:inline-block;vertical-align:middle}
-.flash-msg{position:fixed;top:20px;right:20px;z-index:9999;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,0.12);border:1px solid;max-width:380px;animation:slideIn .3s ease, fadeOut .5s ease 4.5s forwards}
+.flash-msg{position:fixed;top:20px;right:20px;z-index:9999;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,0.12);border:1px solid;max-width:420px;display:flex;align-items:center;gap:12px;animation:slideIn .3s ease, fadeOut .5s ease 8s forwards}
 .flash-msg.success{background:#f0fdf4;color:#166534;border-color:#bbf7d0}
 .flash-msg.error{background:#fef2f2;color:#991b1b;border-color:#fecaca}
 .flash-msg.info{background:#eff6ff;color:#1e40af;border-color:#bfdbfe}
+.flash-copy-btn{flex-shrink:0;padding:4px 12px;border-radius:6px;border:1px solid currentColor;background:transparent;color:inherit;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all .15s}
+.flash-copy-btn:hover{background:rgba(0,0,0,0.06)}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes fadeOut{to{opacity:0;transform:translateY(-10px)}}
 </style>
@@ -26,10 +28,26 @@ tailwind.config = { darkMode: "class", theme: { extend: { colors: { primary: "#0
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
 {% for category, message in messages %}
-<div class="flash-msg {{ category }}">{{ message }}</div>
+<div class="flash-msg {{ category }}">
+<span>{{ message }}</span>
+<button type="button" class="flash-copy-btn" data-copy="{% for w in message.split() %}{% if w.startswith('CMP-') %}{{ w }}{% endif %}{% endfor %}" onclick="copyTicketId(this)" style="display:none"><span class="material-symbols-outlined text-sm">content_copy</span>Copy</button>
+</div>
 {% endfor %}
 {% endif %}
 {% endwith %}
+<script>
+function copyTicketId(btn){
+  var id = btn.getAttribute('data-copy');
+  if(!id) return;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(id).then(function(){ btn.innerHTML='<span class="material-symbols-outlined text-sm">check</span>Copied!'; setTimeout(function(){ btn.innerHTML='<span class="material-symbols-outlined text-sm">content_copy</span>Copy'; }, 2000); });
+  } else {
+    var t = document.createElement('textarea'); t.value = id; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t);
+    btn.innerHTML='<span class="material-symbols-outlined text-sm">check</span>Copied!';
+  }
+}
+document.querySelectorAll('.flash-copy-btn').forEach(function(b){ if(b.getAttribute('data-copy')){ b.style.display = 'inline-flex'; } });
+</script>
 {% block content %}{% endblock %}
 {% block footer %}
 <footer class="bg-primary text-on-primary w-full mt-auto">

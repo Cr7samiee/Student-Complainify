@@ -8,10 +8,11 @@ from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'train'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ml'))
 from classifier import auto_categorize, categorize, predict_top3, detect_anomaly, clean_and_tokenize
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'train'))
-from sentiment import analyze_sentiment, sentiment_priority_boost
+import model_registry
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml'))
+from sentiment import analyze_sentiment
 
 app = Flask(
     __name__,
@@ -201,10 +202,11 @@ def submit_complaint():
             sentiment_score = sentiment_result['score']
 
             priority = 'Medium'
-            boosted = sentiment_priority_boost(sentiment, priority)
-            if boosted != priority:
-                flash(f'Priority set to {boosted} due to {sentiment_result["sub_label"]} tone', 'warning')
-                priority = boosted
+            if sentiment == 'Negative' and sentiment_score <= -0.3:
+                priority = 'High'
+                flash(f'Priority set to High due to {sentiment_result["sub_label"]} tone', 'warning')
+            elif sentiment == 'Positive':
+                priority = 'Low'
 
             student_attachment = request.files.get('student_attachment')
             student_attachment_name = None
@@ -224,11 +226,12 @@ def submit_complaint():
                 auto_status = 'Pending'
 
             cur.execute("""INSERT INTO complaints
-                (ticket_id,user_id,fullname,email,category,priority,subject,description,sentiment,sentiment_score,student_attachment,assigned_to,status,assigned_at)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                (ticket_id,user_id,fullname,email,category,priority,subject,description,sentiment,sentiment_score,student_attachment,assigned_to,status,assigned_at,model_version)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                 (tid, uid, fullname, email,
                  category, priority, subject, description, sentiment, sentiment_score, student_attachment_name,
-                 assigned_to, auto_status, datetime.now() if assigned_to else None))
+                 assigned_to, auto_status, datetime.now() if assigned_to else None,
+                 model_registry.latest_version_id()))
             conn.commit()
 
             conn2 = get_db(); cur2 = conn2.cursor()
@@ -237,17 +240,6 @@ def submit_complaint():
                 create_notification(admin['id'], f'New complaint #{tid} ({category})', url_for('admin_complaint_detail', ticket_id=tid))
             cur2.close(); conn2.close()
             log_action(uid, 'submit_complaint', 'complaint', tid, f'Category: {category}, Priority: {priority}')
-
-            try:
-                csv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'TrainDataset', 'new_complaints.csv')
-                file_exists = os.path.isfile(csv_path)
-                with open(csv_path, 'a', encoding='utf-8', newline='') as f:
-                    writer = csv.writer(f)
-                    if not file_exists:
-                        writer.writerow(['text', 'category'])
-                    writer.writerow([subject + ' ' + description, category])
-            except Exception as ex:
-                print(f"[CSV APPEND ERROR] {ex}")
 
             if SMTP_CONFIG['user'] and not anon:
                 student_email = email
@@ -302,7 +294,7 @@ def track_complaint():
     if request.method == 'POST':
         tid = request.form.get('ticket_id')
         conn = get_db(); cur = conn.cursor()
-        cur.execute("""SELECT ticket_id,status,priority,category,subject,
+        cur.execute("""SELECT ticket_id,status,priority,category,subject,description,student_attachment,
             date_format(created_at,'%%d %%b %%Y') date,
             date_format(assigned_at,'%%d %%b %%Y %%h:%%i %%p') assigned_date,
             date_format(resolved_at,'%%d %%b %%Y %%h:%%i %%p') resolved_date,
@@ -641,12 +633,22 @@ def admin_dashboard():
     sent_neu = sent_map.get('Neutral', 0)
 
     cur.close(); conn.close()
+
+    train_log = {}
+    if os.path.isfile(TRAIN_LOG_PATH):
+        try:
+            with open(TRAIN_LOG_PATH) as f:
+                train_log = json.load(f)
+        except Exception as e:
+            print(f"[DASHBOARD TRAIN LOG] {e}")
+
     return render_template('admin/dashboard.html', total=total, resolved=resolved,
         in_progress=in_progress, pending=pending, critical=critical,
         avg_resolution=avg_resolution,
         cat_labels=cat_labels, cat_values=cat_values, cat_pcts=cat_pcts,
         sent_pos=sent_pos, sent_neg=sent_neg, sent_neu=sent_neu,
         complaints=all_complaints, recent=all_complaints[:10],
+        train_log=train_log,
         admin_name=session.get('fullname', 'Admin'))
 
 @app.route('/admin/complaints')
@@ -658,6 +660,8 @@ def admin_complaints():
     category_filter = request.args.get('category', '')
     priority_filter = request.args.get('priority', '')
     sentiment_filter = request.args.get('sentiment', '')
+    date_from = request.args.get('date_from', '')
+    date_to = request.args.get('date_to', '')
     page = int(request.args.get('page', 1))
     per_page = 20
     offset = (page - 1) * per_page
@@ -675,20 +679,34 @@ def admin_complaints():
     if sentiment_filter:
         base_query += " AND sentiment=%s"
         params.append(sentiment_filter)
+    if date_from:
+        base_query += " AND created_at >= %s"
+        params.append(date_from)
+    if date_to:
+        base_query += " AND created_at <= %s 23:59:59"
+        params.append(date_to)
     cur.execute(f"SELECT COUNT(*) cnt {base_query}", params)
     total_row = cur.fetchone()
     total_count = total_row['cnt'] if total_row else 0
     total_pages = max(1, (total_count + per_page - 1) // per_page)
     query = f"""SELECT ticket_id,fullname student,category,priority,status,subject,sentiment,
-        date_format(created_at,'%%d %%b %%Y') date, assigned_to, validated
+        date_format(created_at,'%%d %%b %%Y') date,
+        date_format(created_at,'%%Y-%%m-%%d') date_input,
+        created_at, assigned_to, validated
         {base_query} ORDER BY created_at DESC LIMIT %s OFFSET %s"""
     cur.execute(query, params + [per_page, offset])
     complaints = cur.fetchall()
     cur.close(); conn.close()
+    from datetime import datetime, timedelta
+    today = datetime.now().strftime('%Y-%m-%d')
+    week_ago = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d')
+    month_start = datetime.now().replace(day=1).strftime('%Y-%m-%d')
     return render_template('admin/complaints_list.html', complaints=complaints,
         admin_name=session.get('fullname', 'Admin'),
         status_filter=status_filter, category_filter=category_filter,
         priority_filter=priority_filter, sentiment_filter=sentiment_filter,
+        date_from=date_from, date_to=date_to,
+        today=today, week_ago=week_ago, month_start=month_start,
         page=page, total_pages=total_pages, total_count=total_count,
         categories=[c for c in CATEGORIES if c != 'Other'])
 
@@ -801,6 +819,33 @@ def admin_validate(ticket_id):
     flash('Complaint validated as legitimate.', 'success')
     return redirect(url_for('admin_complaint_detail', ticket_id=ticket_id))
 
+@app.route('/admin/confirm-label/<ticket_id>', methods=['POST'])
+def admin_confirm_label(ticket_id):
+    """Human confirms (and can correct) the true category.
+
+    Only rows with category_confirmed=1 are eligible for the retraining
+    pipeline, so the model never trains on its own auto-predicted labels.
+    """
+    if not login_required('admin'):
+        return jsonify({'error': 'Unauthorized'}), 403
+    category = request.form.get('category', '').strip()
+    conn = get_db(); cur = conn.cursor()
+    cur.execute("SELECT category FROM complaints WHERE ticket_id=%s", (ticket_id,))
+    existing = cur.fetchone()
+    if category and existing and category in [d for d in CATEGORIES if d != 'Other']:
+        cur.execute("""UPDATE complaints
+            SET category=%s, category_confirmed=1, confirmed_by=%s, confirmed_at=NOW()
+            WHERE ticket_id=%s""", (category, session.get('fullname', 'Admin'), ticket_id))
+    elif existing:
+        cur.execute("""UPDATE complaints
+            SET category_confirmed=1, confirmed_by=%s, confirmed_at=NOW()
+            WHERE ticket_id=%s""", (session.get('fullname', 'Admin'), ticket_id))
+    conn.commit()
+    cur.close(); conn.close()
+    log_action(session['user_id'], 'confirm_label', 'complaint', ticket_id, f'Confirmed category: {category or "unchanged"}')
+    flash('Category confirmed for training dataset.', 'success')
+    return redirect(url_for('admin_complaint_detail', ticket_id=ticket_id))
+
 @app.route('/admin/resend-email/<ticket_id>', methods=['POST'])
 def admin_resend_email(ticket_id):
     if not login_required('admin'):
@@ -817,46 +862,6 @@ def admin_resend_email(ticket_id):
         flash('Email not sent (no recipient or no SMTP config).', 'warning')
     cur.close(); conn.close()
     return redirect(url_for('admin_complaint_detail', ticket_id=ticket_id))
-
-@app.route('/admin/import-csv', methods=['GET', 'POST'])
-def admin_import_csv():
-    if not login_required('admin'):
-        return redirect(url_for('admin_login'))
-    if request.method == 'POST':
-        file = request.files.get('csv_file')
-        if not file or not file.filename.endswith('.csv'):
-            flash('Please upload a .csv file', 'error')
-            return redirect(url_for('admin_import_csv'))
-        try:
-            content = file.read().decode('utf-8').splitlines()
-            reader = csv.DictReader(io.StringIO('\n'.join(content)))
-            conn = get_db(); cur = conn.cursor()
-            imported = 0; errors = 0
-            for row in reader:
-                try:
-                    tid = 'TKT' + hashlib.md5((str(row.get('subject','')) + str(row.get('description','')) + str(random.random())).encode()).hexdigest()[:8].upper()
-                    uid = session.get('user_id', 1)
-                    fullname = row.get('fullname', 'Imported Student')
-                    email = row.get('email', 'imported@example.com')
-                    cat = row.get('category', 'Other')
-                    priority = row.get('priority', 'Medium')
-                    subject = row.get('subject', 'No subject')
-                    description = row.get('description', '')
-                    sentiment = row.get('sentiment', 'Neutral')
-                    score = float(row.get('sentiment_score', 0))
-                    cur.execute("""INSERT INTO complaints
-                        (ticket_id,user_id,fullname,email,category,priority,subject,description,sentiment,sentiment_score)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-                        (tid, uid, fullname, email, cat, priority, subject, description, sentiment, score))
-                    imported += 1
-                except: errors += 1
-            conn.commit(); cur.close(); conn.close()
-            flash(f'Imported {imported} complaints ({errors} errors)', 'success')
-            log_action(session['user_id'], 'import_csv', 'complaint', '', f'{imported} rows')
-        except Exception as e:
-            flash(f'Import failed: {str(e)[:200]}', 'error')
-        return redirect(url_for('admin_import_csv'))
-    return render_template('admin/import_csv.html', admin_name=session.get('fullname', 'Admin'))
 
 @app.route('/admin/settings', methods=['GET', 'POST'])
 def admin_settings():
@@ -973,7 +978,7 @@ def admin_report():
     cur.close(); conn.close()
 
     # Training dataset analysis
-    train_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'TrainDataset', 'train_dataset.csv')
+    train_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'train_dataset.csv')
     train_cats = {}
     train_total = 0
     train_lens = []
@@ -999,9 +1004,20 @@ def admin_report():
     train_cat_labels = list(train_cats.keys())
     train_cat_values = list(train_cats.values())
 
+    # Training log data for accuracy graph
+    train_log_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml', 'training_log.json')
+    train_log = {}
+    if os.path.isfile(train_log_path):
+        try:
+            with open(train_log_path) as f:
+                train_log = json.load(f)
+        except Exception as e:
+            print(f"[REPORT TRAIN LOG] {e}")
+
     return render_template('admin/report.html', complaints=complaints,
         total=total, resolved=resolved, in_progress=in_progress, pending=pending, validated=validated,
         cat_labels=cat_labels, cat_values=cat_values,
+        train_log=train_log,
         daily_labels=daily_labels, daily_data=daily_data,
         month_labels=month_labels, month_data=month_data,
         avg_res=avg_res, max_res=max_res, min_res=min_res,
@@ -1011,6 +1027,94 @@ def admin_report():
         train_max_len=train_max_len, train_median_len=train_median_len,
         train_cat_labels=train_cat_labels, train_cat_values=train_cat_values,
         admin_name=session.get('fullname', 'Admin'))
+
+def _chart_png(kind, **data):
+    """Render one chart to PNG bytes (matplotlib Agg, no GUI).
+
+    Supported kinds:
+      category   -> bar,  data: labels, values
+      sentiment  -> pie,  data: labels, values
+      status     -> pie,  data: labels, values
+      daily      -> line, data: labels, values
+      monthly    -> bar,  data: labels, values
+      resolution -> bar,  data: labels, values  (e.g. Avg/Min/Max hours)
+      accuracy   -> line, data: labels, values  (accuracy % over time)
+    """
+    import io
+    import matplotlib
+    matplotlib.use('Agg')
+    from matplotlib import pyplot as plt
+
+    labels = data.get('labels') or []
+    values = data.get('values') or []
+    if not labels or not values:
+        return None
+
+    bar_colors = ['#3b82f6', '#6366f1', '#8b5cf6', '#ec4899', '#f43f5e',
+                  '#f59e0b', '#10b981', '#06b6d4', '#94a3b8', '#f97316']
+    pie_colors = {
+        'Positive': '#10b981', 'Neutral': '#94a3b8', 'Negative': '#ef4444',
+        'Pending': '#f59e0b', 'In Progress': '#3b82f6', 'Resolved': '#10b981',
+    }
+
+    buf = io.BytesIO()
+    fig, ax = plt.subplots(figsize=(10, 4.4), dpi=120)
+
+    if kind in ('category', 'monthly', 'resolution'):
+        if len(labels) > len(bar_colors):
+            bar_colors = bar_colors * (len(labels) // len(bar_colors) + 1)
+        bars = ax.bar(labels, values,
+                      color=bar_colors[:len(labels)],
+                      edgecolor='#1e3a8a', linewidth=0.6)
+        for b, v in zip(bars, values):
+            ax.text(b.get_x() + b.get_width()/2, v + max(values) * 0.01, str(v),
+                    ha='center', va='bottom', fontsize=8)
+        ax.set_ylabel('Count', fontsize=9)
+        ax.tick_params(axis='x', rotation=35, labelsize=8)
+        ax.tick_params(axis='y', labelsize=8)
+        ax.grid(axis='y', alpha=0.3)
+    elif kind in ('sentiment', 'status'):
+        c = [pie_colors.get(l, '#6366f1') for l in labels]
+        wedges, _, autotexts = ax.pie(values, labels=labels, autopct='%1.0f%%',
+                                      startangle=90, colors=c,
+                                      textprops={'fontsize': 9})
+        for at in autotexts:
+            at.set_color('white'); at.set_fontsize(8); at.set_fontweight('bold')
+    else:  # daily / accuracy -> line
+        ax.plot(labels, values, marker='o', color='#d32f2f', linewidth=2, markersize=5)
+        ax.set_ylabel('Value', fontsize=9)
+        ax.tick_params(axis='x', rotation=35, labelsize=8)
+        ax.tick_params(axis='y', labelsize=8)
+        ax.grid(axis='y', alpha=0.3)
+        if kind == 'accuracy':
+            ax.set_ylim(0, 100)
+            ax.set_ylabel('Accuracy %', fontsize=9)
+            if data.get('current') is not None:
+                ax.axhline(y=data['current'], color='#0a1628', linestyle='--', linewidth=1)
+
+    ax.set_title(data.get('title', ''), fontsize=12, fontweight='bold', color='#0a1628')
+    fig.tight_layout()
+    fig.savefig(buf, format='png')
+    plt.close(fig)
+    buf.seek(0)
+    return buf.read()
+
+
+def _pdf_text(value, maxlen=None):
+    """PDF-safe string for fpdf core fonts (latin-1 range).
+    Non-latin-1 chars (emoji, CJK, Devanagari, curly quotes...) are replaced with '?'
+    so the report always exports instead of crashing with UnicodeEncodeError."""
+    if value is None:
+        return ''
+    s = str(value)
+    if maxlen is not None and len(s) > maxlen:
+        s = s[:maxlen]
+    try:
+        s.encode('latin-1')
+        return s
+    except UnicodeEncodeError:
+        return s.encode('latin-1', 'replace').decode('latin-1')
+
 
 @app.route('/admin/export/pdf')
 def admin_export_pdf():
@@ -1031,80 +1135,212 @@ def admin_export_pdf():
     complaints = cur.fetchall()
     cur.execute(f"SELECT COUNT(*) total, SUM(status='Resolved') resolved, SUM(status='In Progress') in_progress, SUM(status='Pending') pending {base}", params)
     stats = cur.fetchone()
+    cur.execute(f"SELECT category, COUNT(*) cnt {base} GROUP BY category", params if params else None)
+    cat_rows = cur.fetchall()
+    cur.execute("SELECT sentiment, COUNT(*) cnt FROM complaints WHERE sentiment IN ('Positive','Neutral','Negative') GROUP BY sentiment")
+    sent_rows = cur.fetchall()
+    cur.execute(f"SELECT status, COUNT(*) cnt {base} GROUP BY status", params if params else None)
+    status_rows = cur.fetchall()
+
+    # Date-based analysis
+    from collections import defaultdict
+    cur.execute(f"SELECT created_at {base}", params if params else None)
+    date_rows = cur.fetchall()
+    daily_counts = defaultdict(int)
+    monthly_counts = defaultdict(int)
+    for r in date_rows:
+        if r['created_at']:
+            daily_counts[r['created_at'].strftime('%Y-%m-%d')] += 1
+            monthly_counts[r['created_at'].strftime('%b %Y')] += 1
+    daily_labels = sorted(daily_counts.keys())[-30:]
+    daily_data = [daily_counts[d] for d in daily_labels]
+    month_labels = list(monthly_counts.keys())
+    month_data = [monthly_counts[m] for m in month_labels]
+
+    # Resolution time stats
+    cur.execute("""SELECT TIMESTAMPDIFF(HOUR, created_at, resolved_at) hrs
+        FROM complaints WHERE status='Resolved' AND resolved_at IS NOT NULL""")
+    res_times = [r['hrs'] for r in cur.fetchall()]
+    avg_res = round(sum(res_times)/len(res_times), 1) if res_times else 0
+    max_res = max(res_times) if res_times else 0
+    min_res = min(res_times) if res_times else 0
     cur.close(); conn.close()
 
-    pdf = FPDF(orientation='L', unit='mm', format='A4')
-    pdf.add_page()
-    pdf.set_font('Helvetica', 'B', 16)
-    pdf.set_text_color(2, 36, 72)
-    pdf.cell(0, 10, 'Complainify - Complaint Report', ln=1)
-    pdf.set_font('helvetica', 'I', 7)
-    pdf.cell(0, 6, f'Generated: {datetime.now().strftime("%d %b %Y %I:%M %p")} | Admin: {session.get("fullname", "Admin")}{" | Status: " + status_filter if status_filter else ""}{" | Category: " + category_filter if category_filter else ""}', ln=1)
-    pdf.ln(4)
-    pdf.set_font('Helvetica', 'B', 10)
-    pdf.set_fill_color(2, 36, 72)
-    pdf.set_text_color(255, 255, 255)
-    pdf.cell(35, 8, 'Ticket', border=1, fill=True)
-    pdf.cell(28, 8, 'Student', border=1, fill=True)
-    pdf.cell(30, 8, 'Category', border=1, fill=True)
-    pdf.cell(18, 8, 'Priority', border=1, fill=True)
-    pdf.cell(18, 8, 'Status', border=1, fill=True)
-    pdf.cell(22, 8, 'Sentiment', border=1, fill=True)
-    pdf.cell(85, 8, 'Subject', border=1, fill=True)
-    pdf.cell(25, 8, 'Assigned To', border=1, fill=True)
-    pdf.cell(22, 8, 'Date', border=1, fill=True)
-    pdf.ln()
-    pdf.set_font('Helvetica', '', 8)
-    pdf.set_text_color(30, 41, 59)
-    for c in complaints:
-        row_h = 6
-        if pdf.get_y() + row_h > 190:
-            pdf.add_page()
-            pdf.set_font('Helvetica', 'B', 10)
-            pdf.set_fill_color(2, 36, 72)
-            pdf.set_text_color(255, 255, 255)
-            pdf.cell(35, 8, 'Ticket', border=1, fill=True)
-            pdf.cell(28, 8, 'Student', border=1, fill=True)
-            pdf.cell(30, 8, 'Category', border=1, fill=True)
-            pdf.cell(18, 8, 'Priority', border=1, fill=True)
-            pdf.cell(18, 8, 'Status', border=1, fill=True)
-            pdf.cell(22, 8, 'Sentiment', border=1, fill=True)
-            pdf.cell(85, 8, 'Subject', border=1, fill=True)
-            pdf.cell(25, 8, 'Assigned To', border=1, fill=True)
-            pdf.cell(22, 8, 'Date', border=1, fill=True)
-            pdf.ln()
-            pdf.set_font('Helvetica', '', 8)
-            pdf.set_text_color(30, 41, 59)
-        if c['sentiment'] == 'Negative': pdf.set_text_color(185, 28, 28)
-        else: pdf.set_text_color(30, 41, 59)
-        pdf.cell(35, row_h, c['ticket_id'], border=1)
-        pdf.cell(28, row_h, c['fullname'][:15], border=1)
-        pdf.cell(30, row_h, c['category'][:12], border=1)
-        pdf.cell(18, row_h, c['priority'], border=1)
-        status_display = c['status']
-        pdf.cell(18, row_h, status_display, border=1)
-        pdf.cell(22, row_h, c['sentiment'] or 'Neutral', border=1)
-        subj = c['subject'][:45] + '...' if len(c['subject']) > 45 else c['subject']
-        pdf.cell(85, row_h, subj, border=1)
-        pdf.cell(25, row_h, c['assigned_to'][:12] if c['assigned_to'] else '-', border=1)
-        pdf.cell(22, row_h, str(c['created_at']), border=1)
+    # Training log for accuracy chart
+    train_log = {}
+    if os.path.isfile(TRAIN_LOG_PATH):
+        try:
+            with open(TRAIN_LOG_PATH) as f:
+                train_log = json.load(f)
+        except Exception as e:
+            print(f"[PDF TRAIN LOG] {e}")
+
+    # Build chart PNGs (each chart -> own page in the PDF)
+    cat_labels = [r['category'] for r in cat_rows]
+    cat_values = [r['cnt'] for r in cat_rows]
+    sent_labels = [r['sentiment'] for r in sent_rows]
+    sent_values = [r['cnt'] for r in sent_rows]
+    status_labels = [r['status'] for r in status_rows]
+    status_values = [r['cnt'] for r in status_rows]
+    status_order = ['Pending', 'In Progress', 'Resolved']
+    status_labels.sort(key=lambda s: status_order.index(s) if s in status_order else 99)
+    status_values = [dict(zip(status_labels, status_values))[s] for s in status_labels]
+
+    acc_labels = [h['date'] for h in train_log.get('history', []) if h.get('accuracy') is not None]
+    acc_values = [h['accuracy'] for h in train_log.get('history', []) if h.get('accuracy') is not None]
+
+    # ML Training Dataset analysis (matches report page)
+    train_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'train_dataset.csv')
+    train_cats = {}
+    train_lens = []
+    try:
+        with open(train_path, encoding='utf-8') as f:
+            train_rows = list(csv.DictReader(f))
+        for r in train_rows:
+            train_cats[r['category']] = train_cats.get(r['category'], 0) + 1
+            train_lens.append(len(r['text']))
+    except Exception as e:
+        print(f"[PDF TRAIN ANALYSIS] {e}")
+    train_cat_labels = list(train_cats.keys())
+    train_cat_values = list(train_cats.values())
+    train_avg_len = round(sum(train_lens) / len(train_lens)) if train_lens else 0
+    train_min_len = min(train_lens) if train_lens else 0
+    train_max_len = max(train_lens) if train_lens else 0
+
+    charts = [
+        ('category', cat_labels, cat_values, 'Complaint Category Distribution'),
+        ('sentiment', sent_labels, sent_values, 'Complaint Sentiment Breakdown'),
+        ('status', status_labels, status_values, 'Complaint Status Breakdown'),
+        ('daily', daily_labels, daily_data, 'Daily Complaint Trend (Last 30 Days)'),
+        ('monthly', month_labels, month_data, 'Monthly Complaint Trends'),
+        ('resolution', ['Fastest', 'Average', 'Slowest'], [min_res, avg_res, max_res], 'Resolution Time (Hours)'),
+    ]
+    if train_cat_labels:
+        charts.append(('category', train_cat_labels, train_cat_values, 'ML Training Dataset - Category Distribution'))
+    if train_lens:
+        charts.append(('resolution', ['Min', 'Avg', 'Max'], [train_min_len, train_avg_len, train_max_len],
+                       'ML Training Dataset - Text Length (Characters)'))
+    if len(acc_labels) >= 2:
+        charts.append(('accuracy', acc_labels, acc_values, 'Classifier Accuracy Over Time',
+                       {'current': train_log.get('accuracy')}))
+
+    import tempfile, os as os_mod
+    tmpdir = tempfile.mkdtemp(prefix='complainify_')
+    chart_paths = []
+    try:
+        for idx, (kind, labels, values, title, *extra) in enumerate(charts, start=1):
+            kw = dict(title=title)
+            if extra:
+                kw.update(extra[0])
+            png = _chart_png(kind, labels=labels, values=values, **kw)
+            if png is None:
+                continue
+            p = os_mod.path.join(tmpdir, f'chart_{idx}.png')
+            with open(p, 'wb') as f:
+                f.write(png)
+            chart_paths.append((title, p))
+
+        pdf = FPDF(orientation='L', unit='mm', format='A4')
+        pdf.set_auto_page_break(auto=True, margin=10)
+        pdf.add_page()
+        pdf.set_font('Helvetica', 'B', 16)
+        pdf.set_text_color(2, 36, 72)
+        pdf.cell(0, 10, 'Complainify - Complaint Report', ln=1)
+        pdf.set_font('helvetica', 'I', 7)
+        pdf.cell(0, 6, _pdf_text(f'Generated: {datetime.now().strftime("%d %b %Y %I:%M %p")} | Admin: {session.get("fullname", "Admin")}{" | Status: " + status_filter if status_filter else ""}{" | Category: " + category_filter if category_filter else ""}'), ln=1)
+        pdf.ln(4)
+        pdf.set_font('Helvetica', 'B', 10)
+        pdf.set_fill_color(2, 36, 72)
+        pdf.set_text_color(255, 255, 255)
+        pdf.cell(35, 8, 'Ticket', border=1, fill=True)
+        pdf.cell(28, 8, 'Student', border=1, fill=True)
+        pdf.cell(30, 8, 'Category', border=1, fill=True)
+        pdf.cell(18, 8, 'Priority', border=1, fill=True)
+        pdf.cell(18, 8, 'Status', border=1, fill=True)
+        pdf.cell(22, 8, 'Sentiment', border=1, fill=True)
+        pdf.cell(85, 8, 'Subject', border=1, fill=True)
+        pdf.cell(25, 8, 'Assigned To', border=1, fill=True)
+        pdf.cell(22, 8, 'Date', border=1, fill=True)
         pdf.ln()
+        pdf.set_font('Helvetica', '', 8)
+        pdf.set_text_color(30, 41, 59)
+        for c in complaints:
+            row_h = 6
+            if pdf.get_y() + row_h > 190:
+                pdf.add_page()
+                pdf.set_font('Helvetica', 'B', 10)
+                pdf.set_fill_color(2, 36, 72)
+                pdf.set_text_color(255, 255, 255)
+                pdf.cell(35, 8, 'Ticket', border=1, fill=True)
+                pdf.cell(28, 8, 'Student', border=1, fill=True)
+                pdf.cell(30, 8, 'Category', border=1, fill=True)
+                pdf.cell(18, 8, 'Priority', border=1, fill=True)
+                pdf.cell(18, 8, 'Status', border=1, fill=True)
+                pdf.cell(22, 8, 'Sentiment', border=1, fill=True)
+                pdf.cell(85, 8, 'Subject', border=1, fill=True)
+                pdf.cell(25, 8, 'Assigned To', border=1, fill=True)
+                pdf.cell(22, 8, 'Date', border=1, fill=True)
+                pdf.ln()
+                pdf.set_font('Helvetica', '', 8)
+                pdf.set_text_color(30, 41, 59)
+            if c['sentiment'] == 'Negative': pdf.set_text_color(185, 28, 28)
+            else: pdf.set_text_color(30, 41, 59)
+            pdf.cell(35, row_h, _pdf_text(c['ticket_id']), border=1)
+            pdf.cell(28, row_h, _pdf_text(c['fullname'], 15), border=1)
+            pdf.cell(30, row_h, _pdf_text(c['category'], 12), border=1)
+            pdf.cell(18, row_h, _pdf_text(c['priority']), border=1)
+            pdf.cell(18, row_h, _pdf_text(c['status']), border=1)
+            pdf.cell(22, row_h, _pdf_text(c['sentiment'] or 'Neutral'), border=1)
+            subj = _pdf_text(c['subject'])
+            subj = subj[:45] + '...' if len(subj) > 45 else subj
+            pdf.cell(85, row_h, subj, border=1)
+            pdf.cell(25, row_h, _pdf_text(c['assigned_to'] or '-', 12), border=1)
+            pdf.cell(22, row_h, _pdf_text(c['created_at']), border=1)
+            pdf.ln()
 
-    pdf.add_page()
-    pdf.set_font('Helvetica', 'B', 14)
-    pdf.set_text_color(2, 36, 72)
-    pdf.cell(0, 10, 'Summary Statistics', ln=1)
-    pdf.ln(4)
-    pdf.set_font('Helvetica', '', 11)
-    pdf.set_text_color(30, 41, 59)
-    for label, key in [('Total Complaints', 'total'), ('Resolved', 'resolved'), ('In Progress', 'in_progress'), ('Pending', 'pending')]:
-        val = stats[key] if stats[key] is not None else 0
-        pdf.cell(60, 8, f'{label}: {val}', ln=1)
+        # ── Each chart on its OWN page ──
+        page_w = 297
+        margin = 15
+        img_w = page_w - margin * 2
+        for title, p in chart_paths:
+            pdf.add_page()
+            pdf.set_font('Helvetica', 'B', 14)
+            pdf.set_text_color(2, 36, 72)
+            pdf.cell(0, 10, title, ln=1)
+            pdf.set_font('helvetica', 'I', 8)
+            pdf.set_text_color(100, 116, 139)
+            pdf.cell(0, 6, f'Generated: {datetime.now().strftime("%d %b %Y")}', ln=1)
+            pdf.ln(3)
+            pdf.set_text_color(30, 41, 59)
+            pdf.set_font('Helvetica', '', 8)
+            pdf.image(p, x=margin, w=img_w)
 
-    response = make_response(bytes(pdf.output()))
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'attachment; filename=complainify_report.pdf'
-    return response
+        # ── Summary statistics page ──
+        pdf.add_page()
+        pdf.set_font('Helvetica', 'B', 14)
+        pdf.set_text_color(2, 36, 72)
+        pdf.cell(0, 10, 'Summary Statistics', ln=1)
+        pdf.ln(4)
+        pdf.set_font('Helvetica', '', 11)
+        pdf.set_text_color(30, 41, 59)
+        for label, key in [('Total Complaints', 'total'), ('Resolved', 'resolved'), ('In Progress', 'in_progress'), ('Pending', 'pending')]:
+            val = stats[key] if stats[key] is not None else 0
+            pdf.cell(60, 8, f'{label}: {val}', ln=1)
+        pdf.ln(3)
+        pdf.cell(60, 8, f'Avg Resolution: {avg_res} hrs', ln=1)
+        pdf.cell(60, 8, f'Fastest Resolution: {min_res} hrs', ln=1)
+        pdf.cell(60, 8, f'Slowest Resolution: {max_res} hrs', ln=1)
+
+        pdf_out = pdf.output(dest='S')
+        if isinstance(pdf_out, str):
+            pdf_out = pdf_out.encode('latin-1')
+        response = make_response(pdf_out)
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = 'attachment; filename=complainify_report.pdf'
+        return response
+    finally:
+        import shutil
+        shutil.rmtree(tmpdir, ignore_errors=True)
 
 @app.route('/admin/export/csv')
 def admin_export_csv():
@@ -1132,7 +1368,7 @@ def admin_export_csv():
     )
     return response
 
-# ── API: Report data (for TrainDataset/report.html) ──
+# ── API: Report data (for report.html) ──
 
 @app.route('/admin/report/data')
 def admin_report_data():
@@ -1153,8 +1389,21 @@ def api_predict():
     return jsonify({
         'category': result['category'],
         'confidence': round(result['confidence'], 4),
-        'tier': result['tier']
+        'tier': result['tier'],
+        'model_version': model_registry.latest_version_id()
     })
+
+@app.route('/api/models/latest')
+def api_model_latest():
+    info = model_registry.get_version_info(model_registry.latest_version_id())
+    if info is None:
+        return jsonify({'error': 'No model registered yet'}), 404
+    return jsonify(info)
+
+@app.route('/api/models')
+def api_list_models():
+    return jsonify({'versions': model_registry.list_versions(),
+                    'active': model_registry.latest_version_id()})
 
 @app.route('/api/predict-top3', methods=['POST'])
 def api_predict_top3():
@@ -1363,7 +1612,7 @@ def admin_delete_user(uid):
 
 # ── RETRAIN & TRAINING LOGS ──
 
-TRAIN_LOG_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'train', 'training_log.json')
+TRAIN_LOG_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ml', 'training_log.json')
 
 @app.route('/admin/training-logs')
 def admin_training_logs():
@@ -1383,6 +1632,8 @@ def admin_training_logs():
     cur.close(); conn.close()
     return render_template('admin/training_logs.html', log=log_data,
         total_complaints=total_complaints, resolved=resolved,
+        models=model_registry.list_versions(),
+        models_active=model_registry.latest_version_id(),
         admin_name=session.get('fullname', 'Admin'))
 
 @app.route('/admin/retrain', methods=['POST'])
@@ -1390,7 +1641,7 @@ def admin_retrain():
     if not login_required('admin'):
         return redirect(url_for('admin_login'))
     import subprocess, sys as sys_mod
-    train_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'train')
+    train_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml')
     script_path = os.path.join(train_dir, 'retrain.py')
     try:
         result = subprocess.run([sys_mod.executable, script_path], capture_output=True, text=True, timeout=120)
@@ -1398,13 +1649,33 @@ def admin_retrain():
             log_data = json.loads(result.stdout.strip())
             import classifier as clf
             clf._model = None
-            flash(f'Retrain complete! Accuracy: {log_data["accuracy"]}%, F1: {log_data["macro_f1"]}', 'success')
+            acc = log_data.get('accuracy')
+            acc_str = f'{acc}%' if acc is not None else 'N/A (too few test samples)'
+            f1_str = log_data.get('macro_f1', 'N/A')
+            flash(f'Retrain complete! Accuracy: {acc_str}, F1: {f1_str}', 'success')
         else:
             flash(f'Retrain failed: {result.stderr[:500]}', 'error')
     except Exception as e:
         flash(f'Retrain error: {str(e)[:200]}', 'error')
     log_action(session['user_id'], 'retrain_model', 'model', '', '')
     return redirect(url_for('admin_training_logs'))
+
+@app.route('/api/retrain', methods=['POST'])
+def api_retrain():
+    """JSON endpoint to trigger the retraining pipeline."""
+    import subprocess, sys as sys_mod
+    train_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml')
+    script_path = os.path.join(train_dir, 'retrain.py')
+    try:
+        result = subprocess.run([sys_mod.executable, script_path], capture_output=True, text=True, timeout=180)
+        if result.returncode == 0:
+            log_data = json.loads(result.stdout.strip())
+            import classifier as clf
+            clf._model = None
+            return jsonify({'status': 'ok', 'log': log_data})
+        return jsonify({'status': 'error', 'message': result.stderr[:500]}), 500
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)[:200]}), 500
 
 # ── ANOMALY API ──
 
@@ -1502,5 +1773,29 @@ def init_db():
 
 init_db()
 
+def _scheduled_retrain_worker():
+    """Background thread: periodically retrains per RETRAIN_SCHEDULE_HOURS."""
+    try:
+        hours = int(os.environ.get('RETRAIN_SCHEDULE_HOURS', '0') or '0')
+    except ValueError:
+        hours = 0
+    if hours <= 0:
+        return
+    import subprocess, sys as sys_mod, time, threading
+    train_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml')
+    script_path = os.path.join(train_dir, 'retrain.py')
+
+    def run():
+        while True:
+            time.sleep(hours * 3600)
+            try:
+                subprocess.run([sys_mod.executable, script_path], capture_output=True, text=True, timeout=600)
+            except Exception as e:
+                print(f"[SCHEDULED RETRAIN] {e}")
+
+    threading.Thread(target=run, daemon=True).start()
+
+
 if __name__ == '__main__':
+    _scheduled_retrain_worker()
     app.run(debug=True)

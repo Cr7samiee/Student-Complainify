@@ -35,7 +35,7 @@
 <div class="bg-surface-white rounded-xl border border-outline-variant overflow-hidden shadow-sm">
 <div class="p-8">
 <div class="flex items-center justify-between mb-6">
-<div><h3 class="text-2xl font-semibold text-primary">{{ result.ticket_id }}</h3><p class="text-xs text-on-surface-variant mt-1">Submitted {{ result.date }}</p></div>
+<div><h3 class="text-2xl font-semibold text-primary flex items-center gap-3">{{ result.ticket_id }}<button type="button" class="px-3 py-1.5 rounded-lg border border-primary/30 text-primary text-xs font-bold hover:bg-primary/10 transition-colors flex items-center gap-1" onclick="copyTicketId(this)" data-copy="{{ result.ticket_id }}"><span class="material-symbols-outlined text-sm">content_copy</span>Copy</button></h3><p class="text-xs text-on-surface-variant mt-1">Submitted {{ result.date }}</p></div>
 <span class="px-4 py-1.5 rounded-full text-sm font-semibold {% if is_resolved %}bg-on-tertiary-container/10 text-on-tertiary-container{% elif is_in_progress %}bg-secondary/10 text-secondary{% else %}bg-warning-amber/10 text-warning-amber{% endif %}">{{ result.status }}</span>
 </div>
 <div class="grid grid-cols-2 gap-4 mb-6">
@@ -43,6 +43,19 @@
 <div class="bg-surface rounded-lg p-4"><p class="text-xs text-on-surface-variant uppercase tracking-wider">Priority</p><span class="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-semibold {% if result.priority == 'High' %}bg-error-crimson/10 text-error-crimson{% elif result.priority == 'Medium' %}bg-warning-amber/10 text-warning-amber{% else %}bg-on-surface-variant/10 text-on-surface-variant{% endif %}">{{ result.priority }}</span></div>
 <div class="bg-surface rounded-lg p-4"><p class="text-xs text-on-surface-variant uppercase tracking-wider">Assigned To</p><p class="text-sm font-semibold text-primary mt-1">{{ result.assigned_to or 'Not assigned' }}</p></div>
 <div class="bg-surface rounded-lg p-4"><p class="text-xs text-on-surface-variant uppercase tracking-wider">Validated</p><p class="text-sm font-semibold text-primary mt-1">{% if result.validated %}Yes{% else %}Pending{% endif %}</p></div>
+</div>
+<div class="mb-6 space-y-4">
+<div class="bg-surface rounded-lg p-4"><p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Subject</p><p class="text-sm font-semibold text-primary">{{ result.subject }}</p></div>
+<div class="bg-surface rounded-lg p-4"><p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Description</p><p class="text-sm text-primary whitespace-pre-wrap leading-relaxed">{{ result.description }}</p></div>
+{% if result.student_attachment %}
+<div class="bg-surface rounded-lg p-4">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Your Attachment</p>
+<a href="{{ url_for('uploaded_file', filename=result.student_attachment) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary/10 text-primary text-sm font-semibold hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-sm">attach_file</span>{{ result.student_attachment }}
+<span class="material-symbols-outlined text-xs">open_in_new</span>
+</a>
+</div>
+{% endif %}
 </div>
 {% if result.admin_notes %}
 <div class="mb-4 p-4 bg-blue-50 rounded-lg"><p class="text-xs text-blue-700 uppercase tracking-wider mb-1">Admin Notes</p><p class="text-sm text-blue-900">{{ result.admin_notes }}</p></div>
