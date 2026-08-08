@@ -1,0 +1,34 @@
+{
+  "validated_at": "2026-08-07 19:57:12",
+  "total_checked": 5,
+  "valid": 2,
+  "rejected": 3,
+  "rejected_by_reason": {
+    "too_short": 1,
+    "empty_text": 1,
+    "duplicate_text": 1
+  },
+  "rejected_samples": [
+    {
+      "row": {
+        "text": "wifi !!! aaabbbccc111",
+        "category": "IT Support"
+      },
+      "reason": "too_short"
+    },
+    {
+      "row": {
+        "text": "",
+        "category": "Canteen"
+      },
+      "reason": "empty_text"
+    },
+    {
+      "row": {
+        "text": "library too noisy during exams",
+        "category": "Library"
+      },
+      "reason": "duplicate_text"
+    }
+  ]
+}

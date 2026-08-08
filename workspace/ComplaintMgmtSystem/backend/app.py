@@ -13,6 +13,7 @@ from classifier import auto_categorize, categorize, predict_top3, detect_anomaly
 import model_registry
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml'))
 from sentiment import analyze_sentiment
+from priority import compute_priority
 
 app = Flask(
     __name__,
@@ -219,12 +220,9 @@ def submit_complaint():
             sentiment = sentiment_result['label']
             sentiment_score = sentiment_result['score']
 
-            priority = 'Medium'
-            if sentiment == 'Negative' and sentiment_score <= -0.3:
-                priority = 'High'
-                flash(f'Priority set to High due to {sentiment_result["sub_label"]} tone', 'warning')
-            elif sentiment == 'Positive':
-                priority = 'Low'
+            priority, priority_score, priority_reason = compute_priority(
+                full_text, sentiment, sentiment_score, anomaly)
+            flash(f'Priority set to {priority} (score {priority_score} — {priority_reason})', 'warning' if priority == 'High' else 'success')
 
             student_attachment = request.files.get('student_attachment')
             student_attachment_name = None
@@ -244,10 +242,11 @@ def submit_complaint():
                 auto_status = 'Pending'
 
             cur.execute("""INSERT INTO complaints
-                (ticket_id,user_id,fullname,email,college,category,priority,subject,description,sentiment,sentiment_score,student_attachment,assigned_to,status,assigned_at,model_version)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                (ticket_id,user_id,fullname,email,college,category,priority,priority_score,priority_reason,subject,description,sentiment,sentiment_score,student_attachment,assigned_to,status,assigned_at,model_version)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                 (tid, uid, fullname, email, college or None,
-                 category, priority, subject, description, sentiment, sentiment_score, student_attachment_name,
+                 category, priority, priority_score, priority_reason,
+                 subject, description, sentiment, sentiment_score, student_attachment_name,
                  assigned_to, auto_status, datetime.now() if assigned_to else None,
                  model_registry.latest_version_id()))
             conn.commit()
@@ -312,7 +311,7 @@ def track_complaint():
     if request.method == 'POST':
         tid = request.form.get('ticket_id')
         conn = get_db(); cur = conn.cursor()
-        cur.execute("""SELECT ticket_id,status,priority,category,subject,description,student_attachment,college,
+        cur.execute("""SELECT ticket_id,status,priority,priority_score,priority_reason,category,subject,description,student_attachment,college,
             date_format(created_at,'%%d %%b %%Y') date,
             date_format(assigned_at,'%%d %%b %%Y %%h:%%i %%p') assigned_date,
             date_format(resolved_at,'%%d %%b %%Y %%h:%%i %%p') resolved_date,

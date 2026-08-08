@@ -5,9 +5,9 @@ CONFIDENCE_THRESHOLD = 0.35
 AUTO_THRESHOLD = 0.90
 SUGGEST_THRESHOLD = 0.60
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_PATH = os.path.join(BASE, 'TrainDataset', 'train_dataset.csv')
-TEST_PATH = os.path.join(BASE, 'TrainDataset', 'test_dataset.csv')
-ENC_PATH = os.path.join(BASE, 'TrainDataset', 'encoders', 'category_decoder.json')
+DATA_PATH = os.path.join(BASE, 'data', 'train_dataset.csv')
+TEST_PATH = os.path.join(BASE, 'data', 'test_dataset.csv')
+ENC_PATH = os.path.join(BASE, 'data', 'encoders', 'category_decoder.json')
 
 with open(ENC_PATH) as f:
     CAT_DECODER = {int(k): v for k, v in json.load(f).items()}
@@ -161,7 +161,7 @@ def rule_based_categorize(text):
             return rule['category'], rule['confidence']
     return None
 
-MODEL_PARAMS_PATH = os.path.join(BASE, 'TrainDataset', 'model_params.json')
+MODEL_PARAMS_PATH = os.path.join(BASE, 'data', 'model_params.json')
 
 def get_model():
     global _model

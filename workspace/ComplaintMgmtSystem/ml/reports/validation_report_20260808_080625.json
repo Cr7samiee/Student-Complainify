@@ -1,0 +1,42 @@
+{
+  "validated_at": "2026-08-08 08:06:25",
+  "total_checked": 6,
+  "valid": 2,
+  "rejected": 4,
+  "rejected_by_reason": {
+    "empty_text": 1,
+    "too_short": 1,
+    "duplicate_text": 1,
+    "unknown_category": 1
+  },
+  "rejected_samples": [
+    {
+      "row": {
+        "text": "",
+        "category": "Canteen"
+      },
+      "reason": "empty_text"
+    },
+    {
+      "row": {
+        "text": "aaaaaaaaaaaa",
+        "category": "Hostels"
+      },
+      "reason": "too_short"
+    },
+    {
+      "row": {
+        "text": "Hostel water supply stopped in block C since morning",
+        "category": "Hostels"
+      },
+      "reason": "duplicate_text"
+    },
+    {
+      "row": {
+        "text": "Not a real category",
+        "category": "Space"
+      },
+      "reason": "unknown_category"
+    }
+  ]
+}

@@ -41,7 +41,7 @@
 <div><span class="text-gray-400 text-xs block">College</span><span class="font-semibold text-[#0a1628]">{{ c.college or '-' }}</span></div>
 <div><span class="text-gray-400 text-xs block">Email</span><span class="font-semibold text-[#0a1628]">{{ c.email }}</span></div>
 <div><span class="text-gray-400 text-xs block">Category</span><span class="font-semibold text-[#0a1628]">{{ c.category }}</span></div>
-<div><span class="text-gray-400 text-xs block">Priority</span><span class="font-semibold {% if c.priority == 'High' %}text-red-600{% elif c.priority == 'Medium' %}text-amber-600{% else %}text-gray-500{% endif %}">{{ c.priority }}</span></div>
+<div><span class="text-gray-400 text-xs block">Priority</span><span class="font-semibold {% if c.priority == 'High' %}text-red-600{% elif c.priority == 'Medium' %}text-amber-600{% else %}text-gray-500{% endif %}">{{ c.priority }}{% if c.priority_score is not none %} <span class="text-gray-400 text-xs font-normal">(score {{ c.priority_score }})</span>{% endif %}</span>{% if c.priority_reason %}<p class="text-[10px] text-gray-400 mt-0.5">{{ c.priority_reason }}</p>{% endif %}</div>
 <div><span class="text-gray-400 text-xs block">Sentiment</span><span class="font-semibold {% if c.sentiment == 'Positive' %}text-green-600{% elif c.sentiment == 'Negative' %}text-red-600{% else %}text-gray-500{% endif %}">{{ c.sentiment or 'Neutral' }}</span></div>
 <div><span class="text-gray-400 text-xs block">Submitted</span><span class="font-semibold text-[#0a1628]">{{ c.created }}</span></div>
 <div><span class="text-gray-400 text-xs block">Validated</span><span class="font-semibold {% if c.validated %}text-green-600{% else %}text-amber-600{% endif %}">{% if c.validated %}Yes{% else %}No{% endif %}</span></div>

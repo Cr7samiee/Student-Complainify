@@ -31,12 +31,32 @@
 </header>
 <div class="p-6 max-w-7xl mx-auto space-y-6">
 {% if log %}
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5"><span class="text-xs text-gray-400 uppercase">Model Version</span><p class="text-lg font-bold text-[#0a1628] mt-1">{{ log.last_version or '-' }}</p></div>
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5"><span class="text-xs text-gray-400 uppercase">Last Trained</span><p class="text-lg font-bold text-[#0a1628] mt-1">{{ log.last_trained[:10] if log.last_trained else '-' }}</p></div>
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5"><span class="text-xs text-gray-400 uppercase">Accuracy</span><p class="text-lg font-bold mt-1{% if log.accuracy is not none %} text-green-600{% else %} text-gray-400{% endif %}">{{ log.accuracy ~ '%' if log.accuracy is not none else 'N/A' }}</p>{% if log.note %}<p class="text-[10px] text-amber-500 mt-1">{{ log.note }}</p>{% endif %}</div>
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5"><span class="text-xs text-gray-400 uppercase">Macro F1</span><p class="text-lg font-bold text-blue-600 mt-1">{{ log.macro_f1 if log.macro_f1 is not none else 'N/A' }}</p></div>
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5"><span class="text-xs text-gray-400 uppercase">Samples</span><p class="text-lg font-bold text-[#0a1628] mt-1">{{ log.train_samples }} train / {{ log.test_samples }} test</p></div>
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5"><span class="text-xs text-gray-400 uppercase">New Verified Rows</span><p class="text-lg font-bold text-[#0a1628] mt-1">{{ log.new_verified_used or 0 }}</p></div>
 </div>
+{% if models %}
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+<h3 class="text-sm font-bold text-[#0a1628] mb-4">Model Version Registry <span class="text-[10px] text-gray-400 font-normal">(compare old vs new)</span></h3>
+<table class="w-full text-left">
+<thead><tr class="text-[11px] text-gray-500 font-semibold uppercase tracking-wider bg-gray-50"><th class="px-4 py-3">Version</th><th class="px-4 py-3">Saved At</th><th class="px-4 py-3">Accuracy</th><th class="px-4 py-3">Macro F1</th><th class="px-4 py-3">Train / Test</th><th class="px-4 py-3">Status</th></tr></thead>
+<tbody class="divide-y divide-gray-50">
+{% for v in models %}
+<tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-semibold text-[#0a1628]">{{ v.id }}</td>
+<td class="px-4 py-3 text-sm text-gray-500">{{ v.saved_at }}</td>
+<td class="px-4 py-3 text-sm font-bold{% if v.metrics.accuracy is not none %} text-green-600{% else %} text-gray-400{% endif %}">{{ v.metrics.accuracy ~ '%' if v.metrics.accuracy is not none else 'N/A' }}</td>
+<td class="px-4 py-3 text-sm text-blue-600 font-bold">{{ v.metrics.macro_f1 if v.metrics.macro_f1 is not none else 'N/A' }}</td>
+<td class="px-4 py-3 text-sm text-gray-500">{{ v.metrics.train_samples }} / {{ v.metrics.test_samples }}</td>
+<td class="px-4 py-3 text-sm text-xs">{% if v.id == models_active %}<span class="inline-block bg-green-100 text-green-700 px-2 py-0.5 rounded-full">active</span>{% else %}<span class="inline-block bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">archived</span>{% endif %}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endif %}
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
 <h3 class="text-sm font-bold text-[#0a1628] mb-4">Per-Class Performance</h3>
 {% if log.per_class %}
