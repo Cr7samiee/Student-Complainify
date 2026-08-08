@@ -1,6 +1,8 @@
 import re
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
+import env
+
 _analyzer = SentimentIntensityAnalyzer()
 
 _APPRECIATION = re.compile(
@@ -45,6 +47,34 @@ _REQUEST = re.compile(
 
 
 def analyze_sentiment(text):
+    ml = env.ml_sentiment(text)
+    if ml and ml['confidence'] >= 0.45:
+        vader = _analyzer.polarity_scores(text)
+        compound = vader['compound']
+        label = ml['label']
+        if compound <= -0.5:
+            sub_label = 'Angry / Frustrated'
+        elif compound <= -0.05:
+            sub_label = 'Dissatisfied'
+        elif compound >= 0.5:
+            sub_label = 'Appreciative'
+        elif compound >= 0.05:
+            sub_label = 'Satisfied'
+        else:
+            sub_label = 'Informational'
+        return {
+            'label': label,
+            'sub_label': sub_label,
+            'score': round(compound, 3),
+            'neg_words': 0,
+            'pos_words': 0,
+            'total_sentiment_words': 0,
+            'negations': 0,
+            'vader': vader,
+            'model': 'multinomial_nb',
+            'ml_confidence': ml['confidence'],
+        }
+
     scores = _analyzer.polarity_scores(text)
     compound = scores['compound']
 
@@ -77,6 +107,8 @@ def analyze_sentiment(text):
         'total_sentiment_words': 0,
         'negations': 0,
         'vader': scores,
+        'model': 'rule_based',
+        'ml_confidence': None,
     }
 
 

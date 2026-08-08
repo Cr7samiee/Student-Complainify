@@ -1,5 +1,7 @@
 import re
 
+import env
+
 _RISK_PATTERNS = re.compile(
     r'\b(harass\w*|stole|theft|robbery|threaten\w*|unsafe|abuse|assault|'
     r'unhygienic|filthy|spoiled|rotten|stale\s+food|overcharg\w*|leak\w*|'
@@ -56,4 +58,10 @@ def compute_priority(text, sentiment_label, sentiment_score, anomaly=None):
     score = max(score, 0)
     priority = 'High' if score >= 3 else ('Medium' if score >= 1 else 'Low')
     reason = ', '.join(reasons) if reasons else 'baseline'
+
+    ml = env.ml_priority(text)
+    if ml and ml['confidence'] >= 0.75:
+        priority = ml['priority']
+        reason = reason + f" | ML priority ({ml['confidence']*100:.0f}%)"
+
     return priority, score, reason
