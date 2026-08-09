@@ -17,7 +17,8 @@
 <a href="{{ url_for('admin_audit_logs') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">history</span>Audit Logs</a>
 <a href="{{ url_for('admin_users') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">people</span>Users</a>
 <a href="{{ url_for('admin_training_logs') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">model_training</span>Training</a>
-<a href="{{ url_for('admin_report') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">bar_chart</span>Reports</a>
+<a href="{{ url_for('admin_analysis') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">grid_view</span>Sentiment x Priority</a>
+                    <a href="{{ url_for('admin_report') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">bar_chart</span>Reports</a>
 </nav>
 <div class="px-2 space-y-0.5 border-t border-white/10 pt-3 mt-2 mx-2">
 <a href="{{ url_for('admin_settings') }}" class="flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg px-4 py-3 text-sm transition-all"><span class="material-symbols-outlined text-sm">settings</span>Settings</a>
@@ -62,29 +63,65 @@
 <p class="text-[11px] text-red-600 mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-xs">priority_high</span>High priority unresolved</p>
 </div>
 </section>
-{% if train_log and train_log.get('history') and train_log.history|length > 1 %}
+{% if model_cards %}
 <section class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
 <div class="px-5 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
 <h3 class="text-sm font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-[#d32f2f]">model_training</span>Model Accuracy</h3>
 <a href="{{ url_for('admin_training_logs') }}" class="text-xs text-[#d32f2f] font-semibold hover:underline flex items-center gap-1">Training Logs <span class="material-symbols-outlined text-xs">arrow_forward</span></a>
 </div>
-<div class="p-5 grid lg:grid-cols-3 gap-4 items-center">
-<div class="text-center lg:border-r border-gray-100">
-<p class="text-xs text-gray-400 uppercase">Current Accuracy</p>
-<p class="text-3xl font-bold mt-1{% if train_log.accuracy is not none %} text-green-600{% else %} text-gray-400{% endif %}">{{ train_log.accuracy ~ '%' if train_log.accuracy is not none else 'N/A' }}</p>
-{% if train_log.note %}<p class="text-[10px] text-amber-500 mt-1">{{ train_log.note }}</p>{% endif %}
-</div>
-<div class="text-center lg:border-r border-gray-100">
-<p class="text-xs text-gray-400 uppercase">Macro F1</p>
-<p class="text-3xl font-bold text-blue-600 mt-1">{{ train_log.macro_f1 if train_log.macro_f1 is not none else 'N/A' }}</p>
+<div class="p-5 grid lg:grid-cols-3 gap-4">
+{% for card in model_cards %}
+<div class="rounded-lg border border-gray-100 p-4">
+<p class="text-xs text-gray-400 uppercase font-semibold">{{ card.name }} Model</p>
+<div class="mt-3 flex items-end gap-6">
+<div class="text-center">
+<p class="text-[10px] text-gray-400 uppercase">Accuracy</p>
+<p class="text-2xl font-bold{% if card.accuracy is not none %} text-green-600{% else %} text-gray-400{% endif %}">{{ card.accuracy ~ '%' if card.accuracy is not none else 'N/A' }}</p>
 </div>
 <div class="text-center">
-<p class="text-xs text-gray-400 uppercase">Last Trained</p>
-<p class="text-xl font-bold text-[#0a1628] mt-1">{{ train_log.last_trained[:10] if train_log.last_trained else '-' }}</p>
-<p class="text-[10px] text-gray-400 mt-0.5">{{ train_log.train_samples }} train / {{ train_log.test_samples }} test</p>
+<p class="text-[10px] text-gray-400 uppercase">Macro F1</p>
+<p class="text-2xl font-bold text-blue-600 mt-1">{{ card.macro_f1 if card.macro_f1 is not none else 'N/A' }}</p>
 </div>
 </div>
+<p class="text-[10px] text-gray-400 mt-2">{{ card.last_trained[:10] if card.last_trained else '-' }} · {{ card.train_samples }} train / {{ card.test_samples }} test</p>
+{% if card.per_class %}
+<table class="w-full mt-3 text-[11px]">
+<thead><tr class="text-gray-400 border-b border-gray-100"><th class="text-left py-1 font-medium">Class</th><th class="text-right py-1 font-medium">P</th><th class="text-right py-1 font-medium">R</th><th class="text-right py-1 font-medium">F1</th><th class="text-right py-1 font-medium">Samples</th></tr></thead>
+<tbody>
+{% for pc in card.per_class %}
+<tr class="border-b border-gray-50"><td class="py-1 font-semibold text-[#0a1628]">{{ pc.label }}</td><td class="py-1 text-right">{{ pc.precision|round(2) }}</td><td class="py-1 text-right">{{ pc.recall|round(2) }}</td><td class="py-1 text-right font-bold text-[#0a1628]">{{ pc.f1|round(2) }}</td><td class="py-1 text-right text-gray-400">{{ pc.support }}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+</div>
+{% endfor %}
+</div>
+{% if train_log and train_log.get('history') and train_log.history|length > 1 %}
 <div class="px-5 pb-5"><div style="height:150px"><canvas id="dashAccChart"></canvas></div></div>
+{% endif %}
+</section>
+{% endif %}
+{% if corr %}
+<section class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden mt-5">
+<div class="px-5 py-3 border-b border-gray-100 bg-gray-50/50">
+<h3 class="text-sm font-bold text-[#0a1628] flex items-center gap-2"><span class="material-symbols-outlined text-[#d32f2f]">grid_on</span>Correlation Matrix <span class="text-[10px] font-medium text-gray-400 normal-case ml-1">Pearson · sentiment(neg=-1,neu=0,pos=+1) · priority(low=1,med=2,high=3) · text length · polarity score · {{ corr.rows }} samples</span></h3>
+</div>
+<div class="p-5 overflow-x-auto">
+<table class="min-w-full text-xs">
+<thead><tr><th class="p-2"></th>{% for l in corr.labels %}<th class="p-2 text-center font-semibold text-[#0a1628]">{{ l }}</th>{% endfor %}</tr></thead>
+<tbody>
+{% for row in corr.matrix %}
+{% set row_idx = loop.index0 %}
+<tr><td class="p-2 font-semibold text-[#0a1628]">{{ corr.labels[row_idx] }}</td>
+{% for v in row %}
+<td class="p-2 text-center font-bold rounded {% if loop.index0 == row_idx %}bg-gray-50 text-gray-400{% elif v >= 0.5 %}bg-red-100 text-red-700{% elif v >= 0.3 %}bg-red-50 text-red-600{% elif v <= -0.5 %}bg-green-100 text-green-700{% elif v <= -0.3 %}bg-green-50 text-green-600{% else %}bg-gray-50 text-gray-500{% endif %}">{{ v }}</td>
+{% endfor %}
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
 </section>
 {% endif %}
 <section class="grid lg:grid-cols-3 gap-5">

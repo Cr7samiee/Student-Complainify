@@ -14,6 +14,7 @@ import model_registry
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml'))
 from sentiment import analyze_sentiment
 from priority import compute_priority
+from model_stats import model_cards, correlation_matrix
 
 app = Flask(
     __name__,
@@ -161,7 +162,7 @@ def send_email_notification(to_email, subject, body):
         msg['To'] = to_email
         msg.set_content(body)
         context = ssl.create_default_context()
-        with smtplib.SMTP(SMTP_CONFIG['host'], SMTP_CONFIG['port']) as server:
+        with smtplib.SMTP(SMTP_CONFIG['host'], SMTP_CONFIG['port'], timeout=30) as server:
             server.starttls(context=context)
             server.login(SMTP_CONFIG['user'], SMTP_CONFIG['password'])
             server.send_message(msg)
@@ -258,6 +259,7 @@ def submit_complaint():
             cur2.close(); conn2.close()
             log_action(uid, 'submit_complaint', 'complaint', tid, f'Category: {category}, Priority: {priority}')
 
+            student_email_sent = False
             if SMTP_CONFIG['user'] and not anon:
                 student_email = email
                 if student_email:
@@ -273,10 +275,14 @@ We will review and assign it shortly.
 
 Regards,
 Complainify Team"""
-                    send_email_notification(student_email,
-                        f'Complaint Received: {tid}', body)
-                    cur.execute("UPDATE complaints SET email_sent=1 WHERE ticket_id=%s", (tid,))
-                    conn.commit()
+                    try:
+                        if send_email_notification(student_email,
+                                f'Complaint Received: {tid}', body):
+                            student_email_sent = True
+                            cur.execute("UPDATE complaints SET email_sent=1 WHERE ticket_id=%s", (tid,))
+                            conn.commit()
+                    except Exception as e:
+                        print(f"[EMAIL BLOCK ERROR] {e}")
 
             dept_email = DEPARTMENT_EMAILS.get(category)
             if SMTP_CONFIG['user'] and dept_email:
@@ -294,12 +300,17 @@ Please review and take necessary action.
 
 Regards,
 Complainify System"""
-                send_email_notification(dept_email, f'New Complaint #{tid} — {category}', dept_body)
+                try:
+                    send_email_notification(dept_email, f'New Complaint #{tid} — {category}', dept_body)
+                except Exception as e:
+                    print(f"[EMAIL BLOCK ERROR] {e}")
 
             if anon:
                 flash(f'Anonymous complaint submitted! Your tracking ID: {tid} — save this to check status.', 'success')
-            else:
+            elif student_email_sent:
                 flash(f'Complaint submitted! Ticket: {tid} | Category: {category}', 'success')
+            else:
+                flash(f'Complaint submitted! Ticket: {tid} | Category: {category} — confirmation email could not be sent, you can still track it anytime.', 'warning')
         finally:
             cur.close(); conn.close()
         return redirect(url_for('track_complaint'))
@@ -670,6 +681,13 @@ def admin_dashboard():
         except Exception as e:
             print(f"[DASHBOARD TRAIN LOG] {e}")
 
+    cards = model_cards()
+    try:
+        corr = correlation_matrix()
+    except Exception as e:
+        print(f"[DASHBOARD CORRELATION] {e}")
+        corr = None
+
     return render_template('admin/dashboard.html', total=total, resolved=resolved,
         in_progress=in_progress, pending=pending, critical=critical,
         avg_resolution=avg_resolution,
@@ -677,6 +695,7 @@ def admin_dashboard():
         sent_pos=sent_pos, sent_neg=sent_neg, sent_neu=sent_neu,
         complaints=all_complaints, recent=all_complaints[:10],
         train_log=train_log,
+        model_cards=cards, corr=corr,
         admin_name=session.get('fullname', 'Admin'))
 
 @app.route('/admin/complaints')
@@ -959,6 +978,31 @@ def admin_settings():
         admin_name=session.get('fullname', 'Admin'), dept_emails=dept_emails)
 
 # ── REPORT & CSV EXPORT ──
+
+@app.route('/admin/analysis')
+def admin_analysis():
+    if not login_required('admin'):
+        return redirect(url_for('admin_login'))
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml'))
+    import gen_analysis
+    try:
+        rows = gen_analysis.fetch_rows()
+        analysis = gen_analysis.build_analysis(rows)
+        analysis['rows'] = len(rows)
+    except Exception as e:
+        print(f"[ANALYSIS ERROR] {e}")
+        cached = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'live_analysis.json')
+        analysis = {}
+        if os.path.isfile(cached):
+            try:
+                with open(cached) as f:
+                    analysis = json.load(f)
+            except Exception as e2:
+                print(f"[ANALYSIS CACHE ERROR] {e2}")
+        analysis['rows'] = None
+        analysis['error'] = str(e)
+    return render_template('admin/analysis.html', a=analysis,
+        admin_name=session.get('fullname', 'Admin'))
 
 @app.route('/admin/report')
 def admin_report():
