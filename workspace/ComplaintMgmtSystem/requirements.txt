@@ -4,4 +4,3 @@ fpdf2==2.8.7
 python-dotenv>=1.0
 pytest>=8.0
 gunicorn>=21.2
-vaderSentiment>=3.3.2

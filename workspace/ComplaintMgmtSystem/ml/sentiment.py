@@ -1,21 +1,10 @@
 import re
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 import env
-
-_analyzer = SentimentIntensityAnalyzer()
 
 _APPRECIATION = re.compile(
     r'\b(thank|appreciate|grateful|excellent|wonderful|amazing|great|'
     r'fixed|resolved|solved|helpful|happy|satisfied|delighted|impressed)\b',
-    re.IGNORECASE
-)
-
-# Genuine complaint markers only — NOT bare topic nouns (wifi/water/power...)
-# so positive feedback that mentions a topic ("wifi fixed, very helpful") stays positive.
-_COMPLAINT_WORDS = re.compile(
-    r'\b(complaint|complain|problem|issue|fix|repair|broken|damage|leak|'
-    r'not\s+work(?:ing)?|not\s+function|stole|theft|delay|not\s+good)\b',
     re.IGNORECASE
 )
 
@@ -30,11 +19,20 @@ _NEG_PATTERNS = re.compile(
     r'stale|spoiled|rotten|foul|smelly|infest\w*|'
     r'leak(?:ing|s|ed)?|broken|crack(?:ed)?|dirty|filthy|malfunction\w*|'
     r'overcharg\w*|rude|unsafe|cheat\w*|unhygienic|abuse|threaten\w*|'
-    r'refus\w*|ignor\w*|delay(?:s|ed)?)\b',
+    r'refus\w*|ignor\w*|delay(?:s|ed)?|terribl\w*|frustrat\w*|awful|'
+    r'horribl\w*|disgust\w*|worst|bad(?!ly)?\b)\b',
     re.IGNORECASE
 )
 
-# Polite informational requests ("please share the syllabus", "how can I…") —
+# Strong negative language -> clearly frustrated, not just a mild complaint.
+_STRONG_NEG = re.compile(
+    r'\b(stole|theft|robbery|harass\w*|abuse|threaten\w*|assault|unsafe|'
+    r'unhygienic|filthy|rotten|disgust\w*|terribl\w*|horribl\w*|awful|'
+    r'stale|spoiled|foul|smelly|infest\w*)\b',
+    re.IGNORECASE
+)
+
+# Polite informational requests ("please share the syllabus", "how can I.") -
 # these are not appreciation, force to Neutral instead of Positive.
 _REQUEST = re.compile(
     r'\b(?:please|kindly|pls)\s+(?:share|send|provide|give|inform|update|forward|'
@@ -46,70 +44,74 @@ _REQUEST = re.compile(
 )
 
 
-def analyze_sentiment(text):
-    ml = env.ml_sentiment(text)
-    if ml and ml['confidence'] >= 0.45:
-        vader = _analyzer.polarity_scores(text)
-        compound = vader['compound']
-        label = ml['label']
-        if compound <= -0.5:
-            sub_label = 'Angry / Frustrated'
-        elif compound <= -0.05:
-            sub_label = 'Dissatisfied'
-        elif compound >= 0.5:
-            sub_label = 'Appreciative'
-        elif compound >= 0.05:
-            sub_label = 'Satisfied'
-        else:
-            sub_label = 'Informational'
-        return {
-            'label': label,
-            'sub_label': sub_label,
-            'score': round(compound, 3),
-            'neg_words': 0,
-            'pos_words': 0,
-            'total_sentiment_words': 0,
-            'negations': 0,
-            'vader': vader,
-            'model': 'multinomial_nb',
-            'ml_confidence': ml['confidence'],
-        }
+def _sub_label(score):
+    if score <= -0.5:
+        return 'Angry / Frustrated'
+    if score <= -0.05:
+        return 'Dissatisfied'
+    if score >= 0.5:
+        return 'Appreciative'
+    if score >= 0.05:
+        return 'Satisfied'
+    return 'Informational'
 
-    scores = _analyzer.polarity_scores(text)
-    compound = scores['compound']
 
-    if compound > -0.05 and _NEG_PATTERNS.search(text):
-        compound = min(compound, -0.1)
+def analyze_sentiment_rules(text):
+    """From-scratch pattern-based sentiment (no external lexicon/VADER).
 
-    if compound > 0 and _REQUEST.search(text) and not _APPRECIATION.search(text):
-        compound = 0.0
-
-    if compound >= 0.05 and _COMPLAINT_WORDS.search(text) and not _APPRECIATION.search(text):
-        compound = 0.0
-
-    if compound <= -0.5:
-        label, sub_label = 'Negative', 'Angry / Frustrated'
-    elif compound <= -0.05:
-        label, sub_label = 'Negative', 'Dissatisfied'
-    elif compound >= 0.5:
-        label, sub_label = 'Positive', 'Appreciative'
-    elif compound >= 0.05:
-        label, sub_label = 'Positive', 'Satisfied'
+    Same output schema as analyze_sentiment(); used as the fallback when the
+    trained model is unavailable or unconfident, and as the honest baseline
+    in the study notebooks.
+    """
+    if _STRONG_NEG.search(text):
+        label, score = 'Negative', -0.7
+    elif _NEG_PATTERNS.search(text):
+        label, score = 'Negative', -0.25
+    elif _APPRECIATION.search(text) and not _NEG_PATTERNS.search(text):
+        label, score = 'Positive', 0.7
+    elif _REQUEST.search(text) and not _APPRECIATION.search(text):
+        label, score = 'Neutral', 0.0
     else:
-        label, sub_label = 'Neutral', 'Informational'
+        label, score = 'Neutral', 0.0
 
     return {
         'label': label,
-        'sub_label': sub_label,
-        'score': round(compound, 3),
+        'sub_label': _sub_label(score),
+        'score': score,
         'neg_words': 0,
         'pos_words': 0,
         'total_sentiment_words': 0,
         'negations': 0,
-        'vader': scores,
         'model': 'rule_based',
         'ml_confidence': None,
     }
+
+
+def analyze_sentiment(text):
+    # Unambiguous strong complaint language wins over the model: the NB model
+    # is trained on synthetic data and can miss real-world phrasing
+    # ("wifi broken, nobody responds" -> model guessed Positive).
+    if _STRONG_NEG.search(text):
+        return analyze_sentiment_rules(text)
+
+    ml = env.ml_sentiment(text)
+    if ml and ml['confidence'] >= 0.45 and not (
+            ml['label'] == 'Positive' and _NEG_PATTERNS.search(text)):
+        # Continuous score from class probabilities: pos=+1, neu=0, neg=-1.
+        label = ml['label']
+        return {
+            'label': label,
+            'sub_label': _sub_label(ml['score']),
+            'score': round(ml['score'], 3),
+            'neg_words': 0,
+            'pos_words': 0,
+            'total_sentiment_words': 0,
+            'negations': 0,
+            'model': 'multinomial_nb',
+            'ml_confidence': ml['confidence'],
+        }
+
+    return analyze_sentiment_rules(text)
 
 
 def sentiment_priority_boost(sentiment_label, current_priority):

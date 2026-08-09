@@ -50,15 +50,17 @@ def get_priority_model():
 
 
 def ml_sentiment(text):
-    """Return {'label': 'Positive'|..., 'label_lower': ..., 'confidence': float}
-    or None when the model is unavailable."""
+    """Return {'label': 'Positive'|..., 'label_lower': ..., 'confidence': float,
+    'score': p(positive) - p(negative) in [-1, 1]} or None when the model is
+    unavailable."""
     model = get_sentiment_model()
     if model is None:
         return None
     pred, probs = model.predict_with_proba(text)
     label = SENT_LABEL[SENT_DECODER[pred]]
     return {'label': label, 'label_lower': SENT_DECODER[pred],
-            'confidence': round(probs[pred], 4)}
+            'confidence': round(probs[pred], 4),
+            'score': round(probs[0] - probs[2], 4)}
 
 
 def ml_priority(text):
