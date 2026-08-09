@@ -136,12 +136,12 @@
 
   <p class="hint" id="hint">
     💡 <b>Online mode:</b> Google's servers (needs internet) — works best in Chrome / Edge, no Firefox.<br>
-    📴 <b>Offline mode:</b> Vosk runs 100% locally — internet needed only the FIRST time (to download the model). After that it works with WiFi off.<br>
+    📴 <b>Offline mode:</b> Vosk runs 100% locally — internet is needed only the FIRST time (to download the model through the local proxy). The vosk library is vendored in <code>vendor/vosk.js</code>, so after the model is cached you can switch your WiFi off completely.<br>
     <span id="fileNote">Run <code>python serve.py</code> inside the folder, then open <code>http://localhost:8000/</code>. The server proxies the model download (alphacephei.com sends no CORS headers, so a plain http.server cannot fetch it from the browser).</span>
   </p>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vosk-browser@0.0.8/dist/vosk.js"></script>
+<script src="vendor/vosk.js"></script>
 <script>
 (function () {
   const micBtn = document.getElementById('micBtn');
@@ -260,7 +260,7 @@
   async function loadVosk() {
     if (voskModel) { voskWriteInfo('Model already loaded ✅'); return; }
     if (typeof Vosk === 'undefined') {
-      voskWriteInfo('vosk-browser script failed to load — check internet once, then reload.');
+      voskWriteInfo('vendor/vosk.js failed to load — check that the file exists next to index.html, then reload.');
       return;
     }
     loadVoskBtn.disabled = true;
@@ -293,10 +293,13 @@
     try {
       mediaStream = await navigator.mediaDevices.getUserMedia({
         video: false,
-        audio: { echoCancellation: true, noiseSuppression: true, channelCount: 1 }
+        audio: { echoCancellation: true, noiseSuppression: true, channelCount: 1, sampleRate: 16000 }
       });
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      voskRecognizer = new voskModel.KaldiRecognizer();
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+      // The recognizer must be created at the SAME rate the audio chunks come
+      // in at (audioCtx.sampleRate); otherwise Vosk gets audio it can't decode
+      // and returns no text at all.
+      voskRecognizer = new voskModel.KaldiRecognizer(audioCtx.sampleRate);
       voskRecognizer.setWords(false);
 
       voskRecognizer.on('result', function (message) {
