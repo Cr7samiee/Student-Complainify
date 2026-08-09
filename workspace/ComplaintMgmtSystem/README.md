@@ -10,14 +10,15 @@ AI-powered Student Complaint Classification and Management System. A Flask web a
 Student submits complaint
         |
         v
-[Flask app.py] --> [Classifier] --> category + confidence + tier
-                --> [Sentiment]   --> sentiment + score
+[Flask app.py] --> [Classifier]  --> category + confidence + tier
+                --> [Sentiment]  --> trained NB (env.py) | rule fallback
+                --> [Priority]   --> trained NB (env.py) | keyword fallback
         |
         v
-Priority boosted if negative sentiment detected
+Priority + sentiment stored alongside the complaint
         |
         v
-Admin dashboard shows classified + sentiment-tagged complaints
+Admin dashboard: complaint lists, sentiment badges, /admin/analysis heatmaps
 ```
 
 ### Core Components
@@ -34,13 +35,12 @@ Admin dashboard shows classified + sentiment-tagged complaints
   - **Unknown** (<60%): too ambiguous
 - Rule-based override: complaints mentioning hackathon/event keywords auto-classify to Hackathon/Event
 
-#### 2. Sentiment Analyzer (`ml/sentiment.py`)
-- Lexicon-based approach — no training needed
-- ~150 words with intensity scores (negative: -1 to -3, positive: +1 to +3)
-- Negation handling: words like "not", "never" flip polarity
-- Intensifier amplification: "very", "extremely" boost intensity 1.5x
-- Returns: Positive, Neutral, or Negative with a numeric score
-- Priority boost: Negative tone auto-promotes Low→Medium, Medium→High
+#### 2. Sentiment & Priority (ML-first, `ml/sentiment.py` + `ml/priority.py`)
+- **12,000-row dataset** (`data/sentiment_dataset.csv`): hand-written curation + template-driven synthesis where sentiment and priority ground truth are decided at generation time (not by any classifier)
+- Two from-scratch Multinomial Naive Bayes models (`data/sentiment_model.json`, `data/priority_model.json`) trained with the same machinery as the category classifier — train with `python ml/train_sentiment_priority.py`
+- `ml/env.py` lazy-loads both models; sentiment/priority consult the model **first** and fall back to the previous lexicon/keyword rules when confidence is low or models are absent — the app runs even before training
+- Measured on the held-out 20%: sentiment ≈ **99.7%** test accuracy, priority ≈ **99.2%** — priority labels come from a deterministic, explainable text rule (severity/urgency markers for High, deadline/window topics for Medium, appreciation always Low), so the model learns exactly what the rule says
+- Admin **Sentiment × Priority** page (`/admin/analysis`): problem heatmap (category × priority), green/positive counter-matrix, and the *closed-but-still-hurting* list (Resolved + Negative + High/Medium)
 
 #### 3. Flask App (`backend/app.py`)
 - Student routes: register, login, submit complaint, view own complaints
@@ -60,13 +60,13 @@ Admin dashboard shows classified + sentiment-tagged complaints
 
 | Metric | Value |
 |--------|-------|
-| Algorithm | Multinomial Naive Bayes (from scratch) |
-| Training samples | 7204 (80%) |
-| Test samples | 1806 (20%) |
-| Vocabulary | ~3600 unique tokens + bigrams |
-| Accuracy | ~96% |
-| Macro F1 | ~96% |
-| Sentiment method | Lexicon-based (150+ words) |
+| Category model | Multinomial Naive Bayes (from scratch) |
+| Category training samples | 7204 (80%) / 1806 (20%) |
+| Category accuracy | ~96% |
+| Sentiment dataset | 12,000 rows (claude + synth) — ground truth built in |
+| Sentiment model | Multinomial NB, test accuracy ~99.7%, macro-F1 ~0.997 |
+| Priority model | Multinomial NB, test accuracy ~99.2%, macro-F1 ~0.992 |
+| TF-IDF / sklearn / nltk | Not used — everything from scratch |
 
 ---
 
@@ -89,10 +89,18 @@ Student-Complainify/
 │   ├── validate_data.py          # Data validation gate (before training)
 │   ├── model_registry.py        # Model versioning: save/load/list latest
 │   ├── retrain.py               # Full pipeline: collect → validate → append → train → version
+│   ├── env.py                   # Lazy-load trained sentiment/priority models (fallback wiring)
+│   ├── train_sentiment_priority.py # Train sentiment + priority NBs on data/sentiment_dataset.csv
+│   ├── gen_analysis.py          # Reads MySQL → live_analysis.json (heatmaps, pink list)
+│   ├── sentiment_training_log.json # Single source of truth for report/notebook metrics
 │   ├── models/                   # Versioned models + manifest.json (registry)
 │   └── reports/                  # Validation reports (JSON)
 ├── data/                         # ★ Training data + encoders
 │   ├── train_dataset.csv         # Collected, labeled complaints (source of truth)
+│   ├── sentiment_dataset.csv     # 12k rows, tagged sentiment + priority ground truth
+│   ├── sentiment_model.json      # Trained sentiment NB
+│   ├── priority_model.json        # Trained priority NB
+│   ├── live_analysis.json         # Cached live heatmap snapshot (refresh via gen_analysis.py)
 │   ├── test_dataset.csv          # Held-out test set
 │   ├── model_params.json         # Active model copy (back-compat)
 │   └── encoders/                 # category + priority encoders/decoders
@@ -176,6 +184,10 @@ Study notebooks, each focused on one ML topic and **executed** so outputs are vi
 | `06_sentiment_analysis.ipynb` | Lexicon sentiment → priority pipeline |
 | `07_model_performance.ipynb` | Live `training_log.json` accuracy + per-class charts |
 | `08_model_lifecycle.ipynb` | **Production data lifecycle**: validation gate → registry → versioned retraining |
+| `09_sentiment_dataset_authoring.ipynb` | How the 12k sentiment/priority dataset was authored (ground truth built in) |
+| `10_sentiment_priority_models.ipynb` | Train + per-class evaluation of both models vs the rule-based baseline |
+| `11_live_pipeline_heatmap.ipynb` | Live MySQL heatmaps: problem matrix, green zone, closed-but-still-hurting |
+| `12_accuracy_dashboard.ipynb` | **Same numbers as the admin dashboard**: category/sentiment/priority accuracy cards + correlation matrix (via `ml/model_stats.py`) |
 
 ---
 

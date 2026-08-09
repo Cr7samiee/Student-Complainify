@@ -7,6 +7,19 @@
 
 ## ✅ Completed Tasks
 
+### 11. Sentiment & Priority Models (ML-first) — Session 2
+- [x] **12,000-row sentiment/priority dataset** (`data/sentiment_dataset.csv`) — hand-written curation (`source=claude`) + template-driven synthesis (`source=synth`); sentiment & priority ground truth decided at generation time, independent of any classifier
+- [x] **Trained sentiment + priority Multinomial Naive Bayes models** (same from-scratch implementation as the category classifier) → `data/sentiment_model.json`, `data/priority_model.json`
+  - Sentiment test accuracy **99.71%** / macro-F1 **0.9971**
+  - Priority test accuracy **99.21%** / macro-F1 **0.9921** — v5 dataset: priority is a deterministic text-only rule with class-locked High/Medium phrase pools, so the model learns exactly the rule (see notebook 10 per-class tables)
+- [x] **Dataset hygiene** — `--fresh`/`--rebuild` modes: dedupe, whitespace/punctuation normalization, drop rows <10 chars; all synthetic rows regenerated from class-locked pools (mixed-rule rows removed)
+- [x] **ML-first pipeline with rule fallback** — `ml/env.py` lazy-loads both models; `ml/sentiment.py` + `ml/priority.py` consult them first and fall back to the legacy lexicon/keyword rules when unconfident or absent (app keeps working pre-training)
+- [x] **`ml/sentiment_training_log.json`** — single source of truth for test metrics (web pages + notebooks never drift)
+- [x] **Admin Sentiment × Priority page** (`/admin/analysis`) — problem heatmap (category × priority), green/positive counter-matrix, and "closed but still hurting" list (Resolved + Negative + High/Medium); `ml/gen_analysis.py` refreshes the cache
+- [x] **CLI upgraded** — `ml/predict.py` now shows category + sentiment + priority + model used, in one command
+- [x] **Notebooks 09–11** executed with outputs: dataset authoring → model evaluation vs baseline → live heatmap pipeline
+- [x] Tests re-run after integration (20/20 green)
+
 ### 1. Dataset Preparation
 - [x] Combined multiple raw datasets into `processed_dataset_4500.csv` (~9000 rows)
 - [x] Added 15 hand-written hackathon/event examples
