@@ -113,8 +113,8 @@
   <div id="voskPanel" style="display:none;">
     <label>Offline model (downloaded once, then works without internet)</label>
     <select id="voskModel">
-      <option value="https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip">English (US) — small · ~40 MB</option>
-      <option value="https://alphacephei.com/vosk/models/vosk-model-small-en-in-0.4.zip">English (India) — small · ~54 MB</option>
+      <option value="/model/vosk-model-small-en-us-0.15.zip">English (US) — small · ~40 MB</option>
+      <option value="/model/vosk-model-small-en-in-0.4.zip">English (India) — small · ~54 MB</option>
     </select>
     <div class="prog"><div id="progFill"></div></div>
     <div class="bar">
@@ -137,7 +137,7 @@
   <p class="hint" id="hint">
     💡 <b>Online mode:</b> Google's servers (needs internet) — works best in Chrome / Edge, no Firefox.<br>
     📴 <b>Offline mode:</b> Vosk runs 100% locally — internet needed only the FIRST time (to download the model). After that it works with WiFi off.<br>
-    <span id="fileNote">Since Vosk fetches a model, this page must be served over a local server: run <code>python -m http.server</code> inside the folder, then open <code>http://localhost:8000/</code>.</span>
+    <span id="fileNote">Run <code>python serve.py</code> inside the folder, then open <code>http://localhost:8000/</code>. The server proxies the model download (alphacephei.com sends no CORS headers, so a plain http.server cannot fetch it from the browser).</span>
   </p>
 </div>
 
@@ -282,7 +282,7 @@
       await showProg(false);
       voskWrite('❌ Failed: ' + err.message);
       voskInfo.style.display = 'block';
-      voskInfo.textContent = 'Tip: serve this page over http (e.g. python -m http.server) and ensure internet for the first download.';
+      voskInfo.textContent = 'Tip: serve this page with python serve.py (the model proxy) and ensure internet for the first download.';
     } finally {
       loadVoskBtn.disabled = false;
     }
@@ -353,7 +353,7 @@
         support.style.display = 'block';
         support.textContent = secureOK
           ? '❌ Speech recognition is not supported in this browser — open this page in Chrome or Edge.'
-          : '❌ This page is not on http://localhost — browsers block the mic here. Serve the folder: python -m http.server, then open http://localhost:8000/';
+          : '❌ This page is not on http://localhost — browsers block the mic here. Serve the folder: python serve.py, then open http://localhost:8000/';
         setStatus('');
       }
       else { micBtn.disabled = false; support.style.display = 'none'; setStatus('Tap the mic and start speaking…'); }
@@ -409,7 +409,7 @@
     support.style.display = 'block';
     support.textContent = secureOK
       ? '❌ Speech recognition not supported in this browser — open this page in Chrome or Edge. For Vosk offline mode, serve the folder: python -m http.server'
-      : '❌ Browsers block the microphone on file:// pages — that is why nothing happens when you tap the mic. Serve the folder and open http://localhost:8000/ (run: python -m http.server in the voice-testing folder).';
+      : '❌ Browsers block the microphone on file:// pages — that is why nothing happens when you tap the mic. Serve the folder and open http://localhost:8000/ (run: python serve.py in the voice-testing folder).';
   }
 
   function voskWriteInfo(msg) {
