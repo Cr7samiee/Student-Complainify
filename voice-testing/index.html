@@ -97,16 +97,18 @@
     </div>
   </div>
 
-  <label for="lang">Language (Online mode)</label>
-  <select id="lang">
-    <option value="en-IN">English (India)</option>
-    <option value="en-US">English (US)</option>
-    <option value="en-GB">English (UK)</option>
-    <option value="hi-IN">हिन्दी (Hindi)</option>
-    <option value="ne-NP">नेपाली (Nepali)</option>
-    <option value="kn-IN">ಕನ್ನಡ (Kannada)</option>
-    <option value="ta-IN">தமிழ் (Tamil)</option>
-  </select>
+  <div id="langWrap">
+    <label for="lang">Language (Online mode)</label>
+    <select id="lang">
+      <option value="en-IN">English (India)</option>
+      <option value="en-US">English (US)</option>
+      <option value="en-GB">English (UK)</option>
+      <option value="hi-IN">हिन्दी (Hindi)</option>
+      <option value="ne-NP">नेपाली (Nepali)</option>
+      <option value="kn-IN">ಕನ್ನಡ (Kannada)</option>
+      <option value="ta-IN">தமிழ் (Tamil)</option>
+    </select>
+  </div>
 
   <div id="voskPanel" style="display:none;">
     <label>Offline model (downloaded once, then works without internet)</label>
@@ -147,6 +149,7 @@
   const interim = document.getElementById('interim');
   const text = document.getElementById('text');
   const lang = document.getElementById('lang');
+  const langWrap = document.getElementById('langWrap');
   const support = document.getElementById('support');
   const copied = document.getElementById('copied');
   const modeOnline = document.getElementById('modeOnline');
@@ -343,7 +346,7 @@
       runStop();
       modeOnline.classList.add('active');
       modeOffline.classList.remove('active');
-      lang.parentNode.style.display = '';
+      langWrap.style.display = '';
       voskPanel.style.display = 'none';
       if (!SR || !secureOK) {
         micBtn.disabled = true;
@@ -359,7 +362,7 @@
     runStop();
     modeOffline.classList.add('active');
     modeOnline.classList.remove('active');
-    lang.parentNode.style.display = 'none';
+    langWrap.style.display = 'none';
     voskPanel.style.display = 'block';
     micBtn.disabled = false;
     support.style.display = 'none';
