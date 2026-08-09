@@ -156,10 +156,12 @@
   const loadVoskBtn = document.getElementById('loadVoskBtn');
   const voskStatus = document.getElementById('voskStatus');
   const voskInfo = document.getElementById('voskInfo');
-  const progWrap = document.querySelector('.prog');
   const progFill = document.getElementById('progFill');
 
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  // Chrome/Edge only allow mic + speech APIs on https or http://localhost —
+  // never on file:// URLs, which look fine but silently refuse to start.
+  const secureOK = !!window.isSecureContext && location.protocol !== 'file:';
   let mode = SR ? 'online' : 'offline';
 
   function setStatus(msg, cls) {
@@ -259,7 +261,7 @@
       return;
     }
     loadVoskBtn.disabled = true;
-    progWrap(true); progFill.style.width = '0%';
+    showProg(true); progFill.style.width = '0%';
     voskWrite('Downloading model…');
     try {
       const dl = await downloadModel(voskModelSel.value, function (loaded, total) {
@@ -267,14 +269,14 @@
         progFill.style.width = pct + '%';
         voskWrite('Downloading… ' + pct + '% (' + Math.round(total / 1048576) + ' MB)');
       });
-      progWrap(false);
+      showProg(false);
       voskWrite('Loading model into memory (few seconds)…');
       voskModel = await Vosk.createModel(dl.objectUrl);
       voskWrite('✅ Model loaded — talking is now 100% offline.');
       voskInfo.style.display = 'block';
       voskInfo.textContent = 'Model cached. You can now disconnect from the internet and speak — recognition stays local.';
     } catch (err) {
-      await progWrap(false);
+      await showProg(false);
       voskWrite('❌ Failed: ' + err.message);
       voskInfo.style.display = 'block';
       voskInfo.textContent = 'Tip: serve this page over http (e.g. python -m http.server) and ensure internet for the first download.';
@@ -343,7 +345,14 @@
       modeOffline.classList.remove('active');
       lang.parentNode.style.display = '';
       voskPanel.style.display = 'none';
-      if (!SR) { micBtn.disabled = true; support.style.display = 'block'; setStatus(''); }
+      if (!SR || !secureOK) {
+        micBtn.disabled = true;
+        support.style.display = 'block';
+        support.textContent = secureOK
+          ? '❌ Speech recognition is not supported in this browser — open this page in Chrome or Edge.'
+          : '❌ This page is not on http://localhost — browsers block the mic here. Serve the folder: python -m http.server, then open http://localhost:8000/';
+        setStatus('');
+      }
       else { micBtn.disabled = false; support.style.display = 'none'; setStatus('Tap the mic and start speaking…'); }
       return;
     }
@@ -392,17 +401,19 @@
 
   setMode(mode);
 
-  if (location.protocol === 'file:' && !SR) {
+  if (!secureOK || (!SR && mode === 'online')) {
     micBtn.disabled = true;
     support.style.display = 'block';
-    support.textContent = '❌ Speech recognition not supported in this browser — open this page in Chrome or Edge. For Vosk offline mode, serve the folder: python -m http.server';
+    support.textContent = secureOK
+      ? '❌ Speech recognition not supported in this browser — open this page in Chrome or Edge. For Vosk offline mode, serve the folder: python -m http.server'
+      : '❌ Browsers block the microphone on file:// pages — that is why nothing happens when you tap the mic. Serve the folder and open http://localhost:8000/ (run: python -m http.server in the voice-testing folder).';
   }
 
   function voskWriteInfo(msg) {
     voskInfo.style.display = 'block';
     voskInfo.textContent = msg;
   }
-  function progWrap(on) { progFill.parentNode.style.display = on ? 'block' : 'none'; }
+  function showProg(on) { progFill.parentNode.style.display = on ? 'block' : 'none'; }
 })();
 </script>
 </body>
