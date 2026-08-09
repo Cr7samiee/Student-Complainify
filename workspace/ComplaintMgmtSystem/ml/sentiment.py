@@ -26,8 +26,8 @@ _NEG_PATTERNS = re.compile(
 
 # Strong negative language -> clearly frustrated, not just a mild complaint.
 _STRONG_NEG = re.compile(
-    r'\b(stole|theft|robbery|harass\w*|abuse|threaten\w*|assault|unsafe|'
-    r'unhygienic|filthy|rotten|disgust\w*|terribl\w*|horribl\w*|awful|'
+    r'\b(stol\w*|steal\w*|theft|robbery|harass\w*|abuse|threaten\w*|assault|'
+    r'unsafe|unhygienic|filthy|rotten|disgust\w*|terribl\w*|horribl\w*|awful|'
     r'stale|spoiled|foul|smelly|infest\w*)\b',
     re.IGNORECASE
 )
@@ -40,6 +40,16 @@ _REQUEST = re.compile(
     r'\bhow\s+(?:do|can|should)\s+[a-z]|'
     r'\b(?:can|could)\s+(?:you|u)\s+please|'
     r'\bi\s+(?:want|need|would\s+like)\b',
+    re.IGNORECASE
+)
+
+
+# Mild problem-report words: not strong enough for 'negative', but enough to
+# veto an absurd 'positive' verdict ("The bus was late again" is not Positive).
+_MILD_NEG = re.compile(
+    r'\b(late|issue|problem\w*|not\s+getting|not\s+available|non-functional|'
+    r'unavailable|outdated|missing|no\s+proper|hasn.?t\b|haven.?t\b|'
+    r'not\s+been|slow|long|wait\w*|takes?\s+too\s+long)\b',
     re.IGNORECASE
 )
 
@@ -96,7 +106,14 @@ def analyze_sentiment(text):
 
     ml = env.ml_sentiment(text)
     if ml and ml['confidence'] >= 0.45 and not (
-            ml['label'] == 'Positive' and _NEG_PATTERNS.search(text)):
+            ml['label'] == 'Positive'
+            and (_NEG_PATTERNS.search(text) or _MILD_NEG.search(text))):
+        # Dataset convention: 'negative' requires STRONG complaint language
+        # (ml/generate_sentiment_priority_data.py STRONG_NEG). Mild reports
+        # ("water not getting on time, Wi-Fi issue") are neutral — urgency is
+        # handled by the priority model, not sentiment.
+        if ml['label'] == 'Negative' and not _STRONG_NEG.search(text):
+            return analyze_sentiment_rules(text)
         # Continuous score from class probabilities: pos=+1, neu=0, neg=-1.
         label = ml['label']
         return {

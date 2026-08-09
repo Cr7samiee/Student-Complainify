@@ -31,6 +31,35 @@ def normalize(text):
     return text
 
 
+# Sentiment convention: 'negative' is reserved for STRONG complaint language.
+# Mild problem-reports ("issue", "not getting on time", "water coolers
+# non-functional") are labeled 'neutral' — urgency is handled by priority.
+STRONG_NEG = re.compile(
+    r'\b(stol\w*|steal\w*|theft|robbery|harass\w*|abuse|threaten\w*|assault|'
+    r'unsafe|unhygienic|filthy|rotten|stale|spoiled|foul|smelly|infest\w*|'
+    r'disgust\w*|terribl\w*|horribl\w*|awful|broken|crack(?:ed)?|'
+    r'leak(?:ing|s|ed)?|malfunction\w*|not\s+work(?:ing)?|not\s+fixed|'
+    r'never\s+fixed|no\s+(?:response|reply|action|update)|'
+    r'no\s+one\s+(?:responds|listens|cares)|nobody\s+(?:responds|listens|cares)|'
+    r'ignored|ignor\w*|refus\w*|overcharg\w*|rude|delay(?:s|ed)?|serious|'
+    r'emergency|danger\w*|damag\w*|unresolved|fight\w*|insult\w*|cheat\w*|'
+    r'molest\w*)\b',
+    re.IGNORECASE
+)
+
+
+def soften(rows):
+    """Downgrade negative -> neutral when the text lacks strong complaint
+    language (see STRONG_NEG). Deterministic: re-derives priority + polarity."""
+    for r in rows:
+        if r['sentiment_label'].strip().lower() == 'negative' \
+                and not STRONG_NEG.search(r['complaint_text']):
+            r['sentiment_label'] = 'neutral'
+            r['priority'] = assign_priority(r['complaint_text'], 'neutral')
+            r['polarity_score'] = str(polarity(r['complaint_text'], 'neutral'))
+    return rows
+
+
 def relabel(rows):
     """Re-decide priority on every row from its text (deterministic ground truth)."""
     seen = set()
@@ -47,7 +76,7 @@ def relabel(rows):
         r['priority'] = assign_priority(r['complaint_text'], r['sentiment_label'])
         r['category'] = (r.get('category') or 'General/Suggestion').strip()
         out.append(r)
-    return out
+    return soften(out)
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATASET = os.path.join(BASE, 'data', 'sentiment_dataset.csv')

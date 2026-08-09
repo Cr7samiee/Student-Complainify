@@ -36,10 +36,10 @@ Admin dashboard: complaint lists, sentiment badges, /admin/analysis heatmaps
 - Rule-based override: complaints mentioning hackathon/event keywords auto-classify to Hackathon/Event
 
 #### 2. Sentiment & Priority (ML-first, `ml/sentiment.py` + `ml/priority.py`)
-- **12,000-row dataset** (`data/sentiment_dataset.csv`): hand-written curation + template-driven synthesis where sentiment and priority ground truth are decided at generation time (not by any classifier)
+- **12,000-row dataset** (`data/sentiment_dataset.csv`): hand-written curation + template-driven synthesis where sentiment and priority ground truth are decided at generation time (not by any classifier). Labeling convention: `negative` = strong complaint language (stale/rotten/broken/stolen/...); mild problem-reports ("water not getting on time, Wi-Fi issue") are `neutral` — urgency is handled by the priority column, not sentiment
 - Two from-scratch Multinomial Naive Bayes models (`data/sentiment_model.json`, `data/priority_model.json`) trained with the same machinery as the category classifier — train with `python ml/train_sentiment_priority.py`
 - `ml/env.py` lazy-loads both models; sentiment/priority consult the model **first** and fall back to the previous lexicon/keyword rules when confidence is low or models are absent — the app runs even before training
-- Measured on the held-out 20%: sentiment ≈ **99.7%** test accuracy, priority ≈ **99.2%** — priority labels come from a deterministic, explainable text rule (severity/urgency markers for High, deadline/window topics for Medium, appreciation always Low), so the model learns exactly what the rule says
+- Measured on the held-out 20%: sentiment ≈ **95.1%** test accuracy, priority ≈ **99.2%** — priority labels come from a deterministic, explainable text rule (severity/urgency markers for High, deadline/window topics for Medium, appreciation always Low), so the model learns exactly what the rule says
 - Admin **Sentiment × Priority** page (`/admin/analysis`): problem heatmap (category × priority), green/positive counter-matrix, and the *closed-but-still-hurting* list (Resolved + Negative + High/Medium)
 
 #### 3. Flask App (`backend/app.py`)
